@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".xmlandinvoke">
+        <activity android:name=".customview">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,7 +45,7 @@
         <activity android:name=".test_spinner" />
         <activity android:name=".advdata" />
         <activity android:name=".permision_test" />
-        <activity android:name=".customview" />
+        <activity android:name=".xmlandinvoke" />
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.example.johnny_wei.testtool._01_adapter;
+package adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,15 +9,14 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.johnny_wei.testtool.R;
-import com.example.johnny_wei.testtool.RowItem;
 
 import java.util.List;
 
-public class customAdapter_2 extends BaseAdapter {
+public class customAdapter extends BaseAdapter {
     Context context;
     List<RowItem> rowItems;
 
-    public customAdapter_2(Context context, List<RowItem> items) {
+    public customAdapter(Context context, List<RowItem> items) {
         this.context = context;
         this.rowItems = items;
     }
