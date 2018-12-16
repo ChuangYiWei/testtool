@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<BD_AutoTests>
+    <BD_Autotest>
+        <testName>BD_TEST_INTV_WRITE</testName>
+        <data>100</data>
+        <writeCmd>A725350464000000:63263500</writeCmd>
+        <readCmd>A22035:6721350464000000</readCmd>
+    </BD_Autotest>
+    <BD_Autotest>
+        <testName>BD_TEST_NAME_WRITE</testName>
+        <data>123</data>
+        <writeCmd>A6253103313233+A21122+A23344:63263100</writeCmd>
+        <readCmd>A22031:66213103313233</readCmd>
+    </BD_Autotest>
+    <BD_Autotest>
+        <testName>BD_TEST_ADDR_WRITE</testName>
+        <data>321</data>
+        <writeCmd>A6253103313233:63263100</writeCmd>
+        <readCmd>A22031:66213103313233</readCmd>
+    </BD_Autotest>
+</BD_AutoTests>

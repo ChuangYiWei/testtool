@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<BD_AutoTests>
+    <BD_Autotest>
+        <testName>BD_TEST_INTV_WRITE</testName>
+        <data>2000</data>
+        <cmd>A7253504D0070000:63263500</cmd>
+        <cmd>A22035:67213504D0070000</cmd>
+    </BD_Autotest>
+    <!--<BD_Autotest>-->
+        <!--<testName>BD_TEST_INTV_WRITE</testName>-->
+        <!--<data>1000</data>-->
+        <!--<cmd>A7253504E8030000:63263500</cmd>-->
+        <!--<cmd>A22035:67213504E8030000</cmd>-->
+    <!--</BD_Autotest>-->
+</BD_AutoTests>

@@ -1,0 +1,30 @@
+<BC76xx>
+    <uart>
+        <item enable="1">
+            <func_name>funcA</func_name>
+            <data>1000</data>
+            <cmd>253504E8030000:63263500</cmd>
+            <cmd>2035:67213504E8030000</cmd>
+        </item>
+        <item enable="1">
+            <func_name>funcB</func_name>
+            <data>100</data>
+            <cmd>253504E8030000:63263500</cmd>
+            <cmd>2035:67213504E8030000</cmd>
+        </item>
+    </uart>
+    <spi>
+        <item enable="1">
+            <func_name>funcA</func_name>
+            <data>1000</data>
+            <cmd>A7253504E8030000:63263500</cmd>
+            <cmd>A22035:67213504E8030000</cmd>
+        </item>
+        <item enable="1">
+            <func_name>funcB</func_name>
+            <data>100</data>
+            <cmd>B7253504E8030000:63263500</cmd>
+            <cmd>B22035:67213504E8030000</cmd>
+        </item>
+    </spi>
+</BC76xx>

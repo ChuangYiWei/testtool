@@ -1,0 +1,26 @@
+<students>
+    <student>
+        <name sex="man">小明</name>
+        <nickName>明明</nickName>
+        <age>20</age>
+        <address>北京</address>
+    </student>
+    <student>
+        <name sex="woman">小红</name>
+        <nickName>红红</nickName>
+        <age>20</age>
+        <address>上海</address>
+    </student>
+    <student>
+        <name sex="man">小亮</name>
+        <nickName>亮亮</nickName>
+        <age>30</age>
+        <address>广州</address>
+    </student>
+    <student-0>
+        <name sex="man">小亮-0</name>
+        <nickName>亮亮-0</nickName>
+        <age>200</age>
+        <address>广州-0</address>
+    </student-0>
+</students>

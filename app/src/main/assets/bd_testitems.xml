@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<BD_functions>
+    <BD_function>BD_IntvWrite</BD_function>
+    <BD_function>BD_NameWrite</BD_function>
+    <!--<BD_function>BD_AddrWrite</BD_function>-->
+</BD_functions>

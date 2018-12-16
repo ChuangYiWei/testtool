@@ -1,0 +1,229 @@
+package com.example.johnny_wei.testtool;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+
+import java.lang.reflect.Array;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+public class bytecheck extends AppCompatActivity {
+    private final byte[] bytearray={0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F};
+
+    private final String TAG = getClass().getSimpleName();
+    LinkedList<String> testStr;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_bytecheck);
+        testStr = new LinkedList<String>();
+        testStr.add("111");
+        testStr.add("222");
+        for(int i=0;i<3;i++)
+        {
+            Log.d(TAG, Integer.toString(i)+ ":" + testStr.getFirst());
+        }
+//        comparephyaddr();
+//        checkLength();
+//        checkUARTLength();
+
+    }
+
+
+
+    private boolean checkUARTLength() {
+        byte[] rev = {0x21,0x36,0x03,0x01,0x02,0x03};
+        byte[] fakerev = {0x36,0x03,0x01,0x02,0x03};
+        String revStr = bytes2String(rev);
+        String fakerevStr = bytes2String(fakerev);
+        Log.d(TAG, "revStr:" + revStr);
+        Log.d(TAG, "fakerevStr:" + fakerevStr);
+        if(rev[0] == 0x21 || rev[0] == 0x26) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    private void checkLength(){
+        byte[] rev = {0x69,0x21,0x33,0x06,0x13,0x15,0x10,0x18,0x20,0x11};
+        byte[] revfake = {0x21,0x33,0x06,0x13,0x15,0x10,0x18,0x20,0x11};
+
+        Log.d(TAG, "byte length:" + rev.length);
+        String revStr = bytes2String(rev);
+        Log.d(TAG, "revStr:" + revStr);
+
+        int length = (rev[0] & 0xF | ((rev[0] & 0x10))) + 1;//add header itself
+        if ((rev[0] & 0x1F) == 0) {
+            Log.d(TAG, "length: 32 byte");
+        }
+        if(length != rev.length)
+        {
+            Log.e(TAG, "length" + Integer.toString(length) + "is not equal to" + Integer.toString(rev.length));
+        }
+        else{
+            Log.d(TAG, "length" + Integer.toString(length) + " is equal to " + Integer.toString(rev.length));
+        }
+
+        Log.d(TAG, "byte length:" + rev.length);
+        String revStrfake = bytes2String(revfake);
+        Log.d(TAG, "revStr:" + revStr);
+
+        length = (revfake[0] & 0xF | ((revfake[0] & 0x10))) + 1;//add header itself
+        if ((revfake[0] & 0x1F) == 0) {
+            Log.d(TAG, "length: 32 byte");
+        }
+        if(length != revfake.length)
+        {
+            Log.e(TAG, "length" + Integer.toString(length) + " is not equal to" + Integer.toString(revfake.length));
+        }
+        else{
+            Log.d(TAG, "length" + Integer.toString(length) + " is equal to " + Integer.toString(revfake.length));
+        }
+
+
+    }
+
+    private void comparephyaddr() {
+        String revStr = "6C57010100940420000400B0A0";
+        String mstr = "6C57010000940420000400B0A0";
+        if(revStr.startsWith("6C57")) {
+            String revStrsub1 = revStr.substring(0,6);//0x6C5701
+            String revStrsub2 = revStr.substring(10, revStr.length());//skip two byte reserved length
+            String strsub1 = mstr.substring(0, 6);
+            String strsub2 = mstr.substring(10, mstr.length());
+            Log.d(TAG, "revStrsub1 :" + revStrsub1);
+            Log.d(TAG, "revStrsub2 :" + revStrsub2);
+            Log.d(TAG, "strsub1 :" + strsub1);
+            Log.d(TAG, "strsub2 :" + strsub2);
+            if ((revStrsub1.equals(strsub1)) && (revStrsub2.equals(strsub2))) {
+                Log.d(TAG, "jjjj :" );
+            }
+            String strsubaddr = mstr.substring(10, 18);
+            String strsubdata = mstr.substring(18, mstr.length());
+
+
+            Log.d(TAG, "strsubaddr :" + strsubaddr);
+            Log.d(TAG, "strsubdata :" + strsubdata);
+            Log.d(TAG, "string2Bytes:" + bytes2String(string2Bytes(strsubdata)));
+
+            Log.d(TAG, "strsubdata length:" + strsubdata.length());
+
+            byte[] bytes = string2Bytes(strsubdata);
+            Log.d(TAG, "bytes:" + bytes2String(bytes));
+
+            for(byte b:bytes){
+                StringBuilder sb = new StringBuilder();
+                sb.append(String.format("0x%2x", b));
+                Log.d(TAG, sb.toString());
+//                if((b & 0x4) == 0x4)
+//                {
+//                    Log.d(TAG, "0x4");
+//                    StringBuilder sb = new StringBuilder();
+//                    sb.append(String.format("0x%2x", b));
+//                    Log.d(TAG, sb.toString());
+//                }
+            }
+
+            if((bytes[0] & (byte)0x04) == 0x04)
+            {
+                Log.d(TAG, "ccc");
+            }
+        }
+        else{
+            Log.d(TAG, "not start with 6c57");
+        }
+    }
+
+    private String strEndiaOrderChane(String strsubdata) {
+        String retStr = "";
+        if(strsubdata.equals("")) {
+            return retStr;
+        }
+        StringBuilder sb = new StringBuilder(strsubdata.length());
+        int i;
+        for(i=0;i<strsubdata.length()-1;i+=2) {
+            sb.append(strsubdata.substring((strsubdata.length() - (i + 2)), (strsubdata.length() - i)));
+        }
+        return sb.toString();
+    }
+
+    public String bytes2String(byte[] inputbyte){
+        String back = "";
+        if (inputbyte != null) {
+            if (inputbyte.length > 0) {
+                final StringBuilder stringBuilder = new StringBuilder(inputbyte.length);
+                for (byte byteChar : inputbyte) {
+                    stringBuilder.append(String.format("%02X", byteChar));
+                }
+                back = stringBuilder.toString();
+            }
+        }
+        return back;
+    }
+
+    public byte[] string2Bytes(String inString){
+        return string2Bytes(inString,0x00);
+    }
+
+    public static final int _C_ADD_0_BACK_        =0x0002;
+    public static final int _C_LOW_BYTE_FIRST_    =0x0001;
+
+    public byte[] string2Bytes(String inString,int fun){
+        byte[] newbyte=new byte[0];
+        byte[] tmpbyte=new byte[0];
+
+        if(inString==null || inString=="")//return len=0 array
+            return tmpbyte;
+
+        if(inString.length()%2==1){ //odd
+            if((fun & _C_ADD_0_BACK_)>0){
+                inString=inString+"0";
+            }
+            else{
+                inString="0"+inString;
+            }
+        }
+
+        newbyte=new byte[(inString.length()/2)];
+        tmpbyte=inString.getBytes();
+        int k=0;
+        for(int i=0;i<newbyte.length;i++){
+            if((fun&_C_LOW_BYTE_FIRST_)==_C_LOW_BYTE_FIRST_){
+                k=(newbyte.length-1)-i;
+            }
+            else if(i>0){
+                k++;
+            }
+            newbyte[k]|=getHalfHex(tmpbyte[i*2]);
+            newbyte[k]<<=4;
+            newbyte[k]|=getHalfHex(tmpbyte[i*2+1]);
+//System.out.println("0:newbyte["+i+"]:"+newbyte[i]);
+        }
+
+        return newbyte;
+    }
+
+    public byte getHalfHex(byte inputbyte){
+
+        if (inputbyte >= 0x30 && inputbyte <= 0x39) {//0~9
+            return (byte) (inputbyte - 0x30);
+        } else if (inputbyte >= 0x41 && inputbyte <= 0x46) {//A~F
+
+            return (byte) bytearray[inputbyte - 0x41 + 10];
+        } else if (inputbyte >= 0x61 && inputbyte <= 0x66) {//a~f
+
+            return (byte) bytearray[inputbyte - 0x61 + 10];
+        } else {
+
+            return (byte) 0x00;
+        }
+    }
+}
