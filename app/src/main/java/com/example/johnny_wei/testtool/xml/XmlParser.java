@@ -1,4 +1,4 @@
-package com.example.johnny_wei.testtool;
+package com.example.johnny_wei.testtool.xml;
 import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;

@@ -10,6 +10,8 @@ import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.example.johnny_wei.testtool.xml.BLE_testItem;
+
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,7 +30,7 @@ public class BD_Testclass2 extends AppCompatActivity {
 
     Context mcontext;
 
-    //ble
+    //com.example.johnny_wei.testtool.ble
     private boolean mScanning;
     private static final long SCAN_PERIOD = 5000;
     private Handler m_userHandler;
@@ -170,7 +172,7 @@ public class BD_Testclass2 extends AppCompatActivity {
             testitem.popCmd();
         }
 
-        //ble
+        //com.example.johnny_wei.testtool.ble
         long advIntv = Long.parseLong(testitem.getdataStr());
         long scanTime = 5000;
         scanLeDevice(true, scanTime);

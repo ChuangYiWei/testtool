@@ -1,4 +1,4 @@
-package com.example.johnny_wei.testtool;
+package com.example.johnny_wei.testtool.xml;
 import java.util.LinkedList;
 
 public class BLE_testItem {

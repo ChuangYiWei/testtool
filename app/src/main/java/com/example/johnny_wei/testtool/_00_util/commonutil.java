@@ -1,4 +1,4 @@
-package com.example.johnny_wei.testtool.util;
+package com.example.johnny_wei.testtool._00_util;
 
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;

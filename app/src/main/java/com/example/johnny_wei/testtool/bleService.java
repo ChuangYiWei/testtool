@@ -17,14 +17,14 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
 
-import com.example.johnny_wei.testtool.util.commonutil;
+import com.example.johnny_wei.testtool._00_util.commonutil;
 
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.UUID;
 
 public class bleService extends Service {
-    //ble
+    //com.example.johnny_wei.testtool.ble
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothGatt mBluetoothGatt;
@@ -173,7 +173,7 @@ public class bleService extends Service {
             return false;
         }
         if(mConnectionState != STATE_CONNECTED) {
-            commonutil.wdbgLogcat(TAG,1, "ble not connected state :" + mConnectionState);
+            commonutil.wdbgLogcat(TAG,1, "com.example.johnny_wei.testtool.ble not connected state :" + mConnectionState);
             return false;
         }
         return true;

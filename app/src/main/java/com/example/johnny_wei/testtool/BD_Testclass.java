@@ -24,7 +24,7 @@ public class BD_Testclass extends AppCompatActivity {
     private String BD_TEST_ADDR_WRITE = "BD_TEST_ADDR_WRITE";
     Context mcontext;
 
-    //ble
+    //com.example.johnny_wei.testtool.ble
     private boolean mScanning;
     private static final long SCAN_PERIOD = 5000;
     private Handler m_userHandler;

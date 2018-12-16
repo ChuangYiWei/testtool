@@ -11,15 +11,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import com.example.johnny_wei.testtool.R;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class advdata extends AppCompatActivity {
     final static String TAG = "advdata";
-    //ble
+    //com.example.johnny_wei.testtool.ble
 
     private Handler mHandler;
     private BluetoothAdapter mBluetoothAdapter;

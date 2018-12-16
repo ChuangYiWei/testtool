@@ -5,6 +5,10 @@ import android.content.res.AssetManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.example.johnny_wei.testtool.xml.BLE_testItem;
+import com.example.johnny_wei.testtool.xml.XmlParser;
+
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
