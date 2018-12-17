@@ -1,4 +1,4 @@
-package adapter;
+package com.example.johnny_wei.testtool.adapter;
 
 import android.text.TextUtils;
 

@@ -10,8 +10,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import adapter.RowItem;
-import adapter.customAdapter;
+import com.example.johnny_wei.testtool.adapter.RowItem;
+import com.example.johnny_wei.testtool.adapter.customAdapter;
 
 public class customview extends AppCompatActivity {
     ListView listView;
