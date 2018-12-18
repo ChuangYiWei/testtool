@@ -32,9 +32,7 @@ public class readxml extends AppCompatActivity {
             InputStream input = asset.open(filename);
             List<BLE_testItem> list = XmlParser.getTestItems(input);
             for (BLE_testItem item : list) {
-                Log.d(TAG,item.gettestName());
                 Log.d(TAG,item.getdataStr());
-                Log.d(TAG,Integer.toString(item.cmdSize()));
                 Log.d(TAG,Integer.toString(item.cmdSize()));
                 Log.d(TAG,item.getCmd());
                 item.popCmd();

@@ -76,7 +76,7 @@ public class xmlandinvoke extends AppCompatActivity {
         //parse test item
         try {
             InputStream input = asset.open("76xx.xml");
-            List<BLE_testItem> list = XmlParser.getSPItems(input);
+            List<BLE_testItem> list = XmlParser.getTestItems(input);
             for (BLE_testItem item : list) {
                 Method method;
                 try {

@@ -14,7 +14,7 @@ public class XmlParser {
         List<BLE_testItem> BLE_testItemList = null;
         BLE_testItem obj_ble_testitem = null;
         boolean item_enable  = false;
-
+        boolean select_mode  = false;
         XmlPullParserFactory pullFactory = XmlPullParserFactory.newInstance();
         XmlPullParser parser = pullFactory.newPullParser();
 
@@ -30,29 +30,38 @@ public class XmlParser {
                         Log.d("START_DOCUMENT","START_DOCUMENT");
                         break;
                     case XmlPullParser.START_TAG:
-                        if (parser.getName().equals("uart")) {
+                        Log.d("START_TAG", parser.getName());
+                        if (parser.getName().equals("UART")) {
                             Log.d("uart","new ArrayList<BLE_testItem>");
                             BLE_testItemList = new ArrayList<BLE_testItem>();
+                            select_mode = true;
                         }
-                        else if (parser.getName().equals("item")) {
-                            Log.d("item","meet item new obj");
-                            Log.d("item enable",parser.getAttributeValue(null, "enable"));
-                            obj_ble_testitem = new BLE_testItem();
-                        } else if (parser.getName().equals("func_name")) {
-                            obj_ble_testitem.settestName(parser.nextText());
-                        } else if (parser.getName().equals("data")) {
-                            Log.d("data","data");
-                            obj_ble_testitem.setdataStr(parser.nextText());
-                        } else if (parser.getName().equals("cmd")) {
-                            Log.d("name", "name");
-                            obj_ble_testitem.addCmd(parser.nextText());
+                        if (select_mode == true) {
+                            if (parser.getName().equals("item")) {
+                                Log.d("item", "meet item new obj");
+                                Log.d("item enable", parser.getAttributeValue(null, "enable"));
+                                obj_ble_testitem = new BLE_testItem();
+                            } else if (parser.getName().equals("func_name")) {
+                                obj_ble_testitem.settestName(parser.nextText());
+                            } else if (parser.getName().equals("data")) {
+                                Log.d("data", "data");
+                                obj_ble_testitem.setdataStr(parser.nextText());
+                            } else if (parser.getName().equals("cmd")) {
+                                Log.d("cmd", "cmd");
+                                obj_ble_testitem.addCmd(parser.nextText());
+                            }
                         }
                         break;
                     case XmlPullParser.END_TAG:
+                        Log.d("END_TAG", parser.getName());
+
                         if (parser.getName().equals("item")) {
                             Log.d("/item", "/item");
                             BLE_testItemList.add(obj_ble_testitem);
                             obj_ble_testitem = null;
+                        } else if (parser.getName().equals("UART")) {
+                            Log.d("/UART", "select_mode false");
+                            select_mode = false;
                         }
                         break;
                     default:
@@ -87,7 +96,7 @@ public class XmlParser {
                         Log.d("START_DOCUMENT","START_DOCUMENT");
                         break;
                     case XmlPullParser.START_TAG:
-                        if (parser.getName().equals("uart")) {
+                        if (parser.getName().equals("SPI")) {
                             Log.d("uart","new ArrayList<BLE_testItem>");
                             BLE_testItemList = new ArrayList<BLE_testItem>();
                         }

@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".customview">
+        <activity android:name=".readxml">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".handler" />
-        <activity android:name=".readxml" />
+        <activity android:name=".customview" />
         <activity android:name=".write" />
         <activity android:name=".linkedmap" />
         <activity android:name=".ble" />
