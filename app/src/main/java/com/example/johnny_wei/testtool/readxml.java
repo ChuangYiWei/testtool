@@ -22,6 +22,7 @@ public class readxml extends AppCompatActivity {
         testFuncList = new LinkedList<String>();
 
         readxml("76xx.xml");
+
     }
 
     private void readxml(String filename)  {
@@ -30,8 +31,15 @@ public class readxml extends AppCompatActivity {
         //parse test item
         try {
             InputStream input = asset.open(filename);
-            List<BLE_testItem> list = XmlParser.getTestItems(input);
+//            List<BLE_testItem> list = XmlParser.getTestItems(input);
+            List<BLE_testItem> list = XmlParser.getTestItems(input,"UART");
+            if(list == null)
+            {
+                Log.e(TAG,"list is null");
+                return;
+            }
             for (BLE_testItem item : list) {
+                Log.d(TAG,item.gettestName());
                 Log.d(TAG,item.getdataStr());
                 Log.d(TAG,Integer.toString(item.cmdSize()));
                 Log.d(TAG,item.getCmd());
@@ -43,6 +51,7 @@ public class readxml extends AppCompatActivity {
         }
 
         Log.d(TAG, "done");
-
     }
+
+
 }

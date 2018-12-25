@@ -151,6 +151,11 @@ public class BD_Testclass2 extends AppCompatActivity {
     public int funcB(BLE_testItem testItem)
     {
         Log.d(TAG, "funcB----------------------S");
+        Log.d(TAG, "gettestName:" + testItem.gettestName());
+        Log.d(TAG, "data:" + testItem.getdataStr());
+        Log.d(TAG, "gettestName:" + testItem.getCmd());
+        testItem.popCmd();
+        Log.d(TAG, "gettestName:" + testItem.getCmd());
         Log.d(TAG, "funcB----------------------E");
         return 98;
     }
