@@ -6,8 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.johnny_wei.testtool.xml.BLE_testItem;
-import com.example.johnny_wei.testtool.xml.XmlParser;
+import com.example.johnny_wei.testtool.xmlpull.BLE_testItem;
+import com.example.johnny_wei.testtool.xmlpull.XmlParser;
 
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -76,7 +76,7 @@ public class xmlandinvoke extends AppCompatActivity {
         //parse test item
         try {
             InputStream input = asset.open("76xx.xml");
-            List<BLE_testItem> list = XmlParser.getTestItems(input);
+            List<BLE_testItem> list = XmlParser.getTestItems(input,"SPI");
             for (BLE_testItem item : list) {
                 Method method;
                 try {

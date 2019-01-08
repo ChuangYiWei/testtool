@@ -10,7 +10,7 @@ import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.example.johnny_wei.testtool.xml.BLE_testItem;
+import com.example.johnny_wei.testtool.xmlpull.BLE_testItem;
 
 import java.io.InputStream;
 import java.util.LinkedList;
@@ -138,26 +138,26 @@ public class BD_Testclass2 extends AppCompatActivity {
 
     public int funcA(BLE_testItem testItem)
     {
-        Log.d(TAG, "funcA----------------------S");
+        Log.d(TAG, "\nfuncA----------------------S");
         Log.d(TAG, "gettestName:" + testItem.gettestName());
         Log.d(TAG, "data:" + testItem.getdataStr());
-        Log.d(TAG, "gettestName:" + testItem.getCmd());
+        Log.d(TAG, "cmd" + testItem.getCmd());
         testItem.popCmd();
-        Log.d(TAG, "gettestName:" + testItem.getCmd());
+        Log.d(TAG, "cmd:" + testItem.getCmd());
         Log.d(TAG, "funcA----------------------E");
         return 97;
     }
 
     public int funcB(BLE_testItem testItem)
     {
-        Log.d(TAG, "funcB----------------------S");
+        Log.d(TAG, "\nfunc----------------------S");
         Log.d(TAG, "gettestName:" + testItem.gettestName());
         Log.d(TAG, "data:" + testItem.getdataStr());
-        Log.d(TAG, "gettestName:" + testItem.getCmd());
+        Log.d(TAG, "cmd" + testItem.getCmd());
         testItem.popCmd();
-        Log.d(TAG, "gettestName:" + testItem.getCmd());
-        Log.d(TAG, "funcB----------------------E");
-        return 98;
+        Log.d(TAG, "cmd:" + testItem.getCmd());
+        Log.d(TAG, "func----------------------E");
+        return 97;
     }
 
     public int test_IntvWrite(BDAutoTest2 testitem)

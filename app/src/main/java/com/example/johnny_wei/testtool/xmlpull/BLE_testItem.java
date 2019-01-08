@@ -1,11 +1,11 @@
-package com.example.johnny_wei.testtool.xml;
+package com.example.johnny_wei.testtool.xmlpull;
 import java.util.LinkedList;
 
 public class BLE_testItem {
     private String testName;
     private String dataStr;
 
-    LinkedList<String> cmdList;
+    private LinkedList<String> cmdList;
 
     BLE_testItem() {
         cmdList = new LinkedList<String>();

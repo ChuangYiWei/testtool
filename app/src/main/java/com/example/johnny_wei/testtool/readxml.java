@@ -5,8 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.johnny_wei.testtool.xml.BLE_testItem;
-import com.example.johnny_wei.testtool.xml.XmlParser;
+import com.example.johnny_wei.testtool.xmlpull.BLE_testItem;
+import com.example.johnny_wei.testtool.xmlpull.XmlParser;
 
 import java.io.InputStream;
 import java.util.LinkedList;

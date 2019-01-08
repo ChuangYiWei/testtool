@@ -1,4 +1,4 @@
-package com.example.johnny_wei.testtool.xml;
+package com.example.johnny_wei.testtool.xmlpull;
 import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -13,10 +13,10 @@ import java.util.List;
 public class XmlParser {
 
     //tag name
-    final static String ITEM = "item";
-    final static String FUNC_NAME = "func_name";
-    final static String DATA = "data";
-    final static String CMD = "cmd";
+    private final static String ITEM = "item";
+    private final static String FUNC_NAME = "func_name";
+    private final static String DATA = "data";
+    private final static String CMD = "cmd";
 
     public static List<BLE_testItem> getTestItems(InputStream inStream) throws Throwable
     {
