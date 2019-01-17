@@ -15,14 +15,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".xmlandinvoke">
+        <activity android:name=".bytecheck">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".handler" />
+        <activity android:name=".xmlandinvoke" />
         <activity android:name=".customview" />
         <activity android:name=".write" />
         <activity android:name=".linkedmap" />
@@ -40,7 +40,7 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".bytecheck" />
+        <activity android:name=".handler" />
         <activity android:name=".BRrate" />
         <activity android:name=".test_spinner" />
         <activity android:name=".advdata" />

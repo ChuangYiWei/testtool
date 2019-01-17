@@ -26,14 +26,48 @@ public class bytecheck extends AppCompatActivity {
         testStr.add("222");
         for(int i=0;i<3;i++)
         {
-            Log.d(TAG, Integer.toString(i)+ ":" + testStr.getFirst());
+            //Log.d(TAG, Integer.toString(i)+ ":" + testStr.getFirst());
         }
+        splitData();
 //        comparephyaddr();
 //        checkLength();
 //        checkUARTLength();
 
     }
 
+    final int DATASIZE = 20;
+    void splitData()
+    {
+        LinkedList<byte[]> byte_list = new LinkedList<>();
+
+         final byte[] bytearray={0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F,
+                 0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x1A,0x1B,0x1C,0x1D,0x1E,0x1F,
+                 0x20,0x21,0x22,0x23,0x24,0x25,0x26,0x27,0x28,0x29,0x2A,0x2B,0x2C,0x2D,0x2E,0x2F};
+        int split_num = bytearray.length/DATASIZE;
+        Log.d(TAG, "split_num:" + split_num);
+        int num = 0;
+        int idx = 0;
+
+        for(num=0;num<split_num;num++)
+        {
+            byte[] currentData = new byte[DATASIZE];
+            System.arraycopy(bytearray, idx, currentData, 0, DATASIZE);
+            byte_list.addLast(currentData);
+            Log.d(TAG, "currentData:" + bytes2String(currentData));
+            idx+=DATASIZE;
+        }
+        //last one
+
+        int last_one_size = bytearray.length%DATASIZE;
+        byte[] last_one = new byte[last_one_size];
+        System.arraycopy(bytearray, idx, last_one, 0, last_one_size);
+        byte_list.addLast(last_one);
+        Log.d(TAG, "last_one:" + bytes2String(last_one));
+        while(byte_list.size() > 0)
+        {
+            Log.d(TAG, "byte_list:" + bytes2String(byte_list.poll()));
+        }
+    }
 
 
     private boolean checkUARTLength() {
