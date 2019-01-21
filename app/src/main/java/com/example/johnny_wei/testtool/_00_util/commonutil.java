@@ -1,5 +1,6 @@
 package com.example.johnny_wei.testtool._00_util;
 
+import android.os.Build;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,7 +17,7 @@ public class commonutil extends AppCompatActivity {
     final static StackTraceElement[] ste = Thread.currentThread().getStackTrace();
     static SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     static final String mERROR = "      [Err]";
-    static final String mDEBUG = "[Debug]";
+    static final String mDEBUG = "";
     static final String mWARRING = "  [Warring]";
 
     static final String path_SD = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -93,7 +94,11 @@ public class commonutil extends AppCompatActivity {
         return;
     }
 
-    public static void wdbgLogcat(String TAG, int level, String data) {
+    public static String wdbgLogcat(String TAG, int level, String data) {
+        if (!checkExternalMedia()) {
+            return "";
+        }
+
         String prefix;
         switch (level) {
             case 0:
@@ -110,19 +115,23 @@ public class commonutil extends AppCompatActivity {
         }
 
         if (!checkExternalMedia()) {
-            return;
+            return "";
         }
 
-//        data = getCurrentTimeStr() + " : " + prefix + data + endLine;
-//        try {
-//            String absPath = path_AbsDebugfolder + debugfileName;
-//            FileOutputStream output = new FileOutputStream(absPath, true);
-//            output.write(data.getBytes());
-//            output.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-        return;
+        String dataWrited = getCurrentTimeStr().trim() + " | ";
+        dataWrited += data;
+//        dataWrited = dataWrited + "  " + GetBrand() + "-" + GetDeviceModel() + "-" + GetSystemVersion() + endLine;
+        data = getCurrentTimeStr().trim() + " : " + prefix + data + endLine;
+        try {
+            String absPath = path_AbsDebugfolder + debugfileName;
+            FileOutputStream output = new FileOutputStream(absPath, true);
+            output.write(data.getBytes());
+            output.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return dataWrited;
     }
 
     public static void writeToSDFile(String data) {
@@ -272,4 +281,22 @@ public class commonutil extends AppCompatActivity {
             return (byte) 0x00;
         }
     }
+
+    public static String GetDeviceModel(){
+        return Build.MODEL;
+    }
+
+    public static String GetSystemVersion(){
+        return Build.VERSION.RELEASE;
+    }
+
+    public static String GetBrand(){
+        return Build.BRAND;
+    }
+
+    public static int GetVersionSDK(){
+        return Build.VERSION.SDK_INT;
+    }
+
+
 }
