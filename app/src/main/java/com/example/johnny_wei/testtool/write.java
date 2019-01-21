@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -32,9 +33,13 @@ public class write extends AppCompatActivity {
     public String readFileData(String fileName){
         String result = "";
         try {
-            FileInputStream fin = openFileInput(fileName);//獲得FileInputStream對象
+//            FileInputStream fin = openFileInput(fileName);//獲得FileInputStream對象
+//            int length = fin.available();//獲取文件長度
+            File file = new File(fileName);
+            FileInputStream fin = new FileInputStream(file);//獲得FileInputStream對象
             int length = fin.available();//獲取文件長度
             byte[] buffer = new byte[length];//創建byte數組用於讀入數據
+
             fin.read(buffer);
             result = new String(buffer, 0,buffer.length);
             fin.close();//關閉文件輸入流
