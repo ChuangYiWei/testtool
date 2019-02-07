@@ -14,8 +14,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".bytecheck">
+        android:theme="@style/mytheme">
+        <activity android:name=".test_ble">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,6 +46,7 @@
         <activity android:name=".advdata" />
         <activity android:name=".permision_test" />
         <activity android:name=".readxml" />
+        <activity android:name=".bytecheck"></activity>
     </application>
 
 </manifest>
