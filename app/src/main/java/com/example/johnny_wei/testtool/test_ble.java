@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ public class test_ble extends AppCompatActivity {
 
     //view
     static TextView tv_status;
+    EditText ed_mac;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +41,7 @@ public class test_ble extends AppCompatActivity {
 
         //ed_mac = findViewById(R.id.ed_mac);
         tv_status = findViewById(R.id.tv_status);
-
+        ed_mac = findViewById(R.id.ed_mac);
     }
 
     // Device scan callback.
@@ -52,6 +54,7 @@ public class test_ble extends AppCompatActivity {
                     if (null != name) {
                         Log.i(TAG, "device name:" + device.getName() + ", device address:" + device.getAddress() + Integer.toString(rssi));
                     }
+
     }};
 
     @Override
@@ -74,7 +77,16 @@ public class test_ble extends AppCompatActivity {
     }
 
     public void clk_getState(View view) {
+        liteBluetooth.isMainThread();
         int state = liteBluetooth.getConnectionState();
         tv_status.setText(String.valueOf(state));
+    }
+
+    public void clk_connect(View view) {
+        liteBluetooth.connect(ed_mac.getText().toString());
+    }
+
+    public void clk_disconn(View view) {
+        liteBluetooth.disconnect();
     }
 }
