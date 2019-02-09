@@ -80,6 +80,7 @@ public class test_ble extends AppCompatActivity {
         liteBluetooth.isMainThread();
         int state = liteBluetooth.getConnectionState();
         tv_status.setText(String.valueOf(state));
+        liteBluetooth.printServices(liteBluetooth.getBluetoothGatt());
     }
 
     public void clk_connect(View view) {
@@ -88,5 +89,9 @@ public class test_ble extends AppCompatActivity {
 
     public void clk_disconn(View view) {
         liteBluetooth.disconnect();
+    }
+
+    public void clk_reboot_BT(View view) {
+        liteBluetooth.rebootBluetooth();
     }
 }

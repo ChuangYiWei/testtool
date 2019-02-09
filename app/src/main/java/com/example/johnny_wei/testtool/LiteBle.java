@@ -6,7 +6,11 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,6 +24,8 @@ import android.util.Log;
 import com.example.johnny_wei.testtool._00_util.commonutil;
 
 import java.lang.reflect.Method;
+import java.net.ConnectException;
+import java.util.Arrays;
 
 import static com.example.johnny_wei.testtool.permision_test.PERMISSION_REQUEST_COARSE_LOCATION;
 
@@ -55,13 +61,7 @@ public class LiteBle {
 
     //todo:getinstance
 
-    public BluetoothManager getBluetoothManager() {
-        return mbluetoothManager;
-    }
 
-    public BluetoothAdapter getBluetoothAdapter() {
-        return mbluetoothAdapter;
-    }
 
     public void enableBluetoothIfDisabled(Activity activity, int requestCode) {
 
@@ -117,7 +117,51 @@ public class LiteBle {
         return connectionState;
     }
 
+    public void enableBluetooth() {
+        mbluetoothAdapter.enable();
+    }
+
+    public void disableBluetooth() {
+        Log.d(TAG,"disableBluetooth");
+        mbluetoothAdapter.disable();
+    }
+
+    public boolean rebootBluetooth() {
+        disconnect();
+        disableBluetooth();
+        SystemClock.sleep(5000);
+        enableBluetooth();
+        SystemClock.sleep(5000);
+        return true;
+    }
+
+    public Context getContext() {
+        return mContext;
+    }
+
+    public BluetoothManager getBluetoothManager() {
+        return mbluetoothManager;
+    }
+
+    public BluetoothAdapter getBluetoothAdapter() {
+        return mbluetoothAdapter;
+    }
+
+    public BluetoothGatt getBluetoothGatt() {
+        return mBluetoothGatt;
+    }
+
+    public boolean isConnected() {
+        return connectionState >= STATE_CONNECTED;
+    }
+
+    public boolean isServiceDiscoered() {
+        return connectionState == STATE_SERVICES_DISCOVERED;
+    }
+
     private boolean isSuccess;
+
+
     public boolean connect(final String address) {
         Log.d(TAG,"=>connect addr: " + address);
         if (mbluetoothAdapter == null || address == null) {
@@ -167,7 +211,7 @@ public class LiteBle {
     }
 
     /**
-            * Disconnects an existing connection or cancel a pending connection. The
+     * Disconnects an existing connection or cancel a pending connection. The
      * disconnection result is reported asynchronously through the
      * {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
      * callback.
@@ -187,17 +231,80 @@ public class LiteBle {
                 mBluetoothGatt.close();
                 connectionState = STATE_DISCONNECTED;
                 mBluetoothGatt = null;
-                Log.i(TAG, "closed BluetoothGatt ");
+                Log.d(TAG, "closed BluetoothGatt ");
             }
         });
     }
 
+
     /*gatt callback*/
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
 
+        @Override
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            Log.d(TAG, "onConnectionStateChange  status: " + status
+                    + " ,newState: " + newState + "  ,thread: " + Thread.currentThread().getId());
+
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                if (newState == BluetoothProfile.STATE_CONNECTED) {
+                    Log.d(TAG, "Connected to GATT server. Attempting to start service discovery");
+                    runOnMainThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mBluetoothGatt.discoverServices();
+                        }
+                    });
+                    connectionState = STATE_CONNECTED;
+                } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                    connectionState = STATE_DISCONNECTED;
+                    Log.d(TAG, "Disconnected from GATT server.");
+                }
+            } else {
+                printConnectException(gatt, status);
+                disconnect();
+            }
+        }
+
+        @Override
+        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            Log.d(TAG, "onServicesDiscovered.");
+            if (BluetoothGatt.GATT_SUCCESS == status) {
+                connectionState =  STATE_SERVICES_DISCOVERED;
+                //todo
+            } else {
+                printConnectException(gatt, status);
+            }
+            super.onServicesDiscovered(gatt, status);
+        }
     };
 
+    void printConnectException(BluetoothGatt bluetoothGatt, int gattStatus)
+    {
+        Log.e(TAG, "ConnectException bluetoothGatt=" + bluetoothGatt);
+        if (gattStatus == globalConfig.GATT_CONN_TERMINATE_LOCAL_HOST) {
+            Log.w(TAG, "GATT_CONN_TERMINATE_LOCAL_HOST, resetConnectState !");
+        } else if (gattStatus == globalConfig.GATT_CONN_TIMEOUT) {
+            Log.e(TAG, "GATT_CONN_TIMEOUT!");
+        } else if (gattStatus == globalConfig.GATT_INTERNAL_ERROR) {
+            Log.e(TAG, "GATT_INTERNAL_ERROR!");
+        } else {
+            Log.e(TAG, "ConnectException received: " + gattStatus);
+        }
+    }
 
+    public  void printServices(BluetoothGatt gatt) {
+        if (gatt != null) {
+            for (BluetoothGattService service : gatt.getServices()) {
+                Log.i(TAG, "service: " + service.getUuid());
+                for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
+                    Log.d(TAG, "  characteristic: " + characteristic.getUuid() + " value: " + Arrays.toString(characteristic.getValue()));
+                    for (BluetoothGattDescriptor descriptor : characteristic.getDescriptors()) {
+                        Log.v(TAG, "        descriptor: " + descriptor.getUuid() + " value: " + Arrays.toString(descriptor.getValue()));
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * There is a refresh() method in BluetoothGatt class but for now it's hidden. We will call it using reflections.
@@ -214,7 +321,7 @@ public class LiteBle {
             Log.e(TAG, "An exception occured while refreshing device");
             isSuccess = false;
         }
-        SystemClock.sleep(200);
+//        SystemClock.sleep(200);
         return isSuccess;
     }
 
