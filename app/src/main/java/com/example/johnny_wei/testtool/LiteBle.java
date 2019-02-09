@@ -26,6 +26,7 @@ import com.example.johnny_wei.testtool._00_util.commonutil;
 import java.lang.reflect.Method;
 import java.net.ConnectException;
 import java.util.Arrays;
+import java.util.UUID;
 
 import static com.example.johnny_wei.testtool.permision_test.PERMISSION_REQUEST_COARSE_LOCATION;
 
@@ -129,9 +130,9 @@ public class LiteBle {
     public boolean rebootBluetooth() {
         disconnect();
         disableBluetooth();
-        SystemClock.sleep(5000);
+        SystemClock.sleep(3000);
         enableBluetooth();
-        SystemClock.sleep(5000);
+        SystemClock.sleep(3000);
         return true;
     }
 
@@ -159,9 +160,28 @@ public class LiteBle {
         return connectionState == STATE_SERVICES_DISCOVERED;
     }
 
+    /*------------  Service  ------------ */
+    public BluetoothGattService getService(BluetoothGatt gatt, String serviceUUID) {
+        return gatt.getService(UUID.fromString(serviceUUID));
+    }
+
+    /*------------  Characteristic服务  ------------ */
+    public BluetoothGattCharacteristic getCharacteristic(BluetoothGattService service, String charactUUID) {
+        if (service != null) {
+            return service.getCharacteristic(UUID.fromString(charactUUID));
+        }
+        return null;
+    }
+
+    public BluetoothGattCharacteristic getCharacteristic(BluetoothGatt gatt, String serviceUUID, String charactUUID) {
+        BluetoothGattService service = gatt.getService(UUID.fromString(serviceUUID));
+        if (service != null) {
+            return service.getCharacteristic(UUID.fromString(charactUUID));
+        }
+        return null;
+    }
+
     private boolean isSuccess;
-
-
     public boolean connect(final String address) {
         Log.d(TAG,"=>connect addr: " + address);
         if (mbluetoothAdapter == null || address == null) {
@@ -236,6 +256,77 @@ public class LiteBle {
         });
     }
 
+    public boolean enableCharacteristicNotify(
+            final String str_uuid_service,
+            final String characteristicUUID,
+            final String descriptorUUID)
+    {
+        Log.d(TAG,"setCharacteristicNotify");
+        if (mbluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.e(TAG,"BluetoothAdapter null");
+            return false;
+        }
+
+        BluetoothGattService service = getService(mBluetoothGatt, str_uuid_service);
+        if (service == null) {
+            Log.e(TAG,  "service is null");
+            return false;
+        }
+
+        BluetoothGattCharacteristic chara = getCharacteristic(service, characteristicUUID);
+        if (chara == null) {
+            Log.e(TAG, "BluetoothGattCharacteristic is null");
+            return false;
+        }
+
+        if (!mBluetoothGatt.setCharacteristicNotification(chara, true)) {
+            Log.e(TAG,  "setCharacteristicNotification fail");
+            return false;
+        }
+
+        BluetoothGattDescriptor descriptor = chara.getDescriptor(UUID.fromString(descriptorUUID));
+
+        if (null != descriptor) {
+            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            if (!mBluetoothGatt.writeDescriptor(descriptor)) {
+                Log.e(TAG, "writeDescriptor fail");
+                return false;
+            }
+        } else {
+            Log.e(TAG,  "null descriptor");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * write data to characteristic
+     */
+    public boolean writeDataToCharacteristic(
+            final String serviceUUID,
+            final String characteristicUUID,
+            byte[] bytes) {
+        Log.d(TAG,"writeDataToCharacteristic:" + characteristicUUID);
+        BluetoothGattService service = getService(mBluetoothGatt, serviceUUID);
+        if (service == null) {
+            Log.e(TAG,  "service is null");
+            return false;
+        }
+
+        BluetoothGattCharacteristic chara = getCharacteristic(service, characteristicUUID);
+        if (chara == null) {
+            Log.e(TAG, "BluetoothGattCharacteristic is null");
+            return false;
+        }
+
+        chara.setValue(bytes);
+        if (!mBluetoothGatt.writeCharacteristic(chara)) {
+            Log.e(TAG, "write characteristic fail");
+        }
+
+        return true;
+
+    }
 
     /*gatt callback*/
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
@@ -275,6 +366,43 @@ public class LiteBle {
                 printConnectException(gatt, status);
             }
             super.onServicesDiscovered(gatt, status);
+        }
+
+        @Override
+        public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            Log.d(TAG, "onCharacteristicRead");
+            super.onCharacteristicRead(gatt, characteristic, status);
+        }
+
+        @Override
+        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            Log.d(TAG, "onCharacteristicWrite");
+            super.onCharacteristicWrite(gatt, characteristic, status);
+        }
+
+        @Override
+        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+            Log.d(TAG, "onCharacteristicChanged");
+            printbytes(characteristic.getValue());
+            super.onCharacteristicChanged(gatt, characteristic);
+        }
+
+        @Override
+        public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+            Log.d(TAG, "onDescriptorRead");
+            super.onDescriptorRead(gatt, descriptor, status);
+        }
+
+        @Override
+        public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+            Log.d(TAG, "onDescriptorWrite");
+            super.onDescriptorWrite(gatt, descriptor, status);
+        }
+
+        @Override
+        public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
+            Log.d(TAG, "onMtuChanged");
+            super.onMtuChanged(gatt, mtu, status);
         }
     };
 
@@ -344,5 +472,13 @@ public class LiteBle {
 //                connect(device, autoConnect, callback);
 //            }
 //        });
+    }
+
+    public void printbytes(byte bytes[]){
+        String printStr = "";
+        for (byte data : bytes) {
+            printStr = printStr + String.format("%02x", data);
+        }
+        Log.d(TAG, "printbytes:" + printStr);
     }
 }

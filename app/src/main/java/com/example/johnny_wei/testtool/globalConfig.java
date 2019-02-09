@@ -27,4 +27,13 @@ public class globalConfig {
 
     //broad cast
     static final String EXTRAS_ADDR = "EXTRAS_ADDR";
+
+    //UUID
+    final static public String UUID_SERVICE = "0000fff0-0000-1000-8000-00805f9b34fb";
+    final static public String UUID_NOTIFY_CHARA = "0000fff1-0000-1000-8000-00805f9b34fb";
+    final static public String UUID_WRITE_DESCRIPTOR = "00002902-0000-1000-8000-00805f9b34fb";
+    final static public String UUID_WRITE_CHARA = "0000fff2-0000-1000-8000-00805f9b34fb";
+
+    final static public String UUID_BATTERY_SERVICE = "0000180f-0000-1000-8000-00805f9b34fb";
+    final static public String UUID_BATTERY_LEVEL_CHARA = "00002a19-0000-1000-8000-00805f9b34fb";
 }

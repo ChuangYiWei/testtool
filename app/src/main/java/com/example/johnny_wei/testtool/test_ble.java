@@ -92,6 +92,28 @@ public class test_ble extends AppCompatActivity {
     }
 
     public void clk_reboot_BT(View view) {
-        liteBluetooth.rebootBluetooth();
+        m_userHandler.post(new Runnable() {
+           @Override
+           public void run() {
+               liteBluetooth.rebootBluetooth();
+           }
+        });
+
+    }
+
+    public void clk_notify(View view) {
+        liteBluetooth.enableCharacteristicNotify(
+                globalConfig.UUID_SERVICE,
+                globalConfig.UUID_NOTIFY_CHARA,
+                globalConfig.UUID_WRITE_DESCRIPTOR);
+    }
+
+    public void clk_write_data(View view) {
+        byte bytes[] = {0x0, 0x9, 0x9};
+        liteBluetooth.writeDataToCharacteristic(
+                globalConfig.UUID_SERVICE,
+                globalConfig.UUID_WRITE_CHARA,
+                bytes
+        );
     }
 }
