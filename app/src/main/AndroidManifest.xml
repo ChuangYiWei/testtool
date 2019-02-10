@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/mytheme">
-        <activity android:name=".test_ble">
+        <!--<activity android:name=".test_ble">-->
+        <activity android:name=".bytecheck">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".xmlandinvoke" />
-        <activity android:name=".customview" />
+        <activity android:name=".test_ble" />
         <activity android:name=".write" />
         <activity android:name=".linkedmap" />
         <activity android:name=".ble" />
@@ -46,7 +47,7 @@
         <activity android:name=".advdata" />
         <activity android:name=".permision_test" />
         <activity android:name=".readxml" />
-        <activity android:name=".bytecheck"></activity>
+        <activity android:name=".customview"></activity>
     </application>
 
 </manifest>

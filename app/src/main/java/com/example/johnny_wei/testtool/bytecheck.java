@@ -4,6 +4,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.johnny_wei.testtool.utils.devUtil;
+import com.example.johnny_wei.testtool.utils.strUtil;
+
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -28,11 +31,25 @@ public class bytecheck extends AppCompatActivity {
         {
             //Log.d(TAG, Integer.toString(i)+ ":" + testStr.getFirst());
         }
-        splitData();
+        test_str();
+//        splitData();
 //        comparephyaddr();
 //        checkLength();
 //        checkUARTLength();
 
+    }
+
+    void test_str()
+    {
+        final byte[] bytearray={0x00,0x01,0x02};
+        Log.d(TAG,strUtil.bytes2String(bytearray));
+        string2Bytes("123");
+        Log.d(TAG, "brand:"+devUtil.GetBrand());
+        Log.d(TAG, "dev model:"+devUtil.GetDeviceModel());
+        Log.d(TAG, "sys ver:"+devUtil.GetSystemVersion());
+        Log.d(TAG, "SDK ver:"+devUtil.GetVersionSDK());
+        devUtil.printDeviceInfo();
+        return;
     }
 
     final int DATASIZE = 20;

@@ -24,6 +24,8 @@ public class customAdapter extends BaseAdapter {
     /*private view holder class*/
     private class ViewHolder {
         TextView tv_l1;
+        TextView tv_l2;
+        TextView tv_l3;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -34,7 +36,9 @@ public class customAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.list_item, null);
             holder = new ViewHolder();
-            holder.tv_l1 = (TextView) convertView.findViewById(R.id.chara_item_L1);
+            holder.tv_l1 = (TextView) convertView.findViewById(R.id.L1);
+            holder.tv_l2 = (TextView) convertView.findViewById(R.id.L2);
+            holder.tv_l3 = (TextView) convertView.findViewById(R.id.L3);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -43,6 +47,8 @@ public class customAdapter extends BaseAdapter {
         RowItem rowItem = (RowItem) getItem(position);
 
         holder.tv_l1.setText(rowItem.getstrL1());
+        holder.tv_l2.setText(rowItem.getstrL2());
+        holder.tv_l3.setText(rowItem.getstrL3());
 
         return convertView;
     }
