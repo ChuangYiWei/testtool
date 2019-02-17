@@ -15,8 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/mytheme">
-        <!--<activity android:name=".test_ble">-->
-        <activity android:name=".bytecheck">
+
+        <!-- <activity android:name=".test_ble"> -->
+        <activity android:name=".test_callback">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,7 +48,8 @@
         <activity android:name=".advdata" />
         <activity android:name=".permision_test" />
         <activity android:name=".readxml" />
-        <activity android:name=".customview"></activity>
+        <activity android:name=".customview" />
+        <activity android:name=".bytecheck"></activity>
     </application>
 
 </manifest>
