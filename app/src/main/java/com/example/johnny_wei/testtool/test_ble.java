@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.johnny_wei.testtool.config.globalConfig;
+
 public class test_ble extends AppCompatActivity {
     String TAG = getClass().getSimpleName();
     Activity thisActivity = this;

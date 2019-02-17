@@ -21,10 +21,9 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 
-import com.example.johnny_wei.testtool._00_util.commonutil;
+import com.example.johnny_wei.testtool.config.globalConfig;
 
 import java.lang.reflect.Method;
-import java.net.ConnectException;
 import java.util.Arrays;
 import java.util.UUID;
 

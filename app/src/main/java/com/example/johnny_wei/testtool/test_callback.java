@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 
 
-public class test_callback extends AppCompatActivity {
+public class test_callback extends AppCompatActivity implements ICallback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,4 +20,9 @@ public class test_callback extends AppCompatActivity {
 
         }
     };
+
+    @Override
+    public void callback(MyObj o) {
+
+    }
 }

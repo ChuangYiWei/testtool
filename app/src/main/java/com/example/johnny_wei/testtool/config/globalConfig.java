@@ -1,4 +1,14 @@
-package com.example.johnny_wei.testtool;
+package com.example.johnny_wei.testtool.config;
+
+interface IBLECallback{
+    void OnConnect(BLECbData bleData);
+    //onConnection callback
+    //ondisconnect callback
+}
+
+class BLECbData {
+    //gatt merber
+}
 
 public class globalConfig {
 
@@ -16,14 +26,14 @@ public class globalConfig {
     static String[] testModeArray = {"SPI mode","UART mode", "AIR UART CMD mode", "AIR HCI CMD mode"};
 
     //GATT action
-    final static String ACTION_GATT_CONNECTED = "ACTION_GATT_CONNECTED";
-    final static String ACTION_GATT_DISCONNECTED = "ACTION_GATT_DISCONNECTED";
-    final static String ACTION_GATT_SERVICES_DISCOVERED = "ACTION_GATT_SERVICES_DISCOVERED";
+    public static String ACTION_GATT_CONNECTED = "ACTION_GATT_CONNECTED";
+    public static String ACTION_GATT_DISCONNECTED = "ACTION_GATT_DISCONNECTED";
+    public static String ACTION_GATT_SERVICES_DISCOVERED = "ACTION_GATT_SERVICES_DISCOVERED";
 
     //GATT error code
-    static final int GATT_CONN_TERMINATE_LOCAL_HOST = 0x16;
-    static final int GATT_CONN_TIMEOUT = 0x08;
-    static final int GATT_INTERNAL_ERROR = 0x81;//129
+    public static  int GATT_CONN_TERMINATE_LOCAL_HOST = 0x16;
+    public static  int GATT_CONN_TIMEOUT = 0x08;
+    public static  int GATT_INTERNAL_ERROR = 0x81;//129
 
     //broad cast
     static final String EXTRAS_ADDR = "EXTRAS_ADDR";
