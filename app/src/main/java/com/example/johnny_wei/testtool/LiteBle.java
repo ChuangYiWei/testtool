@@ -21,6 +21,8 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.example.johnny_wei.testtool.config.BLECbData;
+import com.example.johnny_wei.testtool.config.IBLECallback;
 import com.example.johnny_wei.testtool.config.globalConfig;
 
 import java.lang.reflect.Method;
@@ -29,8 +31,10 @@ import java.util.UUID;
 
 import static com.example.johnny_wei.testtool.permision_test.PERMISSION_REQUEST_COARSE_LOCATION;
 
-public class LiteBle {
+public class LiteBle  {
     private Context mContext;
+    IBLECallback IbleCB;
+
     private BluetoothManager mbluetoothManager;
     private BluetoothAdapter mbluetoothAdapter;
     private BluetoothGatt mBluetoothGatt;
@@ -57,6 +61,8 @@ public class LiteBle {
         HandlerThread ht_thread = new HandlerThread("name");
         ht_thread.start();
         m_userHandler = new Handler(ht_thread.getLooper());
+        //user must implements IBLECallback
+        IbleCB = (IBLECallback)context;
     }
 
     //todo:getinstance
@@ -344,6 +350,7 @@ public class LiteBle {
                             mBluetoothGatt.discoverServices();
                         }
                     });
+                    IbleCB.OnConnect();
                     connectionState = STATE_CONNECTED;
                 } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                     connectionState = STATE_DISCONNECTED;
@@ -480,4 +487,6 @@ public class LiteBle {
         }
         Log.d(TAG, "printbytes:" + printStr);
     }
+
+
 }
