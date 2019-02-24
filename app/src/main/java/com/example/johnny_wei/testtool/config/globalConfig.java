@@ -1,15 +1,5 @@
 package com.example.johnny_wei.testtool.config;
 
-interface IBLECallback{
-    void OnConnect(BLECbData bleData);
-    //onConnection callback
-    //ondisconnect callback
-}
-
-class BLECbData {
-    //gatt merber
-}
-
 public class globalConfig {
 
     //drop down menu
@@ -17,6 +7,8 @@ public class globalConfig {
     public static final int UART_MODE = 1;
     static final int AIR_UART_MODE = 2;
     static final int AIR_HCI_MODE = 3;
+
+    //TODO:write log enable
 
     static final String SPI_XML_TAG = "UART";
     static final String UART_XML_TAG = "SPI";

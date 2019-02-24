@@ -14,9 +14,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.johnny_wei.testtool.config.BLECbData;
+import com.example.johnny_wei.testtool.config.IBLECallback;
 import com.example.johnny_wei.testtool.config.globalConfig;
 
-public class test_ble extends AppCompatActivity {
+public class test_ble extends AppCompatActivity implements IBLECallback {
     String TAG = getClass().getSimpleName();
     Activity thisActivity = this;
     private LiteBle liteBluetooth;
@@ -117,5 +119,10 @@ public class test_ble extends AppCompatActivity {
                 globalConfig.UUID_WRITE_CHARA,
                 bytes
         );
+    }
+
+    @Override
+    public void OnConnect() {
+
     }
 }
