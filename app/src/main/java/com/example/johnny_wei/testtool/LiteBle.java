@@ -54,6 +54,21 @@ public class LiteBle  {
 
     private int connectionState = STATE_DISCONNECTED;
 
+    public static final int CB_STATE_CHARA_READ_SUCCESS = 0x10;
+    public static final int CB_STATE_CHARA_READ_FAIL = 0x11;
+
+    public static final int CB_STATE_CHARA_WRITE_SUCCESS = 0x12;
+    public static final int CB_STATE_CHARA_WRITE_FAIL = 0x13;
+
+    public static final int CB_STATE_CHARA_CHANGED_SUCCESS = 0x14;
+    public static final int CB_STATE_CHARA_CHANGED_FAIL = 0x15;
+
+    public static final int CB_STATE_DESC_READ_SUCCESS = 0x16;
+    public static final int CB_STATE_DESC_READ_FAIL = 0x17;
+
+    public static final int CB_STATE_DESC_WRITE_SUCCESS = 0x18;
+    public static final int CB_STATE_DESC_WRITE_FAIL = 0x19;
+
     public LiteBle(Context context) {
         this.mContext = context = context.getApplicationContext();
         mbluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
@@ -62,9 +77,13 @@ public class LiteBle  {
         ht_thread.start();
         m_userHandler = new Handler(ht_thread.getLooper());
         //user must implements IBLECallback
-        IbleCB = (IBLECallback)context;
+        //IbleCB = (IBLECallback)context;
     }
 
+    public void setCallback(IBLECallback cb)
+    {
+        IbleCB = cb;
+    }
     //todo:getinstance
 
 
@@ -257,6 +276,7 @@ public class LiteBle  {
                 connectionState = STATE_DISCONNECTED;
                 mBluetoothGatt = null;
                 Log.d(TAG, "closed BluetoothGatt ");
+                sendCallback(STATE_DISCONNECTED);
             }
         });
     }
@@ -332,6 +352,36 @@ public class LiteBle  {
         return true;
 
     }
+    /**
+     * read characteristic data
+     */
+    public boolean readCharacteristic(final String serviceUUID, final String characteristicUUID) {
+        Log.d(TAG, "readCharacteristic uuid:" + characteristicUUID);
+
+        if (mbluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.d(TAG, "BluetoothAdapter null");
+            return false;
+        }
+        UUID service_uuid = UUID.fromString(serviceUUID);
+        UUID chara_uuid = UUID.fromString(characteristicUUID);
+        BluetoothGattService service = mBluetoothGatt.getService(service_uuid);
+
+        if (service == null) {
+            Log.e(TAG, "service is null");
+            return false;
+        }
+
+        BluetoothGattCharacteristic chara = service.getCharacteristic(chara_uuid);
+        if (chara == null) {
+            Log.e(TAG, "BluetoothGattCharacteristic is null");
+            return false;
+        }
+
+        mBluetoothGatt.readCharacteristic(chara);
+        return true;
+    }
+
+
 
     /*gatt callback*/
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
@@ -350,15 +400,17 @@ public class LiteBle  {
                             mBluetoothGatt.discoverServices();
                         }
                     });
-                    IbleCB.OnConnect();
                     connectionState = STATE_CONNECTED;
+                    sendCallback(STATE_CONNECTED);
                 } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                     connectionState = STATE_DISCONNECTED;
                     Log.d(TAG, "Disconnected from GATT server.");
+                    sendCallback(STATE_DISCONNECTED);
                 }
             } else {
                 printConnectException(gatt, status);
                 disconnect();
+
             }
         }
 
@@ -377,18 +429,39 @@ public class LiteBle  {
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             Log.d(TAG, "onCharacteristicRead");
+            if (BluetoothGatt.GATT_SUCCESS == status) {
+                IbleCB.readCharacteristicSuccessCB(
+                        characteristic.getUuid().toString(),
+                        characteristic.getValue());
+            } else {
+                IbleCB.readCharacteristicFailCB(characteristic.getUuid().toString(), status);
+                Log.e(TAG, "onCharacteristicRead fail");
+            }
+            //printbytes(characteristic.getValue());
             super.onCharacteristicRead(gatt, characteristic, status);
         }
 
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             Log.d(TAG, "onCharacteristicWrite");
+            if (BluetoothGatt.GATT_SUCCESS == status) {
+                IbleCB.writeCharacteristicSuccessCB(
+                        characteristic.getUuid().toString(),
+                        characteristic.getValue());
+            } else {
+                IbleCB.writeCharacteristicFailCB(characteristic.getUuid().toString(), status);
+                Log.e(TAG, "onCharacteristicWrite fail");
+            }
             super.onCharacteristicWrite(gatt, characteristic, status);
         }
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             Log.d(TAG, "onCharacteristicChanged");
+                IbleCB.CharaValueChangedSuccessCB(
+                        characteristic.getUuid().toString(),
+                        characteristic.getValue()
+                );
             printbytes(characteristic.getValue());
             super.onCharacteristicChanged(gatt, characteristic);
         }
@@ -396,12 +469,28 @@ public class LiteBle  {
         @Override
         public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
             Log.d(TAG, "onDescriptorRead");
+            if (BluetoothGatt.GATT_SUCCESS == status) {
+                IbleCB.readDescSuccessCB(
+                        descriptor.getUuid().toString(),
+                        descriptor.getValue());
+            } else {
+                IbleCB.readDescFailCB(descriptor.getUuid().toString(), status);
+                Log.e(TAG, "onDescriptorRead fail");
+            }
             super.onDescriptorRead(gatt, descriptor, status);
         }
 
         @Override
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
             Log.d(TAG, "onDescriptorWrite");
+            if (BluetoothGatt.GATT_SUCCESS == status) {
+                IbleCB.writeDescSuccessCB(
+                        descriptor.getUuid().toString(),
+                        descriptor.getValue());
+            } else {
+                IbleCB.writeDescFailCB(descriptor.getUuid().toString(), status);
+                Log.e(TAG, "onDescriptorRead fail");
+            }
             super.onDescriptorWrite(gatt, descriptor, status);
         }
 
@@ -414,16 +503,22 @@ public class LiteBle  {
 
     void printConnectException(BluetoothGatt bluetoothGatt, int gattStatus)
     {
+        String errStr = "";
         Log.e(TAG, "ConnectException bluetoothGatt=" + bluetoothGatt);
         if (gattStatus == globalConfig.GATT_CONN_TERMINATE_LOCAL_HOST) {
+            errStr = "GATT_CONN_TERMINATE_LOCAL_HOST";
             Log.w(TAG, "GATT_CONN_TERMINATE_LOCAL_HOST, resetConnectState !");
         } else if (gattStatus == globalConfig.GATT_CONN_TIMEOUT) {
+            errStr = "GATT_CONN_TIMEOUT";
             Log.e(TAG, "GATT_CONN_TIMEOUT!");
         } else if (gattStatus == globalConfig.GATT_INTERNAL_ERROR) {
+            errStr = "GATT_INTERNAL_ERROR";
             Log.e(TAG, "GATT_INTERNAL_ERROR!");
         } else {
+            errStr = "unknow: " + gattStatus;
             Log.e(TAG, "ConnectException received: " + gattStatus);
         }
+        IbleCB.ConnectFailCB(errStr);
     }
 
     public  void printServices(BluetoothGatt gatt) {
@@ -488,5 +583,18 @@ public class LiteBle  {
         Log.d(TAG, "printbytes:" + printStr);
     }
 
+    private void sendCallback(int state)
+    {
+        switch (state) {
+            case STATE_CONNECTED:
+                IbleCB.ConnectedCB();
+                break;
+            case STATE_DISCONNECTED:
+                IbleCB.DisConnectCB();
+                break;
+            default:
+                break;
+        }
+    }
 
 }

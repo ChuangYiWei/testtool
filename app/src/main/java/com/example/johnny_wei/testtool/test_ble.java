@@ -38,6 +38,7 @@ public class test_ble extends AppCompatActivity implements IBLECallback {
 
         liteBluetooth = new LiteBle(thisActivity);
         liteBluetooth.enableBluetoothIfDisabled(thisActivity, 1);
+        liteBluetooth.setCallback(this);
 
         setupview();
     }
@@ -121,8 +122,94 @@ public class test_ble extends AppCompatActivity implements IBLECallback {
         );
     }
 
-    @Override
-    public void OnConnect() {
+    public void clk_readData(View view) {
+        liteBluetooth.readCharacteristic(globalConfig.UUID_BATTERY_SERVICE, globalConfig.UUID_BATTERY_LEVEL_CHARA);
+    }
 
+    //implement callback
+    @Override
+    public void ConnectedCB() {
+        Log.w(TAG,"OnConnect callback !!!");
+    }
+
+    @Override
+    public void DisConnectCB() {
+        Log.w(TAG,"disconnected callback !!!");
+    }
+
+    @Override
+    public void ConnectFailCB(String reason)
+    {
+        Log.w(TAG,"ConnectFailCB callback !!! " + "reason:" + reason);
+    }
+
+    @Override
+    public void readCharacteristicSuccessCB(String UUID, byte[] CBData)
+    {
+        Log.w(TAG,"read uuid " + UUID);
+        printbytes(CBData);
+    }
+
+    @Override
+    public void readCharacteristicFailCB(String UUID, int status)
+    {
+        Log.e(TAG,"readCharacteristicFailCB uuid:" + UUID);
+    }
+
+
+    @Override
+    public void writeCharacteristicSuccessCB(String UUID, byte[] CBData)
+    {
+        Log.w(TAG,"write uuid " + UUID);
+        printbytes(CBData);
+    }
+
+    @Override
+    public void writeCharacteristicFailCB(String UUID, int status)
+    {
+        Log.e(TAG,"write uuid fail:" + UUID + "status:" + status);
+    }
+
+    @Override
+    public void CharaValueChangedSuccessCB(String UUID, byte[] CBData)
+    {
+        Log.e(TAG,"CharaValueChanged uuid:" + UUID);
+        printbytes(CBData);
+    }
+
+
+    @Override
+    public void readDescSuccessCB(String UUID, byte[] CBData)
+    {
+        Log.w(TAG,"read Desc uuid " + UUID);
+        printbytes(CBData);
+    }
+
+    @Override
+    public void readDescFailCB(String UUID, int status)
+    {
+        Log.e(TAG,"read Desc fail uuid " + UUID);
+    }
+
+
+    @Override
+    public void writeDescSuccessCB(String UUID, byte[] CBData)
+    {
+        Log.w(TAG,"write desc uuid " + UUID);
+        printbytes(CBData);
+    }
+
+    @Override
+    public void writeDescFailCB(String UUID, int status)
+    {
+        Log.e(TAG,"write desc fail uuid:" + UUID);
+    }
+
+    public void printbytes(byte bytes[]){
+        String printStr = "";
+        for (byte data : bytes) {
+            printStr = printStr + String.format("%02x", data);
+        }
+        Log.d(TAG, "printbytes:" + printStr);
     }
 }

@@ -116,4 +116,14 @@
         android:text="write_data"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button15" />
+
+    <Button
+        android:id="@+id/button17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:onClick="clk_readData"
+        android:text="read_data"
+        app:layout_constraintStart_toEndOf="@+id/button16"
+        app:layout_constraintTop_toTopOf="@+id/button16" />
 </android.support.constraint.ConstraintLayout>

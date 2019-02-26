@@ -17,7 +17,7 @@
         android:theme="@style/mytheme">
 
         <!-- <activity android:name=".test_ble"> -->
-        <activity android:name=".test_callback">
+        <activity android:name=".test_ble">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".xmlandinvoke" />
-        <activity android:name=".test_ble" />
+        <activity android:name=".test_callback" />
         <activity android:name=".write" />
         <activity android:name=".linkedmap" />
         <activity android:name=".ble" />
