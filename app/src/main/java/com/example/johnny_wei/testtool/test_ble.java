@@ -1,9 +1,12 @@
 package com.example.johnny_wei.testtool;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.v7.app.AppCompatActivity;
@@ -14,9 +17,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.johnny_wei.testtool.config.BLECbData;
 import com.example.johnny_wei.testtool.config.IBLECallback;
 import com.example.johnny_wei.testtool.config.globalConfig;
+import com.example.johnny_wei.testtool.utils.Permission;
+
+import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_COARSE_LOCATION;
+import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE;
+
 
 public class test_ble extends AppCompatActivity implements IBLECallback {
     String TAG = getClass().getSimpleName();
@@ -27,6 +34,7 @@ public class test_ble extends AppCompatActivity implements IBLECallback {
     //view
     static TextView tv_status;
     EditText ed_mac;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +47,12 @@ public class test_ble extends AppCompatActivity implements IBLECallback {
         liteBluetooth = new LiteBle(thisActivity);
         liteBluetooth.enableBluetoothIfDisabled(thisActivity, 1);
         liteBluetooth.setCallback(this);
+
+        //ask write
+        Permission.setActivity(thisActivity);
+        if (Permission.shouldAskPermissions()) {
+            Permission.WritePermissionsReq();
+        }
 
         setupview();
     }
@@ -62,6 +76,7 @@ public class test_ble extends AppCompatActivity implements IBLECallback {
 
     }};
 
+    //user implement this
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -211,5 +226,52 @@ public class test_ble extends AppCompatActivity implements IBLECallback {
             printStr = printStr + String.format("%02x", data);
         }
         Log.d(TAG, "printbytes:" + printStr);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        Log.d("Permission", "onRequestPermissionsResult");
+        if (grantResults.length == 0) {
+            Log.e(TAG, "grantResults size is 0");
+            return;
+        }
+        switch (requestCode) {
+            case PERMISSION_REQUEST_COARSE_LOCATION: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "coarse location permission granted");
+                } else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Functionality limited");
+                    builder.setMessage("Since location access has not been granted, this app will not be able to discover beacons when in the background.");
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+                break;
+            }
+            case PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE: {
+                if (grantResults[0]
+                        == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "storage location permission granted");
+                } else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Functionality limited");
+                    builder.setMessage("storage access has not been granted, debug log disable");
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+            }
+            break;
+        }
+
     }
 }

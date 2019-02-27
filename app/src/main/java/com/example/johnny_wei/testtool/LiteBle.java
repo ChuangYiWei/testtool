@@ -21,7 +21,7 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 
-import com.example.johnny_wei.testtool.config.BLECbData;
+
 import com.example.johnny_wei.testtool.config.IBLECallback;
 import com.example.johnny_wei.testtool.config.globalConfig;
 
@@ -29,7 +29,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static com.example.johnny_wei.testtool.permision_test.PERMISSION_REQUEST_COARSE_LOCATION;
+import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_COARSE_LOCATION;
+
 
 public class LiteBle  {
     private Context mContext;
