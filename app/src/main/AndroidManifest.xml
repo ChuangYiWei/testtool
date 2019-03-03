@@ -8,8 +8,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <!--storage-->
-    <uses-feature android:name="android.hardware.usb.host"/>
+    <!-- storage -->
+    <uses-feature android:name="android.hardware.usb.host" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -22,7 +23,7 @@
         android:theme="@style/mytheme">
 
         <!-- <activity android:name=".test_ble"> -->
-        <activity android:name=".test_callback">
+        <activity android:name=".test_layout">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -54,7 +55,8 @@
         <activity android:name=".permision_test" />
         <activity android:name=".readxml" />
         <activity android:name=".customview" />
-        <activity android:name=".bytecheck"></activity>
+        <activity android:name=".bytecheck" />
+        <activity android:name=".test_callback"></activity>
     </application>
 
 </manifest>
