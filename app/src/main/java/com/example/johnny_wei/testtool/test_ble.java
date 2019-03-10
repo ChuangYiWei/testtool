@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.johnny_wei.testtool.config.IBLECallback;
+import com.example.johnny_wei.testtool.config.LiteBLECallback;
 import com.example.johnny_wei.testtool.config.globalConfig;
 import com.example.johnny_wei.testtool.utils.Permission;
 
@@ -25,7 +25,7 @@ import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQ
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE;
 
 
-public class test_ble extends AppCompatActivity implements IBLECallback {
+public class test_ble extends AppCompatActivity  {
     String TAG = getClass().getSimpleName();
     Activity thisActivity = this;
     private LiteBle liteBluetooth;
@@ -34,7 +34,7 @@ public class test_ble extends AppCompatActivity implements IBLECallback {
     //view
     static TextView tv_status;
     EditText ed_mac;
-
+    GattCB gatt_cb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +46,7 @@ public class test_ble extends AppCompatActivity implements IBLECallback {
 
         liteBluetooth = new LiteBle(thisActivity);
         liteBluetooth.enableBluetoothIfDisabled(thisActivity, 1);
-        liteBluetooth.setCallback(this);
+        gatt_cb = new GattCB();
 
         //ask write
         Permission.setActivity(thisActivity);
@@ -141,85 +141,81 @@ public class test_ble extends AppCompatActivity implements IBLECallback {
         liteBluetooth.readCharacteristic(globalConfig.UUID_BATTERY_SERVICE, globalConfig.UUID_BATTERY_LEVEL_CHARA);
     }
 
-    //implement callback
-    @Override
-    public void ConnectedCB() {
-        Log.w(TAG,"OnConnect callback !!!");
+    private class GattCB extends LiteBLECallback {
+        GattCB() {
+            //this reference(pointer) is GattCB
+            liteBluetooth.setCallback(this);
+        }
+        //implement callback
+        @Override
+        public void ConnectedCB() {
+            Log.w(TAG, "OnConnect callback !!!");
+        }
+
+        @Override
+        public void DisConnectCB() {
+            Log.w(TAG, "disconnected callback !!!");
+        }
+
+        @Override
+        public void ConnectFailCB(String reason) {
+            Log.w(TAG, "ConnectFailCB callback !!! " + "reason:" + reason);
+        }
+/*
+        @Override
+        public void readCharacteristicSuccessCB(String UUID, byte[] CBData) {
+            Log.w(TAG, "read uuid " + UUID);
+            printbytes(CBData);
+        }
+
+        @Override
+        public void readCharacteristicFailCB(String UUID, int status) {
+            Log.e(TAG, "readCharacteristicFailCB uuid:" + UUID);
+        }
+
+
+        @Override
+        public void writeCharacteristicSuccessCB(String UUID, byte[] CBData) {
+            Log.w(TAG, "write uuid " + UUID);
+            printbytes(CBData);
+        }
+
+        @Override
+        public void writeCharacteristicFailCB(String UUID, int status) {
+            Log.e(TAG, "write uuid fail:" + UUID + "status:" + status);
+        }
+
+        @Override
+        public void CharaValueChangedSuccessCB(String UUID, byte[] CBData) {
+            Log.e(TAG, "CharaValueChanged uuid:" + UUID);
+            printbytes(CBData);
+        }
+
+
+        @Override
+        public void readDescSuccessCB(String UUID, byte[] CBData) {
+            Log.w(TAG, "read Desc uuid " + UUID);
+            printbytes(CBData);
+        }
+
+        @Override
+        public void readDescFailCB(String UUID, int status) {
+            Log.e(TAG, "read Desc fail uuid " + UUID);
+        }
+
+
+        @Override
+        public void writeDescSuccessCB(String UUID, byte[] CBData) {
+            Log.w(TAG, "write desc uuid " + UUID);
+            printbytes(CBData);
+        }
+
+        @Override
+        public void writeDescFailCB(String UUID, int status) {
+            Log.e(TAG, "write desc fail uuid:" + UUID);
+        }
+      */
     }
-
-    @Override
-    public void DisConnectCB() {
-        Log.w(TAG,"disconnected callback !!!");
-    }
-
-    @Override
-    public void ConnectFailCB(String reason)
-    {
-        Log.w(TAG,"ConnectFailCB callback !!! " + "reason:" + reason);
-    }
-
-    @Override
-    public void readCharacteristicSuccessCB(String UUID, byte[] CBData)
-    {
-        Log.w(TAG,"read uuid " + UUID);
-        printbytes(CBData);
-    }
-
-    @Override
-    public void readCharacteristicFailCB(String UUID, int status)
-    {
-        Log.e(TAG,"readCharacteristicFailCB uuid:" + UUID);
-    }
-
-
-    @Override
-    public void writeCharacteristicSuccessCB(String UUID, byte[] CBData)
-    {
-        Log.w(TAG,"write uuid " + UUID);
-        printbytes(CBData);
-    }
-
-    @Override
-    public void writeCharacteristicFailCB(String UUID, int status)
-    {
-        Log.e(TAG,"write uuid fail:" + UUID + "status:" + status);
-    }
-
-    @Override
-    public void CharaValueChangedSuccessCB(String UUID, byte[] CBData)
-    {
-        Log.e(TAG,"CharaValueChanged uuid:" + UUID);
-        printbytes(CBData);
-    }
-
-
-    @Override
-    public void readDescSuccessCB(String UUID, byte[] CBData)
-    {
-        Log.w(TAG,"read Desc uuid " + UUID);
-        printbytes(CBData);
-    }
-
-    @Override
-    public void readDescFailCB(String UUID, int status)
-    {
-        Log.e(TAG,"read Desc fail uuid " + UUID);
-    }
-
-
-    @Override
-    public void writeDescSuccessCB(String UUID, byte[] CBData)
-    {
-        Log.w(TAG,"write desc uuid " + UUID);
-        printbytes(CBData);
-    }
-
-    @Override
-    public void writeDescFailCB(String UUID, int status)
-    {
-        Log.e(TAG,"write desc fail uuid:" + UUID);
-    }
-
     public void printbytes(byte bytes[]){
         String printStr = "";
         for (byte data : bytes) {

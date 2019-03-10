@@ -77,8 +77,6 @@ public class LiteBle  {
         HandlerThread ht_thread = new HandlerThread("name");
         ht_thread.start();
         m_userHandler = new Handler(ht_thread.getLooper());
-        //user must implements IBLECallback
-        //IbleCB = (IBLECallback)context;
     }
 
     public void setCallback(IBLECallback cb)

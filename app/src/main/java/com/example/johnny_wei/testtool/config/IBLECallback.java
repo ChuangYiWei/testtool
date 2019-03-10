@@ -1,6 +1,5 @@
 package com.example.johnny_wei.testtool.config;
 
-
 public interface IBLECallback {
     //connection
     void ConnectedCB();
