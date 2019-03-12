@@ -4,16 +4,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.johnny_wei.testtool.utils.devUtil;
+import com.example.johnny_wei.testtool.utils.DevUtil;
 import com.example.johnny_wei.testtool.utils.strUtil;
 
-import java.lang.reflect.Array;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+
 import java.util.LinkedList;
-import java.util.List;
 
 public class bytecheck extends AppCompatActivity {
     private final byte[] bytearray={0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F};
@@ -44,11 +39,11 @@ public class bytecheck extends AppCompatActivity {
         final byte[] bytearray={0x00,0x01,0x02};
         Log.d(TAG,strUtil.bytes2String(bytearray));
         string2Bytes("123");
-        Log.d(TAG, "brand:"+devUtil.GetBrand());
-        Log.d(TAG, "dev model:"+devUtil.GetDeviceModel());
-        Log.d(TAG, "sys ver:"+devUtil.GetSystemVersion());
-        Log.d(TAG, "SDK ver:"+devUtil.GetVersionSDK());
-        devUtil.printDeviceInfo();
+        Log.d(TAG, "brand:" + DevUtil.GetBrand());
+        Log.d(TAG, "dev model:" + DevUtil.GetDeviceModel());
+        Log.d(TAG, "sys ver:" + DevUtil.GetSystemVersion());
+        Log.d(TAG, "SDK ver:" + DevUtil.GetVersionSDK());
+        DevUtil.printDeviceInfo();
         return;
     }
 
