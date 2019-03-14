@@ -33,7 +33,7 @@ import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQ
 
 
 public class LiteBle  {
-    private Context mContext;
+    private Context mContext = null;
     IBLECallback IbleCB;
 
     private BluetoothManager mbluetoothManager;
@@ -74,18 +74,12 @@ public class LiteBle  {
         this.mContext = context = context.getApplicationContext();
         mbluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
         mbluetoothAdapter = mbluetoothManager.getAdapter();
-        HandlerThread ht_thread = new HandlerThread("name");
-        ht_thread.start();
-        m_userHandler = new Handler(ht_thread.getLooper());
     }
 
     public void setCallback(IBLECallback cb)
     {
         IbleCB = cb;
     }
-    //todo:getinstance
-
-
 
     public void enableBluetoothIfDisabled(Activity activity, int requestCode) {
 
@@ -109,8 +103,10 @@ public class LiteBle  {
     }
 
     public void startLeScan(final BluetoothAdapter.LeScanCallback scanCallback, final long scanTime) {
+
         // Stops scanning after a pre-defined scan period.
-        m_userHandler.postDelayed(new Runnable() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 stopLeScan(scanCallback);

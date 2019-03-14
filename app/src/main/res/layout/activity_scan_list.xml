@@ -6,4 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".scan_list">
 
+    <ListView
+        android:id="@+id/ble_list"
+        android:layout_width="395dp"
+        android:layout_height="715dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
