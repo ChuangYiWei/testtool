@@ -21,6 +21,7 @@ public class handler extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String TAG = getClass().getSimpleName();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_handler);
 
@@ -37,6 +38,7 @@ public class handler extends AppCompatActivity {
         {
             Log.d("jjj onCreate", "run on ui thread");
         }
+
     }
 
     private Runnable runnable = new Runnable() {
@@ -45,16 +47,18 @@ public class handler extends AppCompatActivity {
             do {
                 try {
                     Thread.sleep(3000);
-                    if(Looper.myLooper() == Looper.getMainLooper())
-                    {
-                        Log.d("jjj runnable", "run on ui thread");
-                    }
+
 
                     Message msg = Message.obtain();
                     msg.what = msgKey1;
                     msg.obj = "OK";
                     msg.arg1 = 99;
                     mHandler.sendMessage(msg);
+                    if (Looper.myLooper() == Looper.getMainLooper()) {
+                        Log.d("jjj", "sendMessagerun on ui thread");
+                    } else {
+                        Log.d("jjj", " sendMessage not run on ui thread");
+                    }
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -71,7 +75,30 @@ public class handler extends AppCompatActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case msgKey1:
-                    Log.d("jjj", String.valueOf(msg.arg1));
+                    if (Looper.myLooper() == Looper.getMainLooper()) {
+                        Log.d("jjj", "handleMessage run on ui thread");
+                    } else {
+                        Log.d("jjj", "handleMessage not run on ui thread");
+                    }
+
+                    Log.d("jjj", "handleMessage got" + String.valueOf(msg.arg1));
+                    String x = (String) msg.obj;
+                    txt.setText(String.valueOf(x));
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler2 = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case msgKey1:
+                    Log.d("jjj", "mHandler2 handleMessage got" + String.valueOf(msg.arg1));
                     String x = (String) msg.obj;
                     txt.setText(String.valueOf(x));
                     break;

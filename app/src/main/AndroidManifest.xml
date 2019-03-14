@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.johnny_wei.testtool">
-
     <!-- com.example.johnny_wei.testtool.ble -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <!-- storage -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- storage -->
     <uses-feature android:name="android.hardware.usb.host" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -21,7 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/mytheme">
-
+        <activity android:name=".scan_list"></activity>
         <!-- <activity android:name=".test_ble"> -->
         <activity android:name=".test_ble">
             <intent-filter>
@@ -56,7 +53,7 @@
         <activity android:name=".readxml" />
         <activity android:name=".customview" />
         <activity android:name=".bytecheck" />
-        <activity android:name=".test_callback"></activity>
+        <activity android:name=".test_callback" />
     </application>
 
 </manifest>
