@@ -20,7 +20,7 @@
         android:theme="@style/mytheme">
         <activity android:name=".customview"></activity>
         <!-- <activity android:name=".test_ble"> -->
-        <activity android:name=".scan_list">
+        <activity android:name=".test_layout">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".xmlandinvoke" />
-        <activity android:name=".test_layout" />
+        <activity android:name=".scan_list" />
         <activity android:name=".write" />
         <activity android:name=".collection" />
         <activity android:name=".ble" />
