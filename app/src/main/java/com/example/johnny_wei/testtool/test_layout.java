@@ -15,17 +15,21 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import static android.view.View.VISIBLE;
+
 public class test_layout extends AppCompatActivity {
 
     EditText ed1;
     private Button mButton;
     private ConstraintLayout mConstraintLayout;
+    ConstraintLayout mIncludeConstraintLayout;
     private Context mContext;
     private PopupWindow mPopupWindow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_layout);
+
 
         // Get the application context
         //mContext = getApplicationContext();
@@ -92,5 +96,15 @@ public class test_layout extends AppCompatActivity {
         ed1 = findViewById(R.id.ed_test1);
         String txt = ed1.getText().toString();
         Log.d("test_layout","edit txt is:" + txt);
+    }
+
+    public void clk_include(View view) {
+        //find included layout
+        View includedlayout = (ConstraintLayout)findViewById(R.id.inc1);
+        includedlayout.setVisibility(View.VISIBLE);
+
+        //get obj from included layout
+        EditText tx = includedlayout.findViewById(R.id.ed_test1);
+        Log.d("jjj","tx from sublayout:" + tx.getText().toString());
     }
 }

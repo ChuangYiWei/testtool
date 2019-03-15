@@ -16,27 +16,29 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button18"
+        android:id="@+id/btn_inclue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="108dp"
-        android:layout_marginTop="24dp"
-        android:text="Button"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="28dp"
+        android:onClick="clk_include"
+        android:text="include enable"
         app:layout_constraintStart_toEndOf="@+id/btn"
         app:layout_constraintTop_toTopOf="parent" />
 
     <include
-        android:id="@+id/include"
+        android:id="@+id/inc1"
         layout="@layout/layout_sample"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="316dp"
+        android:layout_height="131dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="236dp"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button17"></include>
+        app:layout_constraintTop_toTopOf="parent"></include>
 
     <include
+        android:id="@+id/inc2"
         layout="@layout/layout_sample2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,5 +46,5 @@
         android:layout_marginTop="40dp"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toBottomOf="@+id/inc1" />
 </android.support.constraint.ConstraintLayout>
