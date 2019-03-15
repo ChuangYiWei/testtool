@@ -4,9 +4,9 @@ import android.text.TextUtils;
 
 public class RowItem {
 
-    private String strL1;
-    private String strL2;
-    private String strL3;
+    private String strL1;//name
+    private String strL2;//addr
+    private String strL3;//rssi
 
 
     public RowItem(String strL1, String strL2, String strL3) {

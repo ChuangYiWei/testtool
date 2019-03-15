@@ -62,7 +62,7 @@ public class ScanListAdapter extends BaseAdapter {
         }
 
         RowItem rowItem = (RowItem) getItem(position);
-        Log.d(TAG,"position is:" + position);
+        //Log.d(TAG,"position is:" + position);
         holder.tv_l1.setText(rowItem.getstrL1());
         holder.tv_l2.setText(rowItem.getstrL2());
         holder.tv_l3.setText(rowItem.getstrL3());

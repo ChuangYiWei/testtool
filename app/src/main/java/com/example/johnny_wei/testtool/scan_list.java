@@ -30,7 +30,7 @@ public class scan_list extends AppCompatActivity {
     Activity thisActivity = this;
 
     private LiteBle liteBluetooth;
-    private LiteBle getFromInstance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +48,6 @@ public class scan_list extends AppCompatActivity {
         // Device scan callback.
         liteBluetooth.startLeScan(mLeScanCallback, 10000);
     }
-
-
 
     private void setupView() {
         listView = (ListView) findViewById(R.id.ble_list);
@@ -89,8 +87,9 @@ public class scan_list extends AppCompatActivity {
                 public void onLeScan(final BluetoothDevice device, final int rssi,
                                      byte[] scanRecord) {
                     String devAddr = device.getAddress();
-                    Log.w(TAG, "device name:" + device.getName() + ", device address:" + device.getAddress() + Integer.toString(rssi));
+                    Log.i(TAG, "device name:" + device.getName() + ", device address:" + device.getAddress() + Integer.toString(rssi));
                     if (null != devAddr) {
+                        //if we don't have devAddr yet, add devaddr/rssi as key/value
                         if ((!mdevMap.containsKey(devAddr) ) ) {
                             RowItem item = new RowItem(device.getName(), device.getAddress(), Integer.toString(rssi));
                             rowItems.add(item);
@@ -99,13 +98,30 @@ public class scan_list extends AppCompatActivity {
                         }
                         else if(mdevMap.containsKey(devAddr))
                         {
-                            if(mdevMap.get(devAddr) != rssi)
-                            {
-                                Log.w(TAG, "update rssi:" + rssi);
-                                mdevMap.put(devAddr,rssi);
-                            }
+                            //update rssi if different
+                            updateRssi(devAddr, rssi);
                         }
 //                        Log.i(TAG, "device name:" + device.getName() + ", device address:" + device.getAddress() + Integer.toString(rssi));
                     }
-                }};
+                }
+                void updateRssi(String devAddr, int rssi)
+                {
+                    if(mdevMap.get(devAddr) != rssi)
+                    {
+                        mdevMap.put(devAddr,rssi);
+                        int listsize = rowItems.size();
+                        listsize = listsize -1;//index start from 0
+                        while(listsize >= 0)
+                        {
+                            if(rowItems.get(listsize).getstrL2().equals(devAddr))
+                            {
+                                Log.d(TAG, "update rssi:" + rssi);
+                                rowItems.get(listsize).setstrL3(Integer.toString(rssi));
+                            }
+                            (mAdapter).notifyDataSetChanged();
+                            listsize--;
+                        }
+                    }
+                }
+    };
 }

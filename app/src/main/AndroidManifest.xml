@@ -30,7 +30,7 @@
         <activity android:name=".xmlandinvoke" />
         <activity android:name=".test_layout" />
         <activity android:name=".write" />
-        <activity android:name=".linkedmap" />
+        <activity android:name=".collection" />
         <activity android:name=".ble" />
         <activity android:name=".invok" />
         <activity android:name=".time" />
