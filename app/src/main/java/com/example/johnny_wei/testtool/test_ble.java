@@ -149,7 +149,8 @@ public class test_ble extends AppCompatActivity  {
     @TargetApi(26)
     public void clk_readphy(View view) {
         if(Build.VERSION.SDK_INT >= 26) {
-            liteBluetooth.getBluetoothGatt().readPhy();
+            m_userHandler.post(readphy_run);
+            m_userHandler.post(setPreferredPhy_run);
         }
         else
         {
@@ -158,10 +159,45 @@ public class test_ble extends AppCompatActivity  {
     }
 
     @TargetApi(26)
-    public void clk_preferphy(View view) {
-        if(Build.VERSION.SDK_INT >= 26) {
+    Runnable readphy_run = new Runnable() {
+        @Override public void run() {
+            Log.d(TAG,"gatt readPhy");
+            liteBluetooth.getBluetoothGatt().readPhy();
+        }
+    };
+
+    @TargetApi(26)
+    Runnable setPreferredPhy_run= new Runnable() {
+        @Override public void run() {
             Log.d(TAG,"set prefer phy");
             liteBluetooth.getBluetoothGatt().setPreferredPhy(PHY_LE_2M,PHY_LE_2M,PHY_OPTION_NO_PREFERRED);
+        }
+    };
+
+    @TargetApi(26)
+    Runnable BLE5_support_run= new Runnable() {
+        @Override public void run() {
+            if(liteBluetooth.getBluetoothAdapter().isLe2MPhySupported()) {
+                Log.d(TAG, "This device support 2M");
+            }
+            if(liteBluetooth.getBluetoothAdapter().isLeCodedPhySupported()) {
+                Log.d(TAG, "LeCodedPhySupported");
+            }
+            if(liteBluetooth.getBluetoothAdapter().isLeExtendedAdvertisingSupported()) {
+                Log.d(TAG, "LeExtendedAdvertisingSupported");
+            }
+            if(liteBluetooth.getBluetoothAdapter().isLePeriodicAdvertisingSupported()) {
+                Log.d(TAG, "LePeriodicAdvertisingSupported");
+            }
+            int maxAdvLength = liteBluetooth.getBluetoothAdapter().getLeMaximumAdvertisingDataLength();
+                Log.d(TAG, "maxAdvLength is : " + maxAdvLength);
+        }
+    };
+
+    @TargetApi(26)
+    public void clk_support(View view) {
+        if(Build.VERSION.SDK_INT >= 26) {
+            m_userHandler.post(BLE5_support_run);
         }
         else
         {

@@ -134,7 +134,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:onClick="clk_readphy"
-        android:text="BLE5_readphy"
+        android:text="BLE5_phy"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button16" />
 
@@ -144,8 +144,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        android:onClick="clk_preferphy"
-        android:text="BLE5_prefer_phy"
+        android:onClick="clk_support"
+        android:text="BLE5_support"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button18" />
 </android.support.constraint.ConstraintLayout>
