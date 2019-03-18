@@ -1,5 +1,6 @@
 package com.example.johnny_wei.testtool;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -7,6 +8,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +23,12 @@ import com.example.johnny_wei.testtool.config.LiteBLECallback;
 import com.example.johnny_wei.testtool.config.globalConfig;
 import com.example.johnny_wei.testtool.utils.Permission;
 
+import java.lang.annotation.Target;
+
+import static android.bluetooth.BluetoothDevice.PHY_LE_1M;
+import static android.bluetooth.BluetoothDevice.PHY_LE_1M_MASK;
+import static android.bluetooth.BluetoothDevice.PHY_LE_2M;
+import static android.bluetooth.BluetoothDevice.PHY_OPTION_NO_PREFERRED;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_COARSE_LOCATION;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE;
 
@@ -48,11 +56,8 @@ public class test_ble extends AppCompatActivity  {
         liteBluetooth.enableBluetoothIfDisabled(thisActivity, 1);
         gatt_cb = new GattCB();
 
-        //ask write
-        Permission.setActivity(thisActivity);
-        if (Permission.shouldAskPermissions()) {
-            Permission.WritePermissionsReq();
-        }
+
+        Permission.Req_Access_Coarse_Permissions(this);
 
         setupview();
     }
@@ -139,6 +144,29 @@ public class test_ble extends AppCompatActivity  {
 
     public void clk_readData(View view) {
         liteBluetooth.readCharacteristic(globalConfig.UUID_BATTERY_SERVICE, globalConfig.UUID_BATTERY_LEVEL_CHARA);
+    }
+
+    @TargetApi(26)
+    public void clk_readphy(View view) {
+        if(Build.VERSION.SDK_INT >= 26) {
+            liteBluetooth.getBluetoothGatt().readPhy();
+        }
+        else
+        {
+            tv_status.setText("not support, API level < 26");
+        }
+    }
+
+    @TargetApi(26)
+    public void clk_preferphy(View view) {
+        if(Build.VERSION.SDK_INT >= 26) {
+            Log.d(TAG,"set prefer phy");
+            liteBluetooth.getBluetoothGatt().setPreferredPhy(PHY_LE_2M,PHY_LE_2M,PHY_OPTION_NO_PREFERRED);
+        }
+        else
+        {
+            tv_status.setText("not support, API level < 26");
+        }
     }
 
     private class GattCB extends LiteBLECallback {

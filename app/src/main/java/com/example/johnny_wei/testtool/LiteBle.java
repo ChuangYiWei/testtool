@@ -494,6 +494,24 @@ public class LiteBle  {
             Log.d(TAG, "onMtuChanged");
             super.onMtuChanged(gatt, mtu, status);
         }
+
+        @Override
+        public void onPhyRead(BluetoothGatt gatt, int txPhy, int rxPhy, int status) {
+            Log.w(TAG, "onPhyRead");
+            Log.d(TAG, "txPhy:" + txPhy);
+            Log.d(TAG, "rxPhy:" + rxPhy);
+            Log.d(TAG, "status:" + status);
+            super.onPhyRead(gatt, txPhy, rxPhy, status);
+        }
+
+        @Override
+        public void onPhyUpdate(BluetoothGatt gatt, int txPhy, int rxPhy, int status) {
+            Log.w(TAG, "onPhyUpdate !!!");
+            Log.d(TAG, "txPhy:" + txPhy);
+            Log.d(TAG, "rxPhy:" + rxPhy);
+            Log.d(TAG, "status:" + status);
+            super.onPhyUpdate(gatt, txPhy, rxPhy, status);
+        }
     };
 
     void printConnectException(BluetoothGatt bluetoothGatt, int gattStatus)

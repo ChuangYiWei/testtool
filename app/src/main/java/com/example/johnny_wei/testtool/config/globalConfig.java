@@ -40,8 +40,10 @@ public class globalConfig {
     final static public String UUID_BATTERY_SERVICE = "0000180f-0000-1000-8000-00805f9b34fb";
     final static public String UUID_BATTERY_LEVEL_CHARA = "00002a19-0000-1000-8000-00805f9b34fb";
 
-    //write permission define
-    public final static int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 102;
     //ble location define
     public final static int PERMISSION_REQUEST_COARSE_LOCATION = 101;
+
+    //write permission define
+    public final static int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 102;
+
 }
