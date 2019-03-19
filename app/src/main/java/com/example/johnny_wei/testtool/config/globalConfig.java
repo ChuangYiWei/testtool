@@ -2,6 +2,8 @@ package com.example.johnny_wei.testtool.config;
 
 public class globalConfig {
 
+    public static final int BLE5_API_LEVEL = 26;
+
     //drop down menu
     public static final int SPI_MODE = 0;
     public static final int UART_MODE = 1;

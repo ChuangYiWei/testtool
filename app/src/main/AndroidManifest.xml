@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/mytheme">
 
-        <activity android:name=".spinner_option">
+        <activity android:name=".test_ble">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,7 +31,7 @@
 
 
 
-        <activity android:name=".test_ble"></activity>
+        <activity android:name=".spinner_option"></activity>
         <activity android:name=".customview" /> <!-- <activity android:name=".test_ble"> -->
         <activity android:name=".xmlandinvoke" />
         <activity android:name=".scan_list" />

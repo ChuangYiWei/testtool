@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,22 +15,26 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.johnny_wei.testtool.config.LiteBLECallback;
 import com.example.johnny_wei.testtool.config.globalConfig;
+import com.example.johnny_wei.testtool.utils.DevUtil;
 import com.example.johnny_wei.testtool.utils.Permission;
 
-import java.lang.annotation.Target;
 
-import static android.bluetooth.BluetoothDevice.PHY_LE_1M;
-import static android.bluetooth.BluetoothDevice.PHY_LE_1M_MASK;
+import java.util.List;
+
 import static android.bluetooth.BluetoothDevice.PHY_LE_2M;
 import static android.bluetooth.BluetoothDevice.PHY_OPTION_NO_PREFERRED;
+import static com.example.johnny_wei.testtool.LiteBle.StaticLiteble;
+import static com.example.johnny_wei.testtool.config.globalConfig.BLE5_API_LEVEL;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_COARSE_LOCATION;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE;
 
@@ -46,6 +52,8 @@ public class test_ble extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         setContentView(R.layout.activity_test_ble);
 
         HandlerThread ht_thread = new HandlerThread("name");
@@ -55,7 +63,6 @@ public class test_ble extends AppCompatActivity  {
         liteBluetooth = new LiteBle(thisActivity);
         liteBluetooth.enableBluetoothIfDisabled(thisActivity, 1);
         gatt_cb = new GattCB();
-
 
         Permission.Req_Access_Coarse_Permissions(this);
 
@@ -81,6 +88,49 @@ public class test_ble extends AppCompatActivity  {
 
     }};
 
+    @TargetApi(21)
+    private ScanCallback mScanCallback = new ScanCallback() {
+        @Override
+        public void onScanResult(int callbackType, ScanResult result) {
+
+//            if( result == null
+//                    || result.getDevice() == null
+//                    || TextUtils.isEmpty(result.getDevice().getName()) )
+//                return;
+            Log.i(TAG, "device name:" +  result.getDevice().getName() +
+                    ", device address:" + result.getDevice().getAddress() +
+                    ", RSSI:" + result.getRssi());
+
+            if(DevUtil.if_BLE5_API_support())
+            {
+                Log.d(TAG,"AdvertisingSid:" + result.getAdvertisingSid());
+                Log.d(TAG,"getDataStatus:" + result.getDataStatus());
+                Log.d(TAG,"getPeriodicAdvInterval:" + result.getPeriodicAdvertisingInterval());
+                Log.d(TAG,"getPrimaryPhy:" + result.getPrimaryPhy());
+                Log.d(TAG,"getSecondaryPhy:" + result.getSecondaryPhy());
+                Log.d(TAG,"getTxPower:" + result.getTxPower());
+                Log.d(TAG,"isConnectable:" + result.isConnectable());
+                Log.d(TAG,"isLegacy:" + result.isLegacy());
+            }
+            //StringBuilder builder = new StringBuilder( result.getDevice().getName() );
+
+            //builder.append("\n").append(new String(result.getScanRecord().getServiceData(result.getScanRecord().getServiceUuids().get(0)), Charset.forName("UTF-8")));
+            //mText.setText(builder.toString());
+        }
+
+        @Override
+        public void onBatchScanResults(List<ScanResult> results) {
+            Log.d( TAG, "onBatchScanResults");
+            super.onBatchScanResults(results);
+        }
+
+        @Override
+        public void onScanFailed(int errorCode) {
+            Log.e( TAG, "Discovery onScanFailed: " + errorCode );
+            super.onScanFailed(errorCode);
+        }
+    };
+
     //user implement this
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -93,8 +143,13 @@ public class test_ble extends AppCompatActivity  {
         }
     }
 
+
     public void clk_scan(View view) {
-        liteBluetooth.startLeScan(mLeScanCallback, 5000);
+        if (DevUtil.if_LeScanner_API_support()) {
+            liteBluetooth.startAPI21_LeScan(mScanCallback, 5000);
+        } else {
+            liteBluetooth.startLeScan(mLeScanCallback, 5000);
+        }
     }
 
     public void clk_stopscan(View view) {
@@ -123,7 +178,6 @@ public class test_ble extends AppCompatActivity  {
                liteBluetooth.rebootBluetooth();
            }
         });
-
     }
 
     public void clk_notify(View view) {
@@ -146,9 +200,9 @@ public class test_ble extends AppCompatActivity  {
         liteBluetooth.readCharacteristic(globalConfig.UUID_BATTERY_SERVICE, globalConfig.UUID_BATTERY_LEVEL_CHARA);
     }
 
-    @TargetApi(26)
+    @TargetApi(BLE5_API_LEVEL)
     public void clk_readphy(View view) {
-        if(Build.VERSION.SDK_INT >= 26) {
+        if(DevUtil.if_BLE5_API_support()) {
             m_userHandler.post(readphy_run);
             m_userHandler.post(setPreferredPhy_run);
         }
@@ -158,7 +212,7 @@ public class test_ble extends AppCompatActivity  {
         }
     }
 
-    @TargetApi(26)
+    @TargetApi(BLE5_API_LEVEL)
     Runnable readphy_run = new Runnable() {
         @Override public void run() {
             Log.d(TAG,"gatt readPhy");
@@ -166,7 +220,7 @@ public class test_ble extends AppCompatActivity  {
         }
     };
 
-    @TargetApi(26)
+    @TargetApi(BLE5_API_LEVEL)
     Runnable setPreferredPhy_run= new Runnable() {
         @Override public void run() {
             Log.d(TAG,"set prefer phy");
@@ -174,7 +228,7 @@ public class test_ble extends AppCompatActivity  {
         }
     };
 
-    @TargetApi(26)
+    @TargetApi(BLE5_API_LEVEL)
     Runnable BLE5_support_run= new Runnable() {
         @Override public void run() {
             if(liteBluetooth.getBluetoothAdapter().isLe2MPhySupported()) {
@@ -194,9 +248,9 @@ public class test_ble extends AppCompatActivity  {
         }
     };
 
-    @TargetApi(26)
+    @TargetApi(BLE5_API_LEVEL)
     public void clk_support(View view) {
-        if(Build.VERSION.SDK_INT >= 26) {
+        if(DevUtil.if_BLE5_API_support()) {
             m_userHandler.post(BLE5_support_run);
         }
         else

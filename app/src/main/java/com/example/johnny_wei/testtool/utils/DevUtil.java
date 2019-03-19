@@ -41,4 +41,14 @@ public class DevUtil {
         return (argContext == null) ? false : argContext.getPackageManager().hasSystemFeature(FEATURE_BLUETOOTH_LE);
     }
 
+    public static boolean if_BLE5_API_support()
+    {
+        return Build.VERSION.SDK_INT >= 26;
+    }
+
+    public static boolean if_LeScanner_API_support()
+    {
+        return Build.VERSION.SDK_INT >= 21;
+    }
+
 }
