@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 
@@ -127,7 +128,7 @@ public class LiteBle  {
         mbluetoothAdapter.startLeScan(scanCallback);
     }
 
-    @TargetApi(21)
+    @RequiresApi(21)
     public void startAPI21_LeScan(final ScanCallback scanCallback, final long scanTime) {
         mBluetoothLeScanner = BluetoothAdapter.getDefaultAdapter().getBluetoothLeScanner();
         // Stops scanning after a pre-defined scan period.

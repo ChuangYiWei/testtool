@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -49,6 +50,10 @@ public class test_ble extends AppCompatActivity  {
     static TextView tv_status;
     EditText ed_mac;
     GattCB gatt_cb;
+
+    @RequiresApi(21)
+    private ScanCallback mScanCallback;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +72,11 @@ public class test_ble extends AppCompatActivity  {
         Permission.Req_Access_Coarse_Permissions(this);
 
         setupview();
+
+        if(DevUtil.if_LeScanner_API_support())
+        {
+            mScanCallback = new LeScannerAPI21();
+        }
     }
     private void setupview() {
 
@@ -88,8 +98,9 @@ public class test_ble extends AppCompatActivity  {
 
     }};
 
-    @TargetApi(21)
-    private ScanCallback mScanCallback = new ScanCallback() {
+    @RequiresApi(21)
+    public class LeScannerAPI21 extends ScanCallback
+    {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
 
@@ -97,20 +108,19 @@ public class test_ble extends AppCompatActivity  {
 //                    || result.getDevice() == null
 //                    || TextUtils.isEmpty(result.getDevice().getName()) )
 //                return;
-            Log.i(TAG, "device name:" +  result.getDevice().getName() +
-                    ", device address:" + result.getDevice().getAddress() +
-                    ", RSSI:" + result.getRssi());
+            Log.i(TAG, "Dev name:" + result.getDevice().getName() +
+                    ", Dev address:" + result.getDevice().getAddress() +
+                    ", Dev rssi:" + result.getRssi());
 
-            if(DevUtil.if_BLE5_API_support())
-            {
-                Log.d(TAG,"AdvertisingSid:" + result.getAdvertisingSid());
-                Log.d(TAG,"getDataStatus:" + result.getDataStatus());
-                Log.d(TAG,"getPeriodicAdvInterval:" + result.getPeriodicAdvertisingInterval());
-                Log.d(TAG,"getPrimaryPhy:" + result.getPrimaryPhy());
-                Log.d(TAG,"getSecondaryPhy:" + result.getSecondaryPhy());
-                Log.d(TAG,"getTxPower:" + result.getTxPower());
-                Log.d(TAG,"isConnectable:" + result.isConnectable());
-                Log.d(TAG,"isLegacy:" + result.isLegacy());
+            if (DevUtil.if_BLE5_API_support()) {
+                Log.d(TAG, "AdvertisingSid:" + result.getAdvertisingSid());
+                Log.d(TAG, "getDataStatus:" + result.getDataStatus());
+                Log.d(TAG, "getPeriodicAdvInterval:" + result.getPeriodicAdvertisingInterval());
+                Log.d(TAG, "getPrimaryPhy:" + result.getPrimaryPhy());
+                Log.d(TAG, "getSecondaryPhy:" + result.getSecondaryPhy());
+                Log.d(TAG, "getTxPower:" + result.getTxPower());
+                Log.d(TAG, "isConnectable:" + result.isConnectable());
+                Log.d(TAG, "isLegacy:" + result.isLegacy());
             }
             //StringBuilder builder = new StringBuilder( result.getDevice().getName() );
 
@@ -120,18 +130,19 @@ public class test_ble extends AppCompatActivity  {
 
         @Override
         public void onBatchScanResults(List<ScanResult> results) {
-            Log.d( TAG, "onBatchScanResults");
+            Log.d(TAG, "onBatchScanResults");
             super.onBatchScanResults(results);
         }
 
         @Override
         public void onScanFailed(int errorCode) {
-            Log.e( TAG, "Discovery onScanFailed: " + errorCode );
+            Log.e(TAG, "Discovery onScanFailed: " + errorCode);
             super.onScanFailed(errorCode);
         }
-    };
+    }
 
-    //user implement this
+
+    //user implement this to check
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
