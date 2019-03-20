@@ -131,6 +131,13 @@ public class LiteBle  {
         mbluetoothAdapter.startLeScan(scanCallback);
     }
 
+    public void stopLeScan(BluetoothAdapter.LeScanCallback scanCallback) {
+        mbluetoothAdapter.stopLeScan(scanCallback);
+        if (connectionState == STATE_SCANNING) {
+            connectionState = STATE_DISCONNECTED;
+        }
+    }
+
     @RequiresApi(21)
     public void startAPI21_LeScan(final ScanCallback scanCallback, final long scanTime) {
         mBluetoothLeScanner = BluetoothAdapter.getDefaultAdapter().getBluetoothLeScanner();
@@ -148,8 +155,9 @@ public class LiteBle  {
         mBluetoothLeScanner.startScan(scanCallback);
     }
 
-    public void stopLeScan(BluetoothAdapter.LeScanCallback scanCallback) {
-        mbluetoothAdapter.stopLeScan(scanCallback);
+    @RequiresApi(21)
+    public void stopAPI21_LeScan(ScanCallback scanCallback) {
+        mBluetoothLeScanner.stopScan(scanCallback);
         if (connectionState == STATE_SCANNING) {
             connectionState = STATE_DISCONNECTED;
         }
