@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">testTool</string>
     <string name="NA">NA</string>
+    <string name="KEY_DevNAME">NAME</string>
+    <string name="KEY_DevAddr">ADDR</string>
+    <string name="KEY_DevRssi">RSSI</string>
 </resources>

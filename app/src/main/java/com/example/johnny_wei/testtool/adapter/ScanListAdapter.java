@@ -17,11 +17,18 @@ public class ScanListAdapter extends BaseAdapter {
     String TAG = getClass().getSimpleName();
     Context mContext;
     List<RowItem> rowItems;
+    List<ListItem> ListItems;
 
-    public ScanListAdapter(Context context, List<RowItem> items) {
+//    public ScanListAdapter(Context context, List<RowItem> items) {
+//        this.mContext = context;
+//        this.rowItems = items;
+//    }
+
+    public ScanListAdapter(Context context, List<ListItem> items) {
         this.mContext = context;
-        this.rowItems = items;
+        this.ListItems = items;
     }
+
     /*private view holder class*/
     private class ViewHolder {
         TextView tv_l1;
@@ -31,17 +38,17 @@ public class ScanListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return rowItems.size();
+        return ListItems.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return rowItems.get(position);
+        return ListItems.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return rowItems.indexOf(getItem(position));
+        return ListItems.indexOf(getItem(position));
     }
 
     @Override
@@ -62,10 +69,14 @@ public class ScanListAdapter extends BaseAdapter {
         }
 
         RowItem rowItem = (RowItem) getItem(position);
+        holder.tv_l1.setText(ListItems.get(position).Get("NAME"));
+        holder.tv_l2.setText(ListItems.get(position).Get("ADDR"));
+        holder.tv_l3.setText(ListItems.get(position).Get("RSSI"));
+
         //Log.d(TAG,"position is:" + position);
-        holder.tv_l1.setText(rowItem.getstrL1());
-        holder.tv_l2.setText(rowItem.getstrL2());
-        holder.tv_l3.setText(rowItem.getstrL3());
+//        holder.tv_l1.setText(rowItem.getstrL1());
+//        holder.tv_l2.setText(rowItem.getstrL2());
+//        holder.tv_l3.setText(rowItem.getstrL3());
 
         return convertView;
     }

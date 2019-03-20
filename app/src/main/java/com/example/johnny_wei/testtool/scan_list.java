@@ -3,6 +3,7 @@ package com.example.johnny_wei.testtool;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.johnny_wei.testtool.adapter.ListItem;
 import com.example.johnny_wei.testtool.adapter.RowItem;
 import com.example.johnny_wei.testtool.adapter.ScanListAdapter;
 
@@ -23,7 +25,7 @@ public class scan_list extends AppCompatActivity {
 
     String TAG = getClass().getSimpleName();
     ListView listView;
-    List<RowItem> rowItems;
+    List<ListItem> ListItems;
     ScanListAdapter mAdapter;
 
     private  HashMap<String, Integer> mdevMap;
@@ -51,8 +53,8 @@ public class scan_list extends AppCompatActivity {
 
     private void setupView() {
         listView = (ListView) findViewById(R.id.ble_list);
-        rowItems = new ArrayList<>();
-        mAdapter = new ScanListAdapter(this, rowItems);
+        ListItems = new ArrayList<>();
+        mAdapter = new ScanListAdapter(this, ListItems);
         listView.setAdapter(mAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -60,7 +62,7 @@ public class scan_list extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 Toast toast = Toast.makeText(getApplicationContext(),
-                        "Item " + (position + 1) + ": " + rowItems.get(position),
+                        "Item " + (position + 1) + ": " + ListItems.get(position),
                         Toast.LENGTH_SHORT);
                 toast.show();
 
@@ -91,8 +93,8 @@ public class scan_list extends AppCompatActivity {
                     if (null != devAddr) {
                         //if we don't have devAddr yet, add devaddr/rssi as key/value
                         if ((!mdevMap.containsKey(devAddr) ) ) {
-                            RowItem item = new RowItem(device.getName(), device.getAddress(), Integer.toString(rssi));
-                            rowItems.add(item);
+                            ListItem listitem = new ListItem(device.getName(), device.getAddress(), Integer.toString(rssi));
+                            ListItems.add(listitem);
                             mdevMap.put(device.getAddress(), rssi);
                             (mAdapter).notifyDataSetChanged();
                         }
@@ -101,22 +103,22 @@ public class scan_list extends AppCompatActivity {
                             //update rssi if different
                             updateRssi(devAddr, rssi);
                         }
-//                        Log.i(TAG, "device name:" + device.getName() + ", device address:" + device.getAddress() + Integer.toString(rssi));
                     }
                 }
+
                 void updateRssi(String devAddr, int rssi)
                 {
                     if(mdevMap.get(devAddr) != rssi)
                     {
                         mdevMap.put(devAddr,rssi);
-                        int listsize = rowItems.size();
+                        int listsize = ListItems.size();
                         listsize = listsize -1;//index start from 0
                         while(listsize >= 0)
                         {
-                            if(rowItems.get(listsize).getstrL2().equals(devAddr))
+                            if(ListItems.get(listsize).Get(getString(R.string.KEY_DevAddr)).equals(devAddr))
                             {
                                 Log.d(TAG, "update rssi:" + rssi);
-                                rowItems.get(listsize).setstrL3(Integer.toString(rssi));
+                                ListItems.get(listsize).Set(getString(R.string.KEY_DevRssi),Integer.toString(rssi));
                             }
                             (mAdapter).notifyDataSetChanged();
                             listsize--;
