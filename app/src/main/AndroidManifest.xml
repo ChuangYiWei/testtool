@@ -19,8 +19,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/mytheme">
-        <activity android:name=".scan_list"></activity>
-        <activity android:name=".expandleble">
+        <activity android:name=".expandleble"></activity>
+        <activity android:name=".scan_list" />
+        <activity android:name=".custom_expand_list">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

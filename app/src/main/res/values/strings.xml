@@ -4,4 +4,8 @@
     <string name="KEY_DevNAME">NAME</string>
     <string name="KEY_DevAddr">ADDR</string>
     <string name="KEY_DevRssi">RSSI</string>
+    <string name="UUID">UUID</string>
+    <string name="PROPERTY">property</string>
+    <string name="VALUE">value</string>
+    <string name="DESCRIPTOR">Descriptor</string>
 </resources>
