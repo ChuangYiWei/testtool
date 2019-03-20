@@ -34,6 +34,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.UUID;
 
+import static android.bluetooth.BluetoothDevice.TRANSPORT_LE;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_COARSE_LOCATION;
 
 
@@ -267,7 +268,12 @@ public class LiteBle  {
         runOnMainThread(new Runnable() {
             @Override
             public void run() {
-                mBluetoothGatt = device.connectGatt(mContext, false, mGattCallback);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    Log.w(TAG,"connection with preferred TRANSPORT_LE.");
+                    mBluetoothGatt = device.connectGatt(mContext, false, mGattCallback, TRANSPORT_LE);
+                } else {
+                    mBluetoothGatt = device.connectGatt(mContext, false, mGattCallback);
+                }
             }
         });
 

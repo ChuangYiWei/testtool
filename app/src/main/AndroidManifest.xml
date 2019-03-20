@@ -21,7 +21,7 @@
         android:theme="@style/mytheme">
         <activity android:name=".expandleble"></activity>
         <activity android:name=".scan_list" />
-        <activity android:name=".custom_expand_list">
+        <activity android:name=".test_ble">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,7 +48,7 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".test_ble" />
+        <activity android:name=".custom_expand_list" />
         <activity android:name=".BRrate" />
         <activity android:name=".advdata" />
         <activity android:name=".permision_test" />

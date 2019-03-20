@@ -14,15 +14,22 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.johnny_wei.testtool.config.LiteBLECallback;
 import com.example.johnny_wei.testtool.config.globalConfig;
@@ -50,9 +57,12 @@ public class test_ble extends AppCompatActivity  {
     static TextView tv_status;
     EditText ed_mac;
     GattCB gatt_cb;
+    private PopupWindow mPopupWindow;
 
     @RequiresApi(21)
     private ScanCallback mScanCallback;
+
+    private ConstraintLayout mConstraintLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +87,89 @@ public class test_ble extends AppCompatActivity  {
         {
             mScanCallback = new LeScannerAPI21();
         }
+
     }
     private void setupview() {
 
         //ed_mac = findViewById(R.id.ed_mac);
         tv_status = findViewById(R.id.tv_status);
         ed_mac = findViewById(R.id.ed_mac);
+
+        mConstraintLayout = (ConstraintLayout) findViewById(R.id.test_ble_parent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // 設置要用哪個menu檔做為選單
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG,"onOptionsItemSelected");
+        // 取得點選項目的id
+        int id = item.getItemId();
+
+        // 依照id判斷點了哪個項目並做相應事件
+        if (id == R.id.action_settings) {
+            // 按下「設定」要做的事
+            Toast.makeText(this, "設定", Toast.LENGTH_SHORT).show();
+            showPopupWindow();
+            return true;
+        }
+        else if (id == R.id.action_help) {
+            // 按下「使用說明」要做的事
+            Toast.makeText(this, "使用說明", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    void showPopupWindow()
+    {
+        LayoutInflater inflater = (LayoutInflater) test_ble.this.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+
+        // Inflate the custom layout/view
+        View customView = inflater.inflate(R.layout.custom_layout,null);
+        // Initialize a new instance of popup window
+        if(mPopupWindow == null) {
+            Log.e(TAG, "create new  mPopupWindow");
+            mPopupWindow = new PopupWindow(
+                    customView,
+                    ConstraintLayout.LayoutParams.WRAP_CONTENT,
+                    ConstraintLayout.LayoutParams.WRAP_CONTENT
+            );
+        }
+        if(null == mPopupWindow)
+        {
+            Log.e("jjj", "mPopupWindow is null");
+        }
+        try {
+            TextView tv = (TextView) customView.findViewById(R.id.tv);
+            String str = "THIS　is Friday Night !!!!";
+            tv.setText(str);
+            tv.setTextColor(0xffaabb00);
+            tv.setTextSize(20);
+            tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Dismiss the popup window
+                    Log.e(TAG, "dismiss mPopupWindow ");
+                    mPopupWindow.dismiss();
+                }
+            });
+
+            // Finally, show the popup window at the center location of root relative layout
+
+            mPopupWindow.showAtLocation(mConstraintLayout, Gravity.CENTER, 0, 0);
+        }catch (Exception e)
+        {
+            Log.e("jjj", e.toString());
+        }
+
     }
 
     // Device scan callback.
