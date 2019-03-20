@@ -10,7 +10,6 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
@@ -20,28 +19,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/mytheme">
-
-        <activity android:name=".collection">
+        <activity android:name=".scan_list"></activity>
+        <activity android:name=".expandleble">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-
-        <activity android:name=".spinner_option"></activity>
+        <activity android:name=".spinner_option" />
         <activity android:name=".customview" /> <!-- <activity android:name=".test_ble"> -->
         <activity android:name=".xmlandinvoke" />
-        <activity android:name=".scan_list" />
+        <activity android:name=".collection" />
         <activity android:name=".write" />
         <activity android:name=".handler" />
         <activity android:name=".ble" />
         <activity android:name=".invok" />
         <activity android:name=".time" />
         <activity android:name=".serviceExample" />
-
 
         <service
             android:name=".MyService"
