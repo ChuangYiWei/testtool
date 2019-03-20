@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/mytheme">
 
-        <activity android:name=".test_ble">
+        <activity android:name=".collection">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,7 +36,7 @@
         <activity android:name=".xmlandinvoke" />
         <activity android:name=".scan_list" />
         <activity android:name=".write" />
-        <activity android:name=".collection" />
+        <activity android:name=".handler" />
         <activity android:name=".ble" />
         <activity android:name=".invok" />
         <activity android:name=".time" />
@@ -52,7 +52,7 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".handler" />
+        <activity android:name=".test_ble" />
         <activity android:name=".BRrate" />
         <activity android:name=".advdata" />
         <activity android:name=".permision_test" />

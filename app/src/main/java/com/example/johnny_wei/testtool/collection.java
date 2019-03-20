@@ -4,27 +4,70 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class collection extends AppCompatActivity {
+    String TAG = getClass().getSimpleName();
+
+    private List<Map<String, Object>> mData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_linkedmap);
 
+
+        demo();
+    }
+
+    void demo() {
+        mData = getData();
+        int cnt = mData.size();
+        while( cnt-- > 0)
+        {
+            Log.w(TAG,(String)mData.get(cnt).get("title"));
+        }
+    }
+
+    private List<Map<String, Object>> getData() {
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("title", "G1");
+        map.put("info", "google 1");
+//        map.put("img", R.drawable.i1);
+        list.add(map);
+
+        map = new HashMap<String, Object>();
+        map.put("title", "G2");
+        map.put("info", "google 2");
+//        map.put("img", R.drawable.i2);
+        list.add(map);
+
+        map = new HashMap<String, Object>();
+        map.put("title", "G3");
+        map.put("info", "google 3");
+//        map.put("img", R.drawable.i3);
+        list.add(map);
+
+        return list;
+    }
+
+    void LinkedHashMap_demo() {
         Map<String, String> map = new LinkedHashMap<String, String>();
 
         map.put("1", "11");
         map.put("22", "22");
         map.put("33", "33");
 
-        Log.d("jjj","key set:" + map.keySet().toString());
-        Log.d("jjj","entry set:" + map.entrySet().toString());
+        Log.d(TAG,"key set:" + map.keySet().toString());
+        Log.d(TAG,"entry set:" + map.entrySet().toString());
 
         //第一种：普遍使用，二次取值
         for (String key : map.keySet()) {
@@ -54,11 +97,11 @@ public class collection extends AppCompatActivity {
 
         Iterator it = map.entrySet().iterator();
         while (it.hasNext()){
-            Log.d("jjj",it.next().toString());
+            Log.d(TAG,it.next().toString());
         }
 
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            Log.d("jjj",entry.getKey() + " = " + entry.getValue());
+            Log.d(TAG,entry.getKey() + " = " + entry.getValue());
         }
     }
     void hashdemo()

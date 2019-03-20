@@ -18,10 +18,10 @@ public class handler extends AppCompatActivity {
     private TextView txt;
     private static final int msgKey1 = 1;
     Handler user_handler;
-
+    String TAG = getClass().getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        String TAG = getClass().getSimpleName();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_handler);
 
@@ -31,12 +31,12 @@ public class handler extends AppCompatActivity {
 
         txt = (TextView) findViewById(R.id.txt);
 
-        Thread t = new Thread(runnable);
+        Thread t = new Thread(runnable);//will run not in ui thread
         t.start();
 
         if(Looper.myLooper() == Looper.getMainLooper())
         {
-            Log.d("jjj onCreate", "run on ui thread");
+            Log.d(TAG, "in onCreate: run on ui thread");
         }
 
     }
@@ -47,8 +47,6 @@ public class handler extends AppCompatActivity {
             do {
                 try {
                     Thread.sleep(3000);
-
-
                     Message msg = Message.obtain();
                     msg.what = msgKey1;
                     msg.obj = "OK";
@@ -57,7 +55,7 @@ public class handler extends AppCompatActivity {
                     if (Looper.myLooper() == Looper.getMainLooper()) {
                         Log.d("jjj", "sendMessagerun on ui thread");
                     } else {
-                        Log.d("jjj", " sendMessage not run on ui thread");
+                        Log.d("jjj", "sendMessage not run on ui thread");
                     }
 
                 } catch (InterruptedException e) {
@@ -69,6 +67,7 @@ public class handler extends AppCompatActivity {
     };
 
     @SuppressLint("HandlerLeak")
+    //will run on ui thread from current thread
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -76,12 +75,12 @@ public class handler extends AppCompatActivity {
             switch (msg.what) {
                 case msgKey1:
                     if (Looper.myLooper() == Looper.getMainLooper()) {
-                        Log.d("jjj", "handleMessage run on ui thread");
+                        Log.d(TAG, "handleMessage run on ui thread");
                     } else {
-                        Log.d("jjj", "handleMessage not run on ui thread");
+                        Log.d(TAG, "handleMessage not run on ui thread");
                     }
 
-                    Log.d("jjj", "handleMessage got" + String.valueOf(msg.arg1));
+                    Log.d(TAG, "handleMessage got" + String.valueOf(msg.arg1));
                     String x = (String) msg.obj;
                     txt.setText(String.valueOf(x));
                     break;
@@ -98,7 +97,7 @@ public class handler extends AppCompatActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case msgKey1:
-                    Log.d("jjj", "mHandler2 handleMessage got" + String.valueOf(msg.arg1));
+                    Log.d(TAG, "mHandler2 handleMessage got" + String.valueOf(msg.arg1));
                     String x = (String) msg.obj;
                     txt.setText(String.valueOf(x));
                     break;

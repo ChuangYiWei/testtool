@@ -84,6 +84,8 @@ public class LiteBle  {
         mbluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
         mbluetoothAdapter = mbluetoothManager.getAdapter();
         StaticLiteble = this;
+
+        Log.w(TAG,"LiteBle open thread id:" + Thread.currentThread().getId());
     }
 
     public void setCallback(IBLECallback cb)
