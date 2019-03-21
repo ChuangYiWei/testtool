@@ -3,6 +3,8 @@ package com.example.johnny_wei.testtool.config;
 public interface IBLECallback {
     //connection
     void ConnectedCB();
+    void SrvDiscoverSuccessCB();
+    void SrvDiscoverFailCB(String reason);
     void DisConnectCB();
     void ConnectFailCB(String reason);
 

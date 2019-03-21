@@ -477,8 +477,14 @@ public class LiteBle  {
             Log.d(TAG, "onServicesDiscovered.");
             if (BluetoothGatt.GATT_SUCCESS == status) {
                 connectionState =  STATE_SERVICES_DISCOVERED;
-                //todo
+                if(CBnotNULL()) {
+                    IbleCB.SrvDiscoverSuccessCB();
+                }
             } else {
+                if(CBnotNULL()) {
+                    String err = "";
+                    IbleCB.SrvDiscoverFailCB(err + status);
+                }
                 printConnectException(gatt, status);
             }
             super.onServicesDiscovered(gatt, status);
@@ -488,11 +494,15 @@ public class LiteBle  {
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             Log.d(TAG, "onCharacteristicRead");
             if (BluetoothGatt.GATT_SUCCESS == status) {
-                IbleCB.readCharacteristicSuccessCB(
-                        characteristic.getUuid().toString(),
-                        characteristic.getValue());
+                if(CBnotNULL()) {
+                    IbleCB.readCharacteristicSuccessCB(
+                            characteristic.getUuid().toString(),
+                            characteristic.getValue());
+                }
             } else {
-                IbleCB.readCharacteristicFailCB(characteristic.getUuid().toString(), status);
+                if(CBnotNULL()) {
+                    IbleCB.readCharacteristicFailCB(characteristic.getUuid().toString(), status);
+                }
                 Log.e(TAG, "onCharacteristicRead fail");
             }
             //printbytes(characteristic.getValue());
@@ -503,11 +513,15 @@ public class LiteBle  {
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             Log.d(TAG, "onCharacteristicWrite");
             if (BluetoothGatt.GATT_SUCCESS == status) {
-                IbleCB.writeCharacteristicSuccessCB(
-                        characteristic.getUuid().toString(),
-                        characteristic.getValue());
+                if(CBnotNULL()) {
+                    IbleCB.writeCharacteristicSuccessCB(
+                            characteristic.getUuid().toString(),
+                            characteristic.getValue());
+                }
             } else {
-                IbleCB.writeCharacteristicFailCB(characteristic.getUuid().toString(), status);
+                if(CBnotNULL()) {
+                    IbleCB.writeCharacteristicFailCB(characteristic.getUuid().toString(), status);
+                }
                 Log.e(TAG, "onCharacteristicWrite fail");
             }
             super.onCharacteristicWrite(gatt, characteristic, status);
@@ -516,10 +530,12 @@ public class LiteBle  {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             Log.d(TAG, "onCharacteristicChanged");
+            if(CBnotNULL()) {
                 IbleCB.CharaValueChangedSuccessCB(
                         characteristic.getUuid().toString(),
                         characteristic.getValue()
                 );
+            }
             printbytes(characteristic.getValue());
             super.onCharacteristicChanged(gatt, characteristic);
         }
@@ -528,11 +544,15 @@ public class LiteBle  {
         public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
             Log.d(TAG, "onDescriptorRead");
             if (BluetoothGatt.GATT_SUCCESS == status) {
-                IbleCB.readDescSuccessCB(
-                        descriptor.getUuid().toString(),
-                        descriptor.getValue());
+                if(CBnotNULL()) {
+                    IbleCB.readDescSuccessCB(
+                            descriptor.getUuid().toString(),
+                            descriptor.getValue());
+                }
             } else {
-                IbleCB.readDescFailCB(descriptor.getUuid().toString(), status);
+                if(CBnotNULL()) {
+                    IbleCB.readDescFailCB(descriptor.getUuid().toString(), status);
+                }
                 Log.e(TAG, "onDescriptorRead fail");
             }
             super.onDescriptorRead(gatt, descriptor, status);
@@ -542,11 +562,15 @@ public class LiteBle  {
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
             Log.d(TAG, "onDescriptorWrite");
             if (BluetoothGatt.GATT_SUCCESS == status) {
-                IbleCB.writeDescSuccessCB(
-                        descriptor.getUuid().toString(),
-                        descriptor.getValue());
+                if(CBnotNULL()) {
+                    IbleCB.writeDescSuccessCB(
+                            descriptor.getUuid().toString(),
+                            descriptor.getValue());
+                }
             } else {
-                IbleCB.writeDescFailCB(descriptor.getUuid().toString(), status);
+                if(CBnotNULL()) {
+                    IbleCB.writeDescFailCB(descriptor.getUuid().toString(), status);
+                }
                 Log.e(TAG, "onDescriptorRead fail");
             }
             super.onDescriptorWrite(gatt, descriptor, status);
@@ -594,7 +618,9 @@ public class LiteBle  {
             errStr = "unknow: " + gattStatus;
             Log.e(TAG, "ConnectException received: " + gattStatus);
         }
-        IbleCB.ConnectFailCB(errStr);
+        if(CBnotNULL()) {
+            IbleCB.ConnectFailCB(errStr);
+        }
     }
 
     public  void printServices(BluetoothGatt gatt) {
@@ -671,6 +697,11 @@ public class LiteBle  {
             default:
                 break;
         }
+    }
+
+    private boolean CBnotNULL()
+    {
+        return (IbleCB != null);
     }
 
 }

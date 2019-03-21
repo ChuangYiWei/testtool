@@ -11,6 +11,10 @@ public abstract class LiteBLECallback implements IBLECallback
     abstract public void DisConnectCB();
     abstract public void ConnectFailCB(String reason);
 
+
+    public void SrvDiscoverSuccessCB(){}
+    public void SrvDiscoverFailCB(String reason){}
+
     //read chara uuid
     public void readCharacteristicSuccessCB(String UUID, byte[] CBData)
     {
