@@ -123,7 +123,7 @@ public class connected_list extends AppCompatActivity {
                 Log.w(TAG, "serv id: " + serviceID);
                 Element e1 = new Element(service.getUuid().toString(),
                                             Element.TOP_LEVEL,
-                                            0,
+                                            serviceID,
                                             Element.NO_PARENT,
                                             true,
                                             false);
