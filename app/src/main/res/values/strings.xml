@@ -12,4 +12,7 @@
 
     <string name="SCAN">SCAN</string>
     <string name="STOP">STOP</string>
+
+    <string name="DEVICE">DEVICE</string>
+    <string name="STATUS">STATUS</string>
 </resources>

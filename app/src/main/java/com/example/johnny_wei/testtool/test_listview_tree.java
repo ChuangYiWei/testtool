@@ -40,6 +40,13 @@ public class test_listview_tree extends AppCompatActivity {
         elements = new ArrayList<Element>();
         elementsData = new ArrayList<Element>();
 
+//        service: 0000180f-0000-1000-8000-00805f9b34fb
+//        characteristic: 00002a19-0000-1000-8000-00805f9b34fb value: null
+//        descriptor: 00002902-0000-1000-8000-00805f9b34fb value: null
+//        service: 0000fff0-0000-1000-8000-00805f9b34fb
+//        characteristic: 0000fff2-0000-1000-8000-00805f9b34fb value: null
+//        characteristic: 0000fff1-0000-1000-8000-00805f9b34fb value: null
+//        descriptor: 00002902-0000-1000-8000-00805f9b34fb value: null
         //添加节点  -- 节点名称，节点level，节点id，父节点id，是否有子节点，是否展开
 
         //添加最外层节点

@@ -19,9 +19,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/mytheme">
-        <activity android:name=".scan_list"></activity>
+        <activity android:name=".connected_list"></activity>
         <activity android:name=".test_layout" />
-        <activity android:name=".connected_list" />
+        <activity android:name=".test_listview_tree" />
         <activity android:name=".expandleble" />
         <activity android:name=".test_ble" />
         <activity android:name=".spinner_option" />
@@ -34,7 +34,7 @@
         <activity android:name=".invok" />
         <activity android:name=".time" />
         <activity android:name=".serviceExample" />
-        <activity android:name=".test_listview_tree">
+        <activity android:name=".scan_list">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -111,7 +111,7 @@ public class scan_list extends AppCompatActivity {
                         Toast.LENGTH_SHORT);
                 toast.show();
 
-//                startNextActivity(position);
+                startNextActivity(position);
             }
         });
     }

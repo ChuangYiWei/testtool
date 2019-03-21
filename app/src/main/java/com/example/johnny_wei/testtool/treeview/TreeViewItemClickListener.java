@@ -18,14 +18,14 @@ public class TreeViewItemClickListener implements AdapterView.OnItemClickListene
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
-        Log.d("jjj","position:" + position);
+
         //点击的item代表的元素
         Element element = (Element) treeViewAdapter.getItem(position);
         //树中的元素
         ArrayList<Element> elements = treeViewAdapter.getElements();
         //元素的数据源
         ArrayList<Element> elementsData = treeViewAdapter.getElementsData();
-
+        Log.d("jjj","position:" + position+", choose:" + element.getContentText());
         //点击没有子项的item直接返回
         if (!element.isHasChildren()) {
             return;
