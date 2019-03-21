@@ -14,6 +14,8 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
+import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -32,6 +34,7 @@ import com.example.johnny_wei.testtool.config.globalConfig;
 import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static android.bluetooth.BluetoothDevice.TRANSPORT_LE;
@@ -41,7 +44,7 @@ import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQ
 public class LiteBle  {
     public static LiteBle StaticLiteble;
     private Context mContext = null;
-    IBLECallback IbleCB;
+    IBLECallback IbleCB = null;
 
     private BluetoothManager mbluetoothManager;
     private BluetoothAdapter mbluetoothAdapter;
@@ -153,6 +156,23 @@ public class LiteBle  {
 
         connectionState = STATE_SCANNING;
         mBluetoothLeScanner.startScan(scanCallback);
+    }
+
+    @RequiresApi(21)
+    public void startAPI21_LeScan(final ScanCallback scanCallback, List<ScanFilter> filters, ScanSettings settings, final long scanTime) {
+        mBluetoothLeScanner = BluetoothAdapter.getDefaultAdapter().getBluetoothLeScanner();
+        // Stops scanning after a pre-defined scan period.
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mBluetoothLeScanner.stopScan(scanCallback);
+                isMainThread();
+            }
+        }, scanTime);
+
+        connectionState = STATE_SCANNING;
+        mBluetoothLeScanner.startScan(filters, settings, scanCallback);
     }
 
     @RequiresApi(21)

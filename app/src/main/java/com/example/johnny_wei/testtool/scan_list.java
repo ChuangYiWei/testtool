@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
 import android.content.Intent;
 import android.os.Looper;
 import android.support.annotation.RequiresApi;
@@ -28,6 +29,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.example.johnny_wei.testtool.config.globalConfig.EXTRAS_DEVICE_ADDRESS;
+import static com.example.johnny_wei.testtool.config.globalConfig.EXTRAS_DEVICE_NAME;
 
 public class scan_list extends AppCompatActivity {
 
@@ -63,11 +67,20 @@ public class scan_list extends AppCompatActivity {
         super.onPause();
     }
 
+    @Override
+    protected void onDestroy() {
+        dev_scan_stop();
+        super.onDestroy();
+    }
+
     void dev_scan() {
 
         if (DevUtil.if_LeScanner_API_support()) {
             mScanCallback = new LeScannerAPI21();
-            liteBluetooth.startAPI21_LeScan(mScanCallback, 10000);
+            ScanSettings settings = new ScanSettings.Builder()
+                    .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+                    .build();
+            liteBluetooth.startAPI21_LeScan(mScanCallback, null, settings, 10000);
         } else {
             liteBluetooth.startLeScan(mLeScanCallback, 10000);
         }
@@ -98,6 +111,7 @@ public class scan_list extends AppCompatActivity {
                         Toast.LENGTH_SHORT);
                 toast.show();
 
+//                startNextActivity(position);
             }
         });
     }
@@ -131,6 +145,19 @@ public class scan_list extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void startNextActivity(int position) {
+        Intent gotintent = getIntent();
+
+        //go to different activity
+        Intent intent;
+        intent = new Intent(thisActivity, connected_list.class);
+
+        intent.putExtra(EXTRAS_DEVICE_NAME, rowItems.get(position).getstrL1());
+        intent.putExtra(EXTRAS_DEVICE_ADDRESS, rowItems.get(position).getstrL2());
+        startActivity(intent);
+    }
+
+
     //user implement this
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -163,8 +190,8 @@ public class scan_list extends AppCompatActivity {
                                     RowItem rowItem = new RowItem(devName, devAddr, Integer.toString(rssi));
                                     rowItems.add(rowItem);
                                     Log.w(TAG,"add device");
-                                    mdevMap.put(devAddr, rssi);
                                     (mAdapter).notifyDataSetChanged();
+                                    mdevMap.put(devAddr, rssi);
                                 }
                             });
                         }
@@ -183,24 +210,23 @@ public class scan_list extends AppCompatActivity {
     {
         if(mdevMap.get(devAddr) != rssi)
         {
-            mdevMap.put(devAddr,rssi);
+
             int listsize = rowItems.size();
             listsize = listsize -1;//index start from 0
             while(listsize >= 0)
             {
-//                           runOnMainThread(updateAdapter_run);
                 final int finalListsize = listsize;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(rowItems.get(finalListsize).getstrL2().equals(devAddr))
-                        {
+                if(rowItems.get(finalListsize).getstrL2().equals(devAddr)) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
                             Log.w(TAG, "update rssi:" + rssi);
                             rowItems.get(finalListsize).setstrL3(Integer.toString(rssi));
+                            (mAdapter).notifyDataSetChanged();
+                            mdevMap.put(devAddr,rssi);
                         }
-                        (mAdapter).notifyDataSetChanged();
-                    }
-                });
+                    });
+                }
                 listsize--;
             }
         }
@@ -238,8 +264,8 @@ public class scan_list extends AppCompatActivity {
                             RowItem rowItem = new RowItem(devName, devAddr, Integer.toString(rssi));
                             rowItems.add(rowItem);
                             Log.w(TAG,"add device");
-                            mdevMap.put(devAddr, rssi);
                             (mAdapter).notifyDataSetChanged();
+                            mdevMap.put(devAddr, rssi);
                         }
                     });
                 }
@@ -249,7 +275,6 @@ public class scan_list extends AppCompatActivity {
                     updateRssi(devAddr, rssi);
                 }
             }
-
         }
 
         @Override

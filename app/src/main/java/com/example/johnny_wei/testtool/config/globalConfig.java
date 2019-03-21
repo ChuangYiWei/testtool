@@ -32,6 +32,8 @@ public class globalConfig {
 
     //broad cast
     static final String EXTRAS_ADDR = "EXTRAS_ADDR";
+    public final static String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
+    public final static String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
 
     //UUID
     final static public String UUID_SERVICE = "0000fff0-0000-1000-8000-00805f9b34fb";
