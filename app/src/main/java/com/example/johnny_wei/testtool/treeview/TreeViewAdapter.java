@@ -1,6 +1,5 @@
 package com.example.johnny_wei.testtool.treeview;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +58,8 @@ public class TreeViewAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.treeview_item, null);
             holder.disclosureImg = (ImageView) convertView.findViewById(R.id.disclosureImg);
-            holder.contentText = (TextView) convertView.findViewById(R.id.contentText);
+            holder.tv_0 = (TextView) convertView.findViewById(R.id.tv_0);
+            holder.tv_1 = (TextView) convertView.findViewById(R.id.tv_1);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -73,7 +73,8 @@ public class TreeViewAdapter extends BaseAdapter {
                 holder.disclosureImg.getPaddingTop(),
                 holder.disclosureImg.getPaddingRight(),
                 holder.disclosureImg.getPaddingBottom());
-        holder.contentText.setText(element.getContentText());
+        holder.tv_0.setText(element.getContentText()[0]);
+        holder.tv_1.setText(element.getContentText()[1]);
         if (element.isHasChildren() && !element.isExpanded()) {
             holder.disclosureImg.setImageResource(R.drawable.close);
             //这里要主动设置一下icon可见，因为convertView有可能是重用了"设置了不可见"的view，下同。
@@ -95,7 +96,8 @@ public class TreeViewAdapter extends BaseAdapter {
      */
     static class ViewHolder{
         ImageView disclosureImg;
-        TextView contentText;
+        TextView tv_0;
+        TextView tv_1;
     }
 
 }

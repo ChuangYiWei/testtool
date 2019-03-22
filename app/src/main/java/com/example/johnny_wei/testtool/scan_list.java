@@ -146,7 +146,8 @@ public class scan_list extends AppCompatActivity {
     }
 
     private void startNextActivity(int position) {
-        Intent gotintent = getIntent();
+
+        dev_scan_stop();
 
         //go to different activity
         Intent intent;

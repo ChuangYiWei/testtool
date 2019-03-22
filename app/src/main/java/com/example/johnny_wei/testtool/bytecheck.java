@@ -8,7 +8,9 @@ import com.example.johnny_wei.testtool.utils.DevUtil;
 import com.example.johnny_wei.testtool.utils.strUtil;
 
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class bytecheck extends AppCompatActivity {
     private final byte[] bytearray={0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F};
@@ -19,20 +21,23 @@ public class bytecheck extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bytecheck);
-        testStr = new LinkedList<String>();
-        testStr.add("111");
-        testStr.add("222");
-        for(int i=0;i<3;i++)
-        {
-            //Log.d(TAG, Integer.toString(i)+ ":" + testStr.getFirst());
-        }
-        test_str();
+
+        String service = "0000180f-0000-1000-8000-00805f9b34fb";
+        int startIdx = 4;
+        int EndIdx = 7+1;
+        Log.d(TAG,service.substring(startIdx,EndIdx));
+
+        String [] strings = {"11","22"};
+        Log.d(TAG,strings[0]);
+        Log.d(TAG,strings[1]);
 //        splitData();
 //        comparephyaddr();
 //        checkLength();
 //        checkUARTLength();
 
     }
+
+
 
     void test_str()
     {

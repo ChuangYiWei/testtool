@@ -15,4 +15,16 @@
 
     <string name="DEVICE">DEVICE</string>
     <string name="STATUS">STATUS</string>
+
+
+    <string name="UNKNOW_SRV">Unknow Serivce</string>
+    <string name="UNKNOW_CHARA">Unknow Charateristic</string>
+    <string name="UNKNOW_DESC">Unknow Descriptor</string>
+
+    <string name="CONNECTED">Connected</string>
+    <string name="CONNECTING">Connecting</string>
+    <string name="DIS_CONNECTED">Disconnected</string>
+    <string name="CONN_FAIL">Connect fail</string>
+    <string name="SRV_DISCOVER">discovered</string>
+    <string name="SRV_DISCOVER_FAIL">discovered fail</string>
 </resources>

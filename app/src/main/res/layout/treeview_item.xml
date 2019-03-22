@@ -7,12 +7,11 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/contentText"
+        android:id="@+id/tv_0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="TextView"
         android:textColor="@android:color/holo_blue_bright"
         app:layout_constraintStart_toEndOf="@+id/disclosureImg"
@@ -23,10 +22,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/tv_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        android:textColor="@android:color/holo_green_light"
+        app:layout_constraintStart_toStartOf="@+id/tv_0"
+        app:layout_constraintTop_toBottomOf="@+id/tv_0" />
 
 </android.support.constraint.ConstraintLayout>

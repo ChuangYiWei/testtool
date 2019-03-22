@@ -2,7 +2,7 @@ package com.example.johnny_wei.testtool.treeview;
 
 public class Element {
     /** 文字内容 */
-    private String contentText;
+    private String[] contentText;
     /** 在tree中的层级 */
     private int level;
     /** 元素的id */
@@ -19,7 +19,7 @@ public class Element {
     /** 表示该元素位于最顶层的层级 */
     public static final int TOP_LEVEL = 0;
 
-    public Element(String contentText, int level, int id, int parendId,
+    public Element(String[] contentText, int level, int id, int parendId,
                    boolean hasChildren, boolean isExpanded) {
         super();
         this.contentText = contentText;
@@ -38,11 +38,11 @@ public class Element {
         this.isExpanded = isExpanded;
     }
 
-    public String getContentText() {
+    public String[] getContentText() {
         return contentText;
     }
 
-    public void setContentText(String contentText) {
+    public void setContentText(String[] contentText) {
         this.contentText = contentText;
     }
 

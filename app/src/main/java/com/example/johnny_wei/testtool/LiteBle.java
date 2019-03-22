@@ -334,7 +334,7 @@ public class LiteBle  {
                 connectionState = STATE_DISCONNECTED;
                 mBluetoothGatt = null;
                 Log.d(TAG, "closed BluetoothGatt ");
-                sendCallback(STATE_DISCONNECTED);
+                sendCallback(STATE_DISCONNECTED);//in case of gatt not send onConnectionStateChange callback
             }
         });
     }
