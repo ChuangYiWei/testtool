@@ -6,17 +6,25 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Looper;
 import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.johnny_wei.testtool.adapter.ListItem;
@@ -40,7 +48,12 @@ public class scan_list extends AppCompatActivity {
     List<ListItem> ListItems;
     List<RowItem> rowItems;
     ScanListAdapter mAdapter;
+    private Context mContext;
+    private ConstraintLayout mConstraintLayout;
+    private PopupWindow mPopupWindow;
+    private Button mButton;
 
+    private String NEW_LINE = "\n";
     private  HashMap<String, Integer> mdevMap;
     Activity thisActivity = this;
 
@@ -53,12 +66,14 @@ public class scan_list extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_list);
-
+        mContext = this;
         liteBluetooth = new LiteBle(thisActivity);
         liteBluetooth.enableBluetoothIfDisabled(thisActivity, 1);
         mdevMap = new HashMap<String, Integer>();
         setupView();
-        dev_scan();
+//        dev_scan();
+        showDevInfo();
+        setupPopup();
     }
 
     @Override
@@ -71,6 +86,93 @@ public class scan_list extends AppCompatActivity {
     protected void onDestroy() {
         dev_scan_stop();
         super.onDestroy();
+    }
+
+    void setupPopup()
+    {
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Initialize a new instance of LayoutInflater service
+
+                LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+
+                // Inflate the custom layout/view
+                View customView = inflater.inflate(R.layout.devinfo,null);
+                // Initialize a new instance of popup window
+                if(mPopupWindow == null) {
+                    mPopupWindow = new PopupWindow(
+                            customView,
+                            ConstraintLayout.LayoutParams.WRAP_CONTENT,
+                            ConstraintLayout.LayoutParams.WRAP_CONTENT
+                    );
+                }
+
+                if(null == mPopupWindow)
+                {
+                    Log.e("jjj", "mPopupWindow is null");
+                }
+                try {
+                    TextView tv = (TextView) customView.findViewById(R.id.tv_dev);
+                    String str = GetDevString();
+                    str += "        [--->click to cancel<---]\n";
+                    tv.setBackgroundColor(0xff000000);
+                    tv.setText(str);
+                    tv.setTextColor(0xffaabb00);
+                    tv.setTextSize(20);
+
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // Dismiss the popup window
+                            Log.e("jjj", "dismiss mPopupWindow ");
+                            mPopupWindow.dismiss();
+                        }
+                    });
+
+                    // Finally, show the popup window at the center location of root relative layout
+
+                    mPopupWindow.showAtLocation(mConstraintLayout, Gravity.CENTER, 0, 0);
+                }catch (Exception e)
+                {
+                    Log.e("jjj", e.toString());
+                }
+            }
+        });
+    }
+
+    private String GetDevString()
+    {
+        String str = "";
+        str += "Brand----------:" + DevUtil.GetBrand() + NEW_LINE;
+        str += "Device Name----:" + DevUtil.GetDeviceModel() + NEW_LINE;
+        str += "Android version:" + DevUtil.GetSystemVersion()+ NEW_LINE;
+        str += "MANUFACTURER---:" + Build.MANUFACTURER+ NEW_LINE;
+        str += "SDK version----:" + DevUtil.GetVersionSDK()+ NEW_LINE;
+        str += "Bluetooth Supported : "+ DevUtil.hasBLUETOOTH_Feature(this)+ NEW_LINE;
+        str += "Bluetooth Low Energy Supported : " + DevUtil.hasBLUETOOTH_LE_Feature(this)+ NEW_LINE;
+        if(DevUtil.if_BLE5_API_support()) {
+            if(liteBluetooth.getBluetoothAdapter() != null) {
+                str += "High speed(PHY 2M) Supported : " + liteBluetooth.getBluetoothAdapter().isLe2MPhySupported()+ NEW_LINE;
+                str += "Long Range(PHY Coded) Supported : " + liteBluetooth.getBluetoothAdapter().isLeCodedPhySupported() + NEW_LINE;
+                str += "Extended adv Supported : " + liteBluetooth.getBluetoothAdapter().isLeExtendedAdvertisingSupported() + NEW_LINE;
+                str += "Periodic adv Supported : " + liteBluetooth.getBluetoothAdapter().isLePeriodicAdvertisingSupported() + NEW_LINE;
+                str += "Max adv Data Length : " + liteBluetooth.getBluetoothAdapter().getLeMaximumAdvertisingDataLength() + NEW_LINE;
+            }
+        }
+        return str;
+    }
+
+    void showDevInfo()
+    {
+        Log.d(TAG, "Brand:" + DevUtil.GetBrand());
+        Log.d(TAG, "Device Name:" + DevUtil.GetDeviceModel());
+        Log.d(TAG, "Android version:" + DevUtil.GetSystemVersion());
+        Log.d(TAG, "MANUFACTURER:" + Build.MANUFACTURER);
+        Log.d(TAG, "SDK version:" + DevUtil.GetVersionSDK());
+
+        Log.d(TAG,"Bluetooth Supported : "+ DevUtil.hasBLUETOOTH_Feature(this));
+        Log.d(TAG,"Bluetooth Low Energy Supported : " + DevUtil.hasBLUETOOTH_LE_Feature(this));
     }
 
     void dev_scan() {
@@ -98,6 +200,7 @@ public class scan_list extends AppCompatActivity {
     private void setupView() {
         listView = (ListView) findViewById(R.id.ble_list);
 //        ListItems = new ArrayList<>();
+        mButton = (Button) findViewById(R.id.btn_dev);
         rowItems = new ArrayList<>();
         mAdapter = new ScanListAdapter(this, rowItems);
         listView.setAdapter(mAdapter);
@@ -114,7 +217,10 @@ public class scan_list extends AppCompatActivity {
                 startNextActivity(position);
             }
         });
+        mConstraintLayout = (ConstraintLayout) findViewById(R.id.scan_list_parent);
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

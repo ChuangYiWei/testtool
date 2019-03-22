@@ -22,6 +22,10 @@ public class DevUtil {
         return Build.BRAND;
     }
 
+    public static String Get_MANUFACTURER(){
+        return Build.MANUFACTURER;
+    }
+
     public static int GetVersionSDK(){
         return Build.VERSION.SDK_INT;
     }
@@ -31,13 +35,14 @@ public class DevUtil {
         Log.d(TAG, "Dev model:" + DevUtil.GetDeviceModel());
         Log.d(TAG, "    System ver:" + DevUtil.GetSystemVersion());
         Log.d(TAG, "    SDK ver:" + DevUtil.GetVersionSDK());
+        Log.d(TAG, "    MANUFACTURER" + DevUtil.Get_MANUFACTURER());
     }
 
-    public static boolean hasBLUETOOTHFeature(Context argContext) {
+    public static boolean hasBLUETOOTH_Feature(Context argContext) {
         return (argContext == null) ? false : argContext.getPackageManager().hasSystemFeature(FEATURE_BLUETOOTH);
     }
 
-    public static boolean hasBLEFeature(Context argContext) {
+    public static boolean hasBLUETOOTH_LE_Feature(Context argContext) {
         return (argContext == null) ? false : argContext.getPackageManager().hasSystemFeature(FEATURE_BLUETOOTH_LE);
     }
 
