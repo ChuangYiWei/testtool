@@ -1,5 +1,6 @@
 package com.example.johnny_wei.testtool.utils;
 
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.os.Build;
 import android.util.Log;
@@ -44,6 +45,14 @@ public class DevUtil {
 
     public static boolean hasBLUETOOTH_LE_Feature(Context argContext) {
         return (argContext == null) ? false : argContext.getPackageManager().hasSystemFeature(FEATURE_BLUETOOTH_LE);
+    }
+
+    public static boolean isBleEnable(Context context) {
+        if (!hasBLUETOOTH_LE_Feature(context)) {
+            return false;
+        }
+        BluetoothManager manager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+        return manager.getAdapter().isEnabled();
     }
 
     public static boolean if_BLE5_API_support()
