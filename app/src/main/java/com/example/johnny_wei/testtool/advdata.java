@@ -9,11 +9,14 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 
 import com.example.johnny_wei.testtool.R;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class advdata extends AppCompatActivity {
@@ -39,10 +42,35 @@ public class advdata extends AppCompatActivity {
         Log.d(TAG, "adv length:" + adv.length);
         Log.d(TAG, "scan record:" + byteArrayToHex(adv));
 
-//        parseAdv(adv);
+        parseAdv(adv);
+        parseScanRecordAsSparseArray(adv);
+//        init();
+//        scanLeDevice(true);
+    }
 
-        init();
-        scanLeDevice(true);
+    public static void parseScanRecordAsSparseArray(final byte[] scanRecord) {
+
+        int index = 0;
+        while (index < scanRecord.length) {
+            final int length = scanRecord[index++];
+            //Done once we run out of records
+            if (length == 0) break;
+
+            final int type = scanRecord[index] & 0xFF;
+
+            //Done if our record isn't a valid type
+            if (type == 0) break;
+
+            final byte[] data = Arrays.copyOfRange(scanRecord, index + 1, index + length);
+
+            Log.d(TAG,"length:" + length);
+            Log.d(TAG,"type:" + String.format("%02x", type));
+            Log.d(TAG,"data:" + Arrays.toString(data));
+            //Advance
+            index += length;
+        }
+
+        return;
     }
 
     private void parseAdv(byte[] adv_data) {

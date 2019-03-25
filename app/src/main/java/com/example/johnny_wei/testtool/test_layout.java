@@ -1,7 +1,9 @@
 package com.example.johnny_wei.testtool;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import static android.view.View.VISIBLE;
 
@@ -29,8 +32,77 @@ public class test_layout extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_layout);
+        popup();
+        showlayoutdialog();
 
+    }
 
+    void showlayoutdialog() {
+        LayoutInflater inflater = LayoutInflater.from(test_layout.this);
+        final View v = inflater.inflate(R.layout.devinfo, null);
+        TextView tv = (v.findViewById(R.id.tv_dev));
+        tv.setText("johnny");
+        new AlertDialog.Builder(test_layout.this)
+                .setTitle("請輸入你的id")
+                .setView(v)
+                .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+//                        EditText editText = (EditText) (v.findViewById(R.id.editText1));
+//                        Toast.makeText(getApplicationContext(), "你的id是" + editText.getText().toString(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .show();
+    }
+    void showListdialog()
+    {
+        final String[] dinner = {"1\n2\n3\n","雞蛋糕","沙威瑪","澳美客","麵線","麵疙瘩"};
+
+        AlertDialog.Builder dialog_list = new AlertDialog.Builder(test_layout.this);
+        dialog_list.setTitle("利用List呈現");
+        dialog_list.setItems(dinner, new DialogInterface.OnClickListener(){
+            @Override
+            //只要你在onClick處理事件內，使用which參數，就可以知道按下陣列裡的哪一個了
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+                Toast.makeText(test_layout.this, "你選的是" + dinner[which], Toast.LENGTH_SHORT).show();
+            }
+        });
+        dialog_list.show();
+    }
+    void showdialog()
+    {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(test_layout.this);
+        dialog.setTitle("基本訊息對話按鈕");
+        dialog.setMessage("基本訊息對話功能介紹");
+        dialog.setNegativeButton("NO",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                // TODO Auto-generated method stub
+                Toast.makeText(test_layout.this, "我還尚未了解",Toast.LENGTH_SHORT).show();
+            }
+
+        });
+        dialog.setPositiveButton("YES",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                // TODO Auto-generated method stub
+                Toast.makeText(test_layout.this, "我了解了",Toast.LENGTH_SHORT).show();
+            }
+
+        });
+        dialog.setNeutralButton("取消",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                // TODO Auto-generated method stub
+                Toast.makeText(test_layout.this, "取消",Toast.LENGTH_SHORT).show();
+            }
+
+        });
+        dialog.show();
+    }
+
+    private void popup() {
         // Get the application context
         //mContext = getApplicationContext();
         mContext = this;
