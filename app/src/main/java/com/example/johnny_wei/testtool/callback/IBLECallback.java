@@ -1,4 +1,4 @@
-package com.example.johnny_wei.testtool.config;
+package com.example.johnny_wei.testtool.callback;
 
 public interface IBLECallback {
     //connection

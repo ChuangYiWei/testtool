@@ -28,7 +28,8 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 
-import com.example.johnny_wei.testtool.config.IBLECallback;
+import com.example.johnny_wei.testtool.callback.IBLEScanCallback;
+import com.example.johnny_wei.testtool.callback.IBLECallback;
 import com.example.johnny_wei.testtool.config.globalConfig;
 
 import java.lang.annotation.Target;
@@ -45,7 +46,7 @@ public class LiteBle  {
     public static LiteBle StaticLiteble;
     private Context mContext = null;
     IBLECallback IbleCB = null;
-
+    IBLEScanCallback IbleScanCB = null;
     private BluetoothManager mbluetoothManager;
     private BluetoothAdapter mbluetoothAdapter;
     private BluetoothGatt mBluetoothGatt;
@@ -97,6 +98,12 @@ public class LiteBle  {
         IbleCB = cb;
     }
 
+    public void listenScanCallback(IBLEScanCallback cb)
+    {
+        IbleScanCB = cb;
+    }
+
+
     public void enableBluetoothIfDisabled(Activity activity, int requestCode) {
 
         if (!mbluetoothAdapter.isEnabled()) {
@@ -126,12 +133,24 @@ public class LiteBle  {
             @Override
             public void run() {
                 stopLeScan(scanCallback);
+                fireScanCallback(STATE_DISCONNECTED);
                 isMainThread();
             }
         }, scanTime);
 
         connectionState = STATE_SCANNING;
         mbluetoothAdapter.startLeScan(scanCallback);
+        fireScanCallback(connectionState);
+    }
+
+    void fireScanCallback(int connectionState) {
+        if (IbleScanCB != null) {
+            if (connectionState == STATE_SCANNING) {
+                IbleScanCB.OnScanStart();
+            } else if (connectionState == STATE_DISCONNECTED) {
+                IbleScanCB.OnScanStop();
+            }
+        }
     }
 
     public void stopLeScan(BluetoothAdapter.LeScanCallback scanCallback) {
@@ -139,6 +158,7 @@ public class LiteBle  {
         if (connectionState == STATE_SCANNING) {
             connectionState = STATE_DISCONNECTED;
         }
+        fireScanCallback(connectionState);
     }
 
     @RequiresApi(21)
@@ -151,11 +171,13 @@ public class LiteBle  {
             public void run() {
                 mBluetoothLeScanner.stopScan(scanCallback);
                 isMainThread();
+                fireScanCallback(STATE_DISCONNECTED);
             }
         }, scanTime);
 
         connectionState = STATE_SCANNING;
         mBluetoothLeScanner.startScan(scanCallback);
+        fireScanCallback(connectionState);
     }
 
     @RequiresApi(21)
@@ -168,11 +190,13 @@ public class LiteBle  {
             public void run() {
                 mBluetoothLeScanner.stopScan(scanCallback);
                 isMainThread();
+                fireScanCallback(STATE_DISCONNECTED);
             }
         }, scanTime);
 
         connectionState = STATE_SCANNING;
         mBluetoothLeScanner.startScan(filters, settings, scanCallback);
+        fireScanCallback(connectionState);
     }
 
     @RequiresApi(21)
@@ -181,6 +205,7 @@ public class LiteBle  {
         if (connectionState == STATE_SCANNING) {
             connectionState = STATE_DISCONNECTED;
         }
+        fireScanCallback(connectionState);
     }
 
     /**

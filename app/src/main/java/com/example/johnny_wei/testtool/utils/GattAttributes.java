@@ -52,6 +52,7 @@ public class GattAttributes {
         attributes.put("0000180d-0000-1000-8000-00805f9b34fb", "Heart Rate Service");
         attributes.put("0000180a-0000-1000-8000-00805f9b34fb", "Device Information Service");
         attributes.put("0000180f-0000-1000-8000-00805f9b34fb", "Battery Service");
+        attributes.put("00001814-0000-1000-8000-00805f9b34fb", "Running Speed and Cadence");
 
         // Sample Characteristics.
 
@@ -60,8 +61,8 @@ public class GattAttributes {
         attributes.put("00002a01-0000-1000-8000-00805f9b34fb", "Appearance");
 
         //0x1801 Generic Attribute
+        attributes.put("00002a04-0000-1000-8000-00805f9b34fb", "Peripheral Preferred Connection Parameters");
         attributes.put("00002a05-0000-1000-8000-00805f9b34fb", "Service Changed");
-
         attributes.put("00002a19-0000-1000-8000-00805f9b34fb", "Battery Level");
 
         //service 0x180A
@@ -74,6 +75,11 @@ public class GattAttributes {
         attributes.put("00002a29-0000-1000-8000-00805f9b34fb", "Manufacturer Name String");
         attributes.put(HEART_RATE_MEASUREMENT, "Heart Rate Measurement");
 
+        //service 0x1814
+        attributes.put("00002a53-0000-1000-8000-00805f9b34fb", "RSC Measurement");
+        attributes.put("00002a54-0000-1000-8000-00805f9b34fb", "RSC Feature");
+        attributes.put("00002a55-0000-1000-8000-00805f9b34fb", "SC Control Point");
+        attributes.put("00002a5d-0000-1000-8000-00805f9b34fb", "Sensor Location");
 
         // Sample Descriptors
         attributes.put(CLIENT_CHARACTERISTIC_CONFIG, "Client Characteristic Configuration");

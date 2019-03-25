@@ -23,7 +23,7 @@
         <activity android:name=".test_layout" />
         <activity android:name=".test_listview_tree" />
         <activity android:name=".expandleble" />
-        <activity android:name=".test_ble" />
+        <activity android:name=".scan_list" />
         <activity android:name=".spinner_option" />
         <activity android:name=".customview" /> <!-- <activity android:name=".test_ble"> -->
         <activity android:name=".xmlandinvoke" />
@@ -34,7 +34,7 @@
         <activity android:name=".invok" />
         <activity android:name=".time" />
         <activity android:name=".serviceExample" />
-        <activity android:name=".scan_list">
+        <activity android:name=".test_ble">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

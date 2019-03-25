@@ -10,11 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.johnny_wei.testtool.config.LiteBLECallback;
+import com.example.johnny_wei.testtool.callback.LiteBLECallback;
 import com.example.johnny_wei.testtool.treeview.Element;
 import com.example.johnny_wei.testtool.treeview.TreeViewAdapter;
 import com.example.johnny_wei.testtool.treeview.TreeViewItemClickListener;

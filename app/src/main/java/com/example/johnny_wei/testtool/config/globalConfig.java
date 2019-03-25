@@ -2,6 +2,9 @@ package com.example.johnny_wei.testtool.config;
 
 public class globalConfig {
 
+    //BLE
+    private int ENABLE_BT = 1;
+
     public static final int BLE5_API_LEVEL = 26;
 
     //drop down menu

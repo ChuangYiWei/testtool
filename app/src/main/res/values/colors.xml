@@ -3,6 +3,15 @@
     <color name="colorPrimary">#E5688500</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="background_material_dark">#242323</color>
-    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="color_tv_00">#00BCD4</color>
+    <color name="color_tv_01">#4CAF50</color>
+    <color name="color_tv_02">#E91E63</color>
+    <color name="color_scan_text">#FFEB3B</color>
+    <color name="color_device">#8BC34A</color>
+    <color name="color_mac">#FF9800</color>
+    <color name="color_status">#FFC107</color>
+    <color name="color_service">#00BCD4</color>
+    <color name="color_chara">#FF5722</color>
 </resources>

@@ -1,12 +1,18 @@
 package com.example.johnny_wei.testtool.utils;
 
+import android.Manifest;
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
 
 import static android.content.pm.PackageManager.FEATURE_BLUETOOTH;
 import static android.content.pm.PackageManager.FEATURE_BLUETOOTH_LE;
+import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_COARSE_LOCATION;
 
 public class DevUtil {
     private static final String TAG = "DevUtil";
@@ -37,6 +43,20 @@ public class DevUtil {
         Log.d(TAG, "    System ver:" + DevUtil.GetSystemVersion());
         Log.d(TAG, "    SDK ver:" + DevUtil.GetVersionSDK());
         Log.d(TAG, "    MANUFACTURER" + DevUtil.Get_MANUFACTURER());
+    }
+    public static void enableBluetooth(Activity activity, int requestCode) {
+        Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        activity.startActivityForResult(intent, requestCode);
+    }
+
+    public static void enableBluetoothPermisison(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int permission = activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+            //未取得權限，向使用者要求允許權限
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                activity.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
+            }
+        }
     }
 
     public static boolean hasBLUETOOTH_Feature(Context argContext) {
