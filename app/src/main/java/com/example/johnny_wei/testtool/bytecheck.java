@@ -30,6 +30,8 @@ public class bytecheck extends AppCompatActivity {
         String [] strings = {"11","22"};
         Log.d(TAG,strings[0]);
         Log.d(TAG,strings[1]);
+
+        substr();
 //        splitData();
 //        comparephyaddr();
 //        checkLength();
@@ -37,6 +39,14 @@ public class bytecheck extends AppCompatActivity {
 
     }
 
+    private void substr() {
+        String test = "UUID:0x2A19\n value:63";
+        Log.d("jjj","test:" + test);
+        Log.d("jjj","fist appear 2a19=" + test.indexOf("2A19"));
+        Log.d("jjj","fist appear value=" + test.indexOf("value:"));
+        Log.d("jjj","fist appear value=" + test.lastIndexOf("value:"));
+        Log.d("jjj","substr=" + test.substring(0,test.indexOf("val")));
+    }
 
 
     void test_str()

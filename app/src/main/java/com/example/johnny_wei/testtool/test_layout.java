@@ -28,14 +28,41 @@ public class test_layout extends AppCompatActivity {
     ConstraintLayout mIncludeConstraintLayout;
     private Context mContext;
     private PopupWindow mPopupWindow;
+
+    TextView textOut;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_layout);
+        textOut = (TextView)findViewById(R.id.textout);
         popup();
-        showlayoutdialog();
-
+//        showlayoutdialog();
+        showEditdialog();
     }
+
+    void showEditdialog() {
+        AlertDialog.Builder editDialog = new AlertDialog.Builder(test_layout.this);
+        editDialog.setTitle("--- Edit ---");
+
+        final EditText editText = new EditText(test_layout.this);
+        editText.setText(textOut.getText());
+        editDialog.setView(editText);
+
+        editDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            // do something when the button is clicked
+            public void onClick(DialogInterface arg0, int arg1) {
+                textOut.setText(editText.getText().toString());
+            }
+        });
+        editDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            // do something when the button is clicked
+            public void onClick(DialogInterface arg0, int arg1) {
+                //...
+            }
+        });
+        editDialog.show();
+    }
+
 
     void showlayoutdialog() {
         LayoutInflater inflater = LayoutInflater.from(test_layout.this);
@@ -70,6 +97,8 @@ public class test_layout extends AppCompatActivity {
         });
         dialog_list.show();
     }
+
+
     void showdialog()
     {
         AlertDialog.Builder dialog = new AlertDialog.Builder(test_layout.this);

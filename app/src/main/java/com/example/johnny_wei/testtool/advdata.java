@@ -49,6 +49,8 @@ public class advdata extends AppCompatActivity {
     }
 
     public static void parseScanRecordAsSparseArray(final byte[] scanRecord) {
+        StringBuilder sb = new StringBuilder();
+
 
         int index = 0;
         while (index < scanRecord.length) {
@@ -63,9 +65,16 @@ public class advdata extends AppCompatActivity {
 
             final byte[] data = Arrays.copyOfRange(scanRecord, index + 1, index + length);
 
-            Log.d(TAG,"length:" + length);
+
+            Log.d(TAG,"length:" + String.format("%02x", length));
             Log.d(TAG,"type:" + String.format("%02x", type));
-            Log.d(TAG,"data:" + Arrays.toString(data));
+            Log.d(TAG,"data:" +  byteArrayToHex(data));
+
+            sb.append("length:" + String.format("0x%02x", length) + "\n");
+            sb.append("type:" + String.format("0x%02x", type)+"\n");
+            sb.append("data:" + "0x" +byteArrayToHex(data)+"\n");
+
+            Log.w("jjj",sb.toString());
             //Advance
             index += length;
         }
