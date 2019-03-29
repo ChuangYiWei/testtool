@@ -1,6 +1,7 @@
 package com.example.johnny_wei.testtool.utils;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -13,6 +14,7 @@ import android.util.Log;
 import static android.content.pm.PackageManager.FEATURE_BLUETOOTH;
 import static android.content.pm.PackageManager.FEATURE_BLUETOOTH_LE;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_COARSE_LOCATION;
+import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE;
 
 public class DevUtil {
     private static final String TAG = "DevUtil";
@@ -84,5 +86,17 @@ public class DevUtil {
     {
         return Build.VERSION.SDK_INT >= 21;
     }
-
+    @TargetApi(23)
+    public static void request_WritePermissions(Activity argActivity) {
+        if(Build.VERSION.SDK_INT >= 23){
+            int permission = argActivity.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            //未取得權限，向使用者要求允許權限
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                argActivity.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
+            }
+        }
+        else {
+            // do nothing
+        }
+    }
 }
