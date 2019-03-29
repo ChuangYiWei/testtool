@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -21,12 +22,14 @@ public class dbgLog {
     public static final int ERROR = 6;
     public static final int ASSERT = 7;
 
-    private static final String TAG = "Log";
+    private static final String className = "dbgLog";
 
     private static boolean DEBUG_ENABLED = false;
     private static String PATH = "debug.txt";
 
+    private static String SD_PATH = Environment.getExternalStorageDirectory().getPath();
 
+    static SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     public static void setDebug(boolean debug) {
         DEBUG_ENABLED = debug;
     }
@@ -34,8 +37,8 @@ public class dbgLog {
     public static void setPath(String path) {
         if (path.endsWith("/")) {
             PATH = path + "debug.txt";
-        } else if (!path.endsWith(".txt")) {
-            PATH  = path + ".txt";
+//        } else if (!path.endsWith(".txt")) {
+//            PATH  = path + ".txt";
         } else {
             PATH = path;
         }
@@ -126,10 +129,11 @@ public class dbgLog {
     }
 
     private static String getDateTimeStamp() {
-        Date dateNow = Calendar.getInstance().getTime();
-        return (DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.CHINESE).format(dateNow));
-    }
+        String dts = sdf.format(new Date());
+        return dts;
 
+    }
+    //ex: dbgLog.setPath("123/456/789");//,folder is 123/456, file is 789
     private static void logToFile(String tag, String message) {
         try {
             File logFile = new File(Environment.getExternalStorageDirectory(), PATH);
@@ -147,7 +151,40 @@ public class dbgLog {
             writer.close();
 
         } catch (IOException e) {
-            android.util.Log.e(TAG, "Unable to log exception to file.", e);
+            android.util.Log.e(className, "Unable to log exception to file.", e);
         }
     }
+
+
+    public static void deletefile(String fileName) {
+        File file = new File(Environment.getExternalStorageDirectory(), fileName);
+        if(!file.exists())
+        {
+            logToFile("file", "file: " + file + " not exist");
+            return;
+        }
+        Log.w(className, "delete file:" + file.getPath());
+        file.delete();
+    }
+
+    public static void deletefolder(String dirName) {
+        File dir = new File(Environment.getExternalStorageDirectory(), dirName);
+        if(!dir.exists())
+        {
+            logToFile("file", "dirName: " + dirName + " not exist");
+            return;
+        }
+        Log.w(className, "delete folder dir:" + dir.getPath());
+        deleteRecursive(dir);
+    }
+
+    static void  deleteRecursive(File fileOrDirectory) {
+
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                deleteRecursive(child);
+
+        fileOrDirectory.delete();
+    }
+
 }

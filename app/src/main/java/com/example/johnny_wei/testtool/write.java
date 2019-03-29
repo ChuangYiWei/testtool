@@ -36,9 +36,11 @@ public class write extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         storage_setup();
         dbgLog.setDebug(true);
-        dbgLog.setPath("123/456");
-        dbgLog.e("ttt","123");
 
+//        dbgLog.deletefolder("123");
+//        dbgLog.setPath("1");//create file 789,folder is 123/456
+//        dbgLog.w("ttt","321");
+        dbgLog.deletefile("1");
 //        createFoler("log_debug");
 //        writeDebug("abc","123");
     }
