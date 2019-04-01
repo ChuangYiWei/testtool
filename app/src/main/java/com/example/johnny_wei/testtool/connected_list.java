@@ -13,16 +13,16 @@ import android.view.LayoutInflater;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.johnny_wei.testtool.callback.LiteBLECallback;
+import com.example.johnny_wei.testtool.BLEutils.callback.LiteBLECallback;
 import com.example.johnny_wei.testtool.treeview.Element;
 import com.example.johnny_wei.testtool.treeview.TreeViewAdapter;
 import com.example.johnny_wei.testtool.treeview.TreeViewItemClickListener;
-import com.example.johnny_wei.testtool.utils.GattAttributes;
+import com.example.johnny_wei.testtool.BLEutils.GattAttributes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.example.johnny_wei.testtool.LiteBle.StaticLiteble;
+import static com.example.johnny_wei.testtool.BLEutils.LiteBle.StaticLiteble;
 import static com.example.johnny_wei.testtool.config.globalConfig.EXTRAS_DEVICE_ADDRESS;
 
 public class connected_list extends AppCompatActivity {

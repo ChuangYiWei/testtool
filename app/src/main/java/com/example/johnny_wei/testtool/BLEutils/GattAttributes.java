@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.johnny_wei.testtool.utils;
+package com.example.johnny_wei.testtool.BLEutils;
 
 import java.util.HashMap;
 
@@ -27,13 +27,13 @@ public class GattAttributes {
     private final String className = getClass().getSimpleName();
 
     final int GATT_PROP_BCAST = 0x01; //Permits broadcasts of the Characteristic Value.
-    private static final int GATT_PROP_READ = 0x02;//Permits reads of the Characteristic Value.
-    private static final int GATT_PROP_WRITE = 0x08;//Permits writes of the Characteristic Value with response.
-    private static final int GATT_PROP_NOTIFY = 0x10;//Permits notifications of a Characteristic Value without acknowledgement.
-    private static final int GATT_PROP_WRITE_NO_RSP = 0x04; // Permits writes of the Characteristic Value without response.
-    private static final int GATT_PROP_INDICATE = 0x20;//Permits indications of a Characteristic Value with acknowledgement.
-    private static final int GATT_PROP_AUTHEN = 0x40;// Permits signed writes to the Characteristic Value.
-    private static final int GATT_PROP_EXTENDED = 0x80; //Additional characteristic properties are defined in the Characteristic Extended Properties Descriptor.
+    public static final int GATT_PROP_READ = 0x02;//Permits reads of the Characteristic Value.
+    public static final int GATT_PROP_WRITE = 0x08;//Permits writes of the Characteristic Value with response.
+    public static final int GATT_PROP_NOTIFY = 0x10;//Permits notifications of a Characteristic Value without acknowledgement.
+    public static final int GATT_PROP_WRITE_NO_RSP = 0x04; // Permits writes of the Characteristic Value without response.
+    public static final int GATT_PROP_INDICATE = 0x20;//Permits indications of a Characteristic Value with acknowledgement.
+    public static final int GATT_PROP_AUTHEN = 0x40;// Permits signed writes to the Characteristic Value.
+    public static final int GATT_PROP_EXTENDED = 0x80; //Additional characteristic properties are defined in the Characteristic Extended Properties Descriptor.
     //==================================================================
 
     private static HashMap<String, String> attributes = new HashMap();
@@ -44,26 +44,34 @@ public class GattAttributes {
     static {
 
 //        https://www.bluetooth.com/specifications/gatt/services
-        // Sample Services.
+        //Sample Services. -------------------------------------------------
         attributes.put("00001800-0000-1000-8000-00805f9b34fb", "Generic Access");
 
 
         attributes.put("00001801-0000-1000-8000-00805f9b34fb", "Generic Attribute");
+        attributes.put("00001802-0000-1000-8000-00805f9b34fb", "Immediate Alert");
+
         attributes.put("0000180d-0000-1000-8000-00805f9b34fb", "Heart Rate Service");
         attributes.put("0000180a-0000-1000-8000-00805f9b34fb", "Device Information Service");
         attributes.put("0000180f-0000-1000-8000-00805f9b34fb", "Battery Service");
+        attributes.put("00001811-0000-1000-8000-00805f9b34fb", "Alert Notification Service");
+
         attributes.put("00001814-0000-1000-8000-00805f9b34fb", "Running Speed and Cadence");
 
-        // Sample Characteristics.
+        // Sample Characteristics.-------------------------------------------------
 
         //0x1800 service
         attributes.put("00002a00-0000-1000-8000-00805f9b34fb", "Device Name");
         attributes.put("00002a01-0000-1000-8000-00805f9b34fb", "Appearance");
+        attributes.put("00002aa6-0000-1000-8000-00805f9b34fb", "Central Address Resolution");
 
         //0x1801 Generic Attribute
         attributes.put("00002a04-0000-1000-8000-00805f9b34fb", "Peripheral Preferred Connection Parameters");
         attributes.put("00002a05-0000-1000-8000-00805f9b34fb", "Service Changed");
         attributes.put("00002a19-0000-1000-8000-00805f9b34fb", "Battery Level");
+
+        //0x1802
+        attributes.put("00002a06-0000-1000-8000-00805f9b34fb", "Alert Level");
 
         //service 0x180A
         attributes.put("00002a23-0000-1000-8000-00805f9b34fb", "System ID");

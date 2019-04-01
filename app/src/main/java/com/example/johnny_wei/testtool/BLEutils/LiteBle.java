@@ -1,7 +1,6 @@
-package com.example.johnny_wei.testtool;
+package com.example.johnny_wei.testtool.BLEutils;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -21,18 +20,16 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 
-import com.example.johnny_wei.testtool.callback.IBLEScanCallback;
-import com.example.johnny_wei.testtool.callback.IBLECallback;
+import com.example.johnny_wei.testtool.BLEutils.callback.IBLEScanCallback;
+import com.example.johnny_wei.testtool.BLEutils.callback.IBLECallback;
 import com.example.johnny_wei.testtool.config.globalConfig;
 
-import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.johnny_wei.testtool.callback;
+package com.example.johnny_wei.testtool.BLEutils.callback;
 
 /**
  * LiteBLECallback is an abstract extension of IBLECallback.

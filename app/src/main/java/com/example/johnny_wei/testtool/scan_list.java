@@ -9,7 +9,6 @@ import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Looper;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -27,14 +26,13 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.johnny_wei.testtool.BLEutils.LiteBle;
 import com.example.johnny_wei.testtool.adapter.ListItem;
 import com.example.johnny_wei.testtool.adapter.RowItem;
 import com.example.johnny_wei.testtool.adapter.ScanListAdapter;
 import com.example.johnny_wei.testtool.utils.DevUtil;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 

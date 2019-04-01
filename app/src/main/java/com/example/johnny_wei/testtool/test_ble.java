@@ -28,7 +28,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.johnny_wei.testtool.callback.LiteBLECallback;
+import com.example.johnny_wei.testtool.BLEutils.LiteBle;
+import com.example.johnny_wei.testtool.BLEutils.callback.LiteBLECallback;
 import com.example.johnny_wei.testtool.config.globalConfig;
 import com.example.johnny_wei.testtool.utils.DevUtil;
 import com.example.johnny_wei.testtool.utils.Permission;
