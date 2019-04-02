@@ -13,11 +13,6 @@ import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
 import android.os.Build.VERSION;
 
-import com.example.johnny_wei.testtool.R;
-import com.example.johnny_wei.testtool.common.DBG;
-import com.example.johnny_wei.testtool.common.pConvertType;
-import com.example.johnny_wei.testtool.common.pString;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -37,7 +32,6 @@ public class PL2303Driver {
     public final static  String TAG_CLASS =
             "com.baboo.android.uart";
 
-    private DBG dbgMsg;
     //String ===========================================================
     //String[] =========================================================
     //int ==============================================================
@@ -74,8 +68,8 @@ public class PL2303Driver {
     //-----------------------------------
 
     //==================================================================
-    private pConvertType ct;
-    private pString sp;
+//    private pConvertType ct;
+//    private pString sp;
 //    private Map<String, String> mapUart = new HashMap<String, String>();
     //==============================================================================================
 
@@ -288,15 +282,15 @@ public class PL2303Driver {
 
     //==============================================================================================
     void initClass(){
-        if(dbgMsg==null)
-        {
-            dbgMsg = new DBG(com.example.johnny_wei.testtool.R.integer.PL2303Driver_dbg);//first need send context
-
-            ct=new pConvertType();
-            sp=new pString();
-
-//dbgMsg.save(TAG + ".dbgIni" + "API_Level=" + ct.int2String(android.os.Build.VERSION.SDK_INT));
-        }
+//        if(dbgMsg==null)
+//        {
+//            dbgMsg = new DBG(com.example.johnny_wei.bleuart.R.integer.PL2303Driver_dbg);//first need send context
+//
+//            ct=new pConvertType();
+//            sp=new pString();
+//
+////dbgMsg.save(TAG + ".dbgIni" + "API_Level=" + ct.int2String(android.os.Build.VERSION.SDK_INT));
+//        }
     }
     //==============================================================================================
 

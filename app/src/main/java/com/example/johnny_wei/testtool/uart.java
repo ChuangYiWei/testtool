@@ -15,13 +15,7 @@ import com.example.johnny_wei.testtool._00_util.commonutil;
 import com.example.johnny_wei.testtool.driver_pl2303.PL2303Driver;
 import com.example.johnny_wei.testtool.utils.strUtil;
 
-import static com.example.johnny_wei.testtool.common.pUart._ST_CHIP_NOT_SUPPORT_;
-import static com.example.johnny_wei.testtool.common.pUart._ST_NOT_CONNECTED_;
-import static com.example.johnny_wei.testtool.common.pUart._ST_NOT_ENMERATE_;
-import static com.example.johnny_wei.testtool.common.pUart._ST_OPEN_FAIL_;
-import static com.example.johnny_wei.testtool.common.pUart._ST_SUCCESS_;
-import static com.example.johnny_wei.testtool.common.pUart._ST_UST_HOST_NOT_SUPPORT_;
-import static com.example.johnny_wei.testtool.common.pUart._ST_WRITE_FAIL_;
+
 
 import static com.example.johnny_wei.testtool.utils.strUtil.bytes2String;
 
@@ -39,10 +33,18 @@ public class uart extends AppCompatActivity {
     private PL2303Driver.StopBits       mStopBits       = PL2303Driver.StopBits.S1;
     private PL2303Driver.Parity         mParity         = PL2303Driver.Parity.NONE;
     private PL2303Driver.FlowControl    mFlowControl    = PL2303Driver.FlowControl.OFF;
-    private static final int                       mBaudratei = 115200;
     private static final int           mBaudratei115200 = 115200;
+
+    public static final int _ST_SUCCESS_                =0x00;
+    public static final int _ST_UST_HOST_NOT_SUPPORT_   =0xF2;
+    public static final int _ST_NOT_ENMERATE_           =0xF3;
+    public static final int _ST_NOT_CONNECTED_          =0xF4;
+    public static final int _ST_OPEN_FAIL_              =0xF5;
+    public static final int _ST_CHIP_NOT_SUPPORT_       =0xF6;
+    public static final int _ST_WRITE_FAIL_             =0xF7;
+
     private static final String ACTION_USB_PERMISSION = "com.prolific.pl2303hxdsimpletest.USB_PERMISSION";
-    private final byte[] bytearray={0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
