@@ -2,10 +2,27 @@ package com.example.johnny_wei.testtool.utils;
 
 public class strUtil {
 
-
+    //get_version
+    public static final int _B_SHOW_VERSION_      =0x0001;
     public static final int _C_LOW_BYTE_FIRST_    =0x0001;
     public static final int _C_ADD_0_BACK_        =0x0002;
+    //bin2Hex
+    public static final int _D_LOW_BIT_FIRST_     =0x0001;
+    public static final int _D_NIBBLE_SWITCH_     =0x0002;
+    public static final int _D_PADDING_FRONT_     =0x0004;//0001->000000001
+
+    //int2String
+    public static final int _E_DECIMAL_                =0x0001;
+    public static final int _E_REMOVE_0_               =0x0002;//remove all 0 infront
+    public static final int _E_NO_SIGN_                =0x0004;
+    public static final int _E_HEXADECIMAL_            =0x0008;
+    public static final int _E_NULL_RETURN_0_          =0x0010;
+    public static final int _E_REMOVE_0_KEEP_LAST_     =0x0020;//keep last 0 infront
+    public static final int _E_ADD_0_FRONT_            =0x0040;//padding 0 at first
+
+
     private static final byte[] bytearray={0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F};
+    public static final String[] NibbleHex={"0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"};
 
     public static String bytes2String(byte[] inputbyte){
         String back = "";
@@ -56,7 +73,7 @@ public class strUtil {
         return newbyte;
     }
 
-    public byte[] string2Bytes(String inString) {
+    public static byte[] string2Bytes(String inString) {
         return string2Bytes(inString, 0x00);
     }
 
@@ -75,6 +92,81 @@ public class strUtil {
 
             return (byte) 0x00;
         }
+    }
+
+    public static String int2String(int inI,int fun){
+        int digi = 16, digix2 = 256;
+        long tmpI0 = 0;
+        String rString = "";
+        boolean minus = false;
+
+        {
+            if (inI < 0) {
+                minus = true;
+                if ((fun & _E_NO_SIGN_) > 0) {
+                    inI &= 0x7FFFFFFF;
+                } else {
+                    inI = -inI;
+                }
+            }
+        }
+        if ((fun & _E_DECIMAL_) > 0) {
+            digi = 10;
+            digix2 = 100;
+        }
+
+        do {
+            tmpI0 = (inI % (digix2));
+
+            if (rString.length() == 6 && (fun & _E_NO_SIGN_) > 0)//MSB
+            {
+                rString = NibbleHex[(int) ((tmpI0 / digi) | 0x8)] + NibbleHex[(int) (tmpI0 % digi)] + rString;
+            } else {
+                rString = NibbleHex[(int) (tmpI0 / digi)] + NibbleHex[(int) (tmpI0 % digi)] + rString;
+            }
+//Log.d("dbg","rString.1="+rString);
+//dbgMsg.save("pConvertType.int2String.rString.0="+rString);
+            inI /= (digix2);
+//dbgMsg.save("pConvertType.int2String.inI.0="+inI);
+//System.out.println("ins="+ins);
+        }
+        while (inI > 0);
+
+
+        if ((fun & _E_ADD_0_FRONT_) > 0) {
+            while ((rString.length() % 2) != 0) {
+                rString = "0" + rString;
+            }
+        }
+
+
+        if ((fun & _E_REMOVE_0_KEEP_LAST_) > 0) {
+            while (rString.indexOf("0") == 0 && rString.length() > 1) {
+                rString = rString.substring(1, rString.length());
+            }
+        } else if ((fun & _E_REMOVE_0_) > 0) {
+            while (rString.indexOf("0") == 0) {
+                rString = rString.substring(1, rString.length());
+            }
+        }
+
+//dbgMsg.save("pConvertType.int2String.rString.1="+rString);
+        if (minus) {
+            if ((fun & _E_NO_SIGN_) > 0) {
+                while (rString.length() < 8) {
+                    if (rString.length() == 7)//MSB
+                    {
+                        rString = NibbleHex[8] + rString;
+                    } else {
+                        rString = NibbleHex[0] + rString;
+                    }
+                }
+            } else {
+                rString = "-" + rString;
+            }
+        }
+        return rString;
+
     }
 
 

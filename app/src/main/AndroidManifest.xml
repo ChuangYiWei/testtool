@@ -4,18 +4,14 @@
     package="com.example.johnny_wei.testtool">
     <!-- com.example.johnny_wei.testtool.ble -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-
-    <!--add from android API 23-->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /> <!-- add from android API 23 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- storage -->
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-<!--//usb driver use-->
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- //usb driver use -->
     <uses-feature android:name="android.hardware.usb.host" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/mytheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".connected_list"></activity>
+        <activity android:name=".write"></activity>
+        <activity android:name=".connected_list" />
         <activity android:name=".bytecheck" />
         <activity android:name=".test_listview_tree" />
         <activity android:name=".expandleble" />
@@ -39,13 +36,20 @@
         <activity android:name=".invok" />
         <activity android:name=".time" />
         <activity android:name=".serviceExample" />
-        <activity android:name=".write">
+        <activity android:name="uart">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/device_filter" />
         </activity>
+
         <service
             android:name=".MyService"
             android:enabled="true"
