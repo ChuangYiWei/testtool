@@ -22,7 +22,7 @@ public class dbgLog {
     private static final String className = "dbgLog";
 
     private static boolean DEBUG_ENABLED = false;
-    private static String PATH = "D_DEBUG/debug_00";
+    private static String PATH = "D_DEBUG/debug_0";
     private static String CURRENT_PATH = PATH;
     private static String DEBUG_FOLDER = "D_DEBUG/";
     private static String SD_PATH = Environment.getExternalStorageDirectory().getPath();
