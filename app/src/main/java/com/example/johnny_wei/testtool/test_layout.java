@@ -13,8 +13,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ public class test_layout extends AppCompatActivity {
     private Context mContext;
     private PopupWindow mPopupWindow;
 
+
     TextView textOut;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +39,41 @@ public class test_layout extends AppCompatActivity {
         setContentView(R.layout.activity_test_layout);
         textOut = (TextView)findViewById(R.id.textout);
         popup();
+
+        RadioButton programButton = (RadioButton) findViewById(R.id.program);
+        RadioButton uiButton = (RadioButton) findViewById(R.id.ui);
+        programButton.setOnCheckedChangeListener(mOnCheckedChangeListener);
+        uiButton.setOnCheckedChangeListener(mOnCheckedChangeListener);
+
 //        showlayoutdialog();
-        showEditdialog();
+//        showEditdialog();
     }
+
+    private CompoundButton.OnCheckedChangeListener mOnCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            switch (buttonView.getId()) {
+                case R.id.program:
+                    Toast.makeText(test_layout.this, "安安, 程式設計師!", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.ui:
+                    Toast.makeText(test_layout.this, "安安, UI設計師!", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
+
+//    public void onSelect(View view){
+//        switch(view.getId()){
+//            case R.id.program:
+//                Toast.makeText(test_layout.this, "安安, 程式設計師!", Toast.LENGTH_SHORT).show();
+//                break;
+//            case R.id.ui:
+//                Toast.makeText(test_layout.this, "安安, UI設計師!", Toast.LENGTH_SHORT).show();
+//                break;
+//        }
+//    }
 
     void showEditdialog() {
         AlertDialog.Builder editDialog = new AlertDialog.Builder(test_layout.this);

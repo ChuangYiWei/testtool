@@ -36,7 +36,7 @@
         <activity android:name=".invok" />
         <activity android:name=".time" />
         <activity android:name=".serviceExample" />
-        <activity android:name="uart">
+        <activity android:name="test_layout">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -61,7 +61,7 @@
 
         <activity android:name=".custom_expand_list" />
         <activity android:name=".BRrate" />
-        <activity android:name=".test_layout" />
+        <activity android:name=".uart" />
         <activity android:name=".permision_test" />
         <activity android:name=".readxml" />
         <activity android:name=".advdata" />

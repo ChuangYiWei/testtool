@@ -67,4 +67,38 @@
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <RadioGroup
+        android:layout_width="395dp"
+        android:layout_height="201dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="156dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6">
+
+        <RadioButton
+            android:id="@+id/program"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@mipmap/iv_lol_icon1"
+            android:text="程式設計師" />
+
+        <RadioButton
+            android:id="@+id/ui"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UI設計師" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="RadioButton" />
+
+    </RadioGroup>
+
 </android.support.constraint.ConstraintLayout>
