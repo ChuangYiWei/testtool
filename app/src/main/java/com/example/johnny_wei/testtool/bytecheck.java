@@ -31,12 +31,89 @@ public class bytecheck extends AppCompatActivity {
         Log.d(TAG,strings[0]);
         Log.d(TAG,strings[1]);
 
-        substr();
+        GetsubByteStr("040F0400011D04040C08000000081D00D307",3,2);
+        GetsubByteStr("040F0400011D04040C08000000081D00D307",0,1);
+        GetsubByteStr("040E07012D0C000E0006",0,7);
+        SetsubByteStr();
+
+//        HCI_check_evt_success("040E0C01032000254D000000000000");
+//        HCI_check_evt_success("040F0400011D04040C08000000081D00D307");
+//        HCI_check_evt_success("040E07012D0C000E0006");
+        read_remote_version();
+//        substr();
 //        splitData();
 //        comparephyaddr();
 //        checkLength();
 //        checkUARTLength();
 
+    }
+
+    void read_remote_version()
+    {
+        String str = "040C08000000081D00D307";
+        String ver =  GetsubByteStr(str,6,1);
+        String Manufacturer_Name =  GetsubByteStr(str,7,2);
+        String sub_ver =  GetsubByteStr(str,9,2);
+
+        Log.d(TAG,"ver:" + ver);
+    }
+
+    public final static int READ_REMOTE_VERSION_INFORMATION_COMPLETE_EVENT = 0x0C;
+    public final static int COMMAND_COMPLETE_EVENT = 0x0E;
+    public final static int COMMAND_STATUS_EVENT = 0x0F;
+    boolean HCI_check_evt_success(String hci_evt_str) {
+
+        byte[] hci_evt = strUtil.string2Bytes(hci_evt_str);
+        int pos = 0;
+        int total = hci_evt.length;
+        byte status = (byte) 0xFF;
+        while (pos < total) {
+            int len = hci_evt[pos + 2];
+            Log.d(TAG, "len is : " + len);
+            int evt = hci_evt[pos + 1];
+
+            switch (evt) {
+                case COMMAND_COMPLETE_EVENT://cmd complete
+                    status = hci_evt[pos + 6];
+                    break;
+                case COMMAND_STATUS_EVENT://cmd status
+                case READ_REMOTE_VERSION_INFORMATION_COMPLETE_EVENT://Read Remote Version Information Complete
+                    status = hci_evt[pos + 3];
+                    break;
+                default:
+                    Log.e(TAG, "can't find event");
+                    break;
+            }
+            Log.d(TAG, "evt is: " + evt + ",status is:" + status);
+            if (status != 0x00) {
+                return false;
+            }
+            pos = pos + (len + 3);
+            Log.d(TAG, "pos : " + pos);
+        }
+        return true;
+    }
+
+    private String SetsubByteStr()
+    {
+//        String orgstr = "013020020E00";
+        String orgstr = "01302002XXXX";
+        String newStr = orgstr.replace("XXXX","0900");
+        Log.d(TAG,"after replace:" + newStr);
+        return newStr;
+    }
+
+    private String GetsubByteStr(String byteStr,int byte_start_pos,int read_size) {
+        //ex:string = "040F0400011D04040C08000000081D00D307"
+        //byte_start_pos=3, read_size=2 will get "0001"
+        int startIdx = byte_start_pos*2; //byte 3
+        int EndIdx = startIdx + (read_size*2);
+        if (byteStr.length() < EndIdx) {
+            Log.e(TAG,"invalid byte str size");
+            return "";
+        }
+//        Log.d(TAG,"substatus:" + byteStr.substring(startIdx,EndIdx));
+        return byteStr.substring(startIdx,EndIdx);
     }
 
     private void substr() {

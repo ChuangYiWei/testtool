@@ -1,7 +1,10 @@
 package com.example.johnny_wei.testtool.utils;
 
+import android.util.Log;
+
 public class strUtil {
 
+    private static String TAG = "strUtil";
     //get_version
     public static final int _B_SHOW_VERSION_      =0x0001;
     public static final int _C_LOW_BYTE_FIRST_    =0x0001;
@@ -169,6 +172,17 @@ public class strUtil {
 
     }
 
-
+    public static String GetsubByteStr(String byteStr,int byte_start_pos,int read_size) {
+        //ex:string = "040F0400011D04040C08000000081D00D307"
+        //byte_start_pos=3, read_size=2 will get "0001"
+        int startIdx = byte_start_pos*2; //byte 3
+        int EndIdx = startIdx + (read_size*2);
+        if (byteStr.length() < EndIdx) {
+            Log.e(TAG,"invalid byte str size");
+            return "";
+        }
+//        Log.d(TAG,"substatus:" + byteStr.substring(startIdx,EndIdx));
+        return byteStr.substring(startIdx,EndIdx);
+    }
 
 }

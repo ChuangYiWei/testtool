@@ -22,21 +22,21 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".write"></activity>
         <activity android:name=".connected_list" />
-        <activity android:name=".bytecheck" />
+        <activity android:name=".collection" />
         <activity android:name=".test_listview_tree" />
         <activity android:name=".expandleble" />
         <activity android:name=".scan_list" />
         <activity android:name=".spinner_option" />
         <activity android:name=".customview" /> <!-- <activity android:name=".test_ble"> -->
         <activity android:name=".xmlandinvoke" />
-        <activity android:name=".collection" />
+        <activity android:name=".uart" />
         <activity android:name=".test_ble" />
         <activity android:name=".handler" />
         <activity android:name=".ble" />
         <activity android:name=".invok" />
         <activity android:name=".time" />
         <activity android:name=".serviceExample" />
-        <activity android:name="uart">
+        <activity android:name="bytecheck">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
