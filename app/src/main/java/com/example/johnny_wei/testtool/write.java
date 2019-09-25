@@ -2,6 +2,7 @@ package com.example.johnny_wei.testtool;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,15 +11,22 @@ import android.widget.TextView;
 
 import com.example.johnny_wei.testtool.BLEutils.BleUtil;
 import com.example.johnny_wei.testtool.log.dbgLog;
+import com.example.johnny_wei.testtool.utils.AlertDialogUtil;
 import com.example.johnny_wei.testtool.utils.DevUtil;
 import com.example.johnny_wei.testtool.utils.permissionUtil;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOError;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE;
 
 public class write extends AppCompatActivity {
 
@@ -34,6 +42,8 @@ public class write extends AppCompatActivity {
     static SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
      final String CURRENT_PATH = "./";
+
+     List<String> string_list = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +53,37 @@ public class write extends AppCompatActivity {
         dbgLog.setDebug(true);
 
         writefile();
+        readline("HID_CMD/HID_KB.txt");
+    }
+
+    //filename is folder+file under sd card root dir
+    void readline(String filename)
+    {
+        StringBuilder text = new StringBuilder();
+        try {
+            File file = new File(PATH_SD,filename);
+
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = br.readLine()) != null) {
+                Log.e(className, line);
+                string_list.add(line);
+                text.append(line);
+                text.append('\n');
+            }
+            br.close() ;
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        //save string in list
+        for(int i=0;i<string_list.size();i++)
+        {
+            Log.d(className, "string_list" + i + ":" + string_list.get(i));
+        }
+
+        int idx=1;
+        String data = string_list.get(idx).substring(8, string_list.get(idx).length());
+        dbgLog.d("write", data);//tag, message
 
     }
 
@@ -153,7 +194,7 @@ public class write extends AppCompatActivity {
     private boolean checkExternalMedia() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {
-            //Log.d(TAG, "sd card mounted with read/write access");
+            Log.d(className, "sd card mounted with read/write access");
             return true;
         } else {
             Log.d(className, "mount fail state : " + state);
@@ -161,7 +202,27 @@ public class write extends AppCompatActivity {
         return false;
     }
 
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        Log.d("Permission", "onRequestPermissionsResult");
+        if (grantResults.length == 0) {
+            Log.e(className, "grantResults size is 0");
+            return;
+        }
+        switch (requestCode) {
+            case PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE: {
+                if (grantResults[0]
+                        == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(className, "storage location permission granted");
+                } else {
+                    AlertDialogUtil.simpleDialog(mActivity,
+                            "Functionality limited",
+                            "storage access has not been granted, debug log disable");
+                }
+            }
+            break;
+        }
+    }
 
 
 
