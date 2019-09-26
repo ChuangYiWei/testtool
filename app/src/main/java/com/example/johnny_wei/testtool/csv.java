@@ -50,7 +50,7 @@ public class csv extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_csv);
-        String filename = "test.csv";
+        String filename = "converted.csv";
         readcsv(filename);
     }
 
@@ -65,9 +65,11 @@ public class csv extends AppCompatActivity {
         }
 
         for (int i = 0; i < rows.size(); i++) {
+            Log.d("row len:", String.format("row len %s", rows.get(i).length));
             Log.d("csv_test", String.format("row %s:%s,%s", i, rows.get(i)[0], rows.get(i)[1]));
         }
     }
+
 
     //write csv
 //    https://www.mkyong.com/java/how-to-export-data-to-csv-file-java/
