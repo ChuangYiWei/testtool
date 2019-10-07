@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.johnny_wei.testtool">
-
+    <!-- add from android API 23 -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/mytheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".csv"></activity>
+        <activity android:name=".test_draw"></activity>
+        <activity android:name=".csv" />
         <activity android:name=".write" />
         <activity android:name=".bytecheck" />
         <activity android:name=".connected_list" />
@@ -29,7 +30,7 @@
         <activity android:name=".invok" />
         <activity android:name=".time" />
         <activity android:name=".serviceExample" />
-        <activity android:name=".test_draw">
+        <activity android:name=".test_surface">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -59,15 +60,16 @@
             android:name=".bleService"
             android:enabled="true"
             android:exported="true" />
-    </application> <!-- add from android API 23 -->
-    <uses-feature android:name="android.hardware.usb.host" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- storage -->
+    </application>
+
+    <uses-feature android:name="android.hardware.usb.host" /> <!-- storage -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- //usb driver use -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
 </manifest>
