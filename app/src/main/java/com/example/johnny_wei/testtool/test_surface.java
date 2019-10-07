@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,8 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import java.util.Random;
 
 public class test_surface extends AppCompatActivity {
 
@@ -38,7 +41,7 @@ public class test_surface extends AppCompatActivity {
             mHolder = getHolder(); // 获得SurfaceHolder对象
             mHolder.addCallback(this); // 为SurfaceView添加状态监听
             p = new Paint(); // 创建一个画笔对象
-            p.setColor(Color.WHITE); // 设置画笔的颜色为白色
+            p.setColor(Color.RED); // 设置画笔的颜色为白色
             setFocusable(true); // 设置焦点
         }
 
@@ -100,7 +103,8 @@ public class test_surface extends AppCompatActivity {
                 try {
                     synchronized (mHolder) {
                         Thread.sleep(100); // 让线程休息1000毫秒
-                        Draw(); // 调用自定义画画方法
+                        //Draw(); // 调用自定义画画方法
+                        test_draw_run();
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -112,6 +116,22 @@ public class test_surface extends AppCompatActivity {
                 }
             }
         }
+        int g_x=0;
+        int g_y=0;
+        public void test_draw_run() {
+            mCanvas = mHolder.lockCanvas(); // 获得画布对象，开始对画布画画
+            if (mCanvas != null) {
+                g_x++;
+                g_y++;
+                p.setStrokeWidth(10);
+                p.setStyle(Paint.Style.STROKE);
+                mCanvas.drawColor(Color.BLACK);
+                mCanvas.drawLine(g_x, g_y, -10+g_x, -10+g_y, p);
+                mHolder.unlockCanvasAndPost(mCanvas); // 完成画画，把画布显示在屏幕上
+
+            }
+        }
+
 
         /**
          * 自定义一个方法，在画布上画一个圆
@@ -141,6 +161,8 @@ public class test_surface extends AppCompatActivity {
             }
         }
     }
+
+
 
 
     //内部类
