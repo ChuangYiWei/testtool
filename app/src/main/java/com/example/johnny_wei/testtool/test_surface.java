@@ -1,5 +1,6 @@
 package com.example.johnny_wei.testtool;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -11,22 +12,53 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.Random;
 
 public class test_surface extends AppCompatActivity {
-
+    LinearLayout layoutGet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_test_surface);
+        setContentView(R.layout.activity_test_surface);
         //setContentView(new MyView(this));
-        setContentView(new MySurfaceView(this));
+        layoutGet=(LinearLayout) findViewById(R.id.linear);
+        //setContentView(new MySurfaceView(this));
+        layoutGet.addView(new MySurfaceView(this));
+
+        Log.d("test_surface", "layoutGet.getWidth() : "+ layoutGet.getWidth());
+        Log.d("test_surface", "layoutGet.getLayoutParams().width : "+ layoutGet.getLayoutParams().width);
+        Log.d("test_surface", "layoutGet.getLayoutParams().height : "+ layoutGet.getLayoutParams().height);
+
+        layoutGet.measure(0,0);
+        Log.d("test_surface", "layoutGet.getMeasuredWidth() : "+ layoutGet.getMeasuredWidth());
+        Log.d("test_surface", "layoutGet.getMeasuredHeight() : "+ layoutGet.getMeasuredHeight());
+
+        //textview
+        TextView tv = findViewById(R.id.tv_test);
+        Log.d("test_surface", "tv.getWidth : "+ tv.getWidth());
+        Log.d("test_surface", "tv.getLayoutParams().width : "+ tv.getLayoutParams().width);
+        Log.d("test_surface", "tv.getLayoutParams().height : "+ tv.getLayoutParams().height);
+
+        //phone-----------------------
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        int vWidth = dm.widthPixels;
+        int vHeight = dm.heightPixels;
+
+        Log.d("test_surface", "vWidth : "+ vWidth);
+        Log.d("test_surface", "vHeight : "+ vHeight);
+
+
     }
 
     public class MySurfaceView extends SurfaceView implements Runnable, SurfaceHolder.Callback {
@@ -45,6 +77,14 @@ public class test_surface extends AppCompatActivity {
             p = new Paint(); // 创建一个画笔对象
             p.setColor(Color.RED); // 设置画笔的颜色为白色
             setFocusable(true); // 设置焦点
+
+        }
+
+        @Override
+        protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+            super.onSizeChanged(w, h, oldw, oldh);
+            Log.w("MySurfaceView","onSizeChanged Height is :" + h);
+            Log.w("MySurfaceView","onSizeChanged width is :" + w);
         }
 
         /**
@@ -52,6 +92,7 @@ public class test_surface extends AppCompatActivity {
          */
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
+            Log.w("MySurfaceView","surfaceCreated");
             t = new Thread(this); // 创建一个线程对象
             flag = true; // 把线程运行的标识设置成true
             t.start(); // 启动线程
@@ -104,7 +145,7 @@ public class test_surface extends AppCompatActivity {
             while (flag) {
                 try {
                     synchronized (mHolder) {
-                        Thread.sleep(1); // 让线程休息1000毫秒
+                        Thread.sleep(5); // 让线程休息1000毫秒
                         //Draw(); // 调用自定义画画方法
                         test_draw_run();
                     }
@@ -119,20 +160,22 @@ public class test_surface extends AppCompatActivity {
         }
         int g_x=0;
         int g_y=0;
-        int[] dataX=new int[30];
-        int[]  dataY=new int[30];
+        int w=800;
+        int h=380;
+
+
+        int[] dataX=new int[w/20];
+        int[] dataY=new int[w/20];
         public int generatRandomPositiveNegitiveValue(int max , int min) {
             Random r = new Random();
             int ii = r.nextInt(max - min + 1) + min;
             return (ii-140);
         }
         public void test_draw_run() {
+
             mCanvas = mHolder.lockCanvas(); // 获得画布对象，开始对画布画画
             if (mCanvas != null) {
-                int w;
-                int h;
-                h=380;
-                w=600;
+
 
                 //Generate random
                 int min = 0;
@@ -146,10 +189,11 @@ public class test_surface extends AppCompatActivity {
                     dataX[i+1]=(i+1)*w/20;
                     dataY[w/20 - 1]=generatRandomPositiveNegitiveValue(max ,min);
                     dataY[i]=dataY[i+1];
-                    Log.d("MySurfaceView","X idx " + i + "is:" +  dataX[i]);
-                    Log.d("MySurfaceView","Y idx " + i + "is:" +  dataY[i]);
+//                    Log.d("MySurfaceView","X idx " + i + "is:" +  dataX[i]);
+//                    Log.d("MySurfaceView","Y idx " + i + "is:" +  dataY[i]);
                 }
 
+                //clear canvas
                 mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 //                g_x++;
 //                g_y++;
