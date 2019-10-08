@@ -6,10 +6,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -102,7 +104,7 @@ public class test_surface extends AppCompatActivity {
             while (flag) {
                 try {
                     synchronized (mHolder) {
-                        Thread.sleep(100); // 让线程休息1000毫秒
+                        Thread.sleep(1); // 让线程休息1000毫秒
                         //Draw(); // 调用自定义画画方法
                         test_draw_run();
                     }
@@ -110,25 +112,65 @@ public class test_surface extends AppCompatActivity {
                     e.printStackTrace();
                 } finally {
                     if (mCanvas != null) {
-                        // mHolder.unlockCanvasAndPost(mCanvas);//结束锁定画图，并提交改变。
-
+                        mHolder.unlockCanvasAndPost(mCanvas);// 完成画画，把画布显示在屏幕上结束锁定画图，并提交改变。
                     }
                 }
             }
         }
         int g_x=0;
         int g_y=0;
+        int[] dataX=new int[30];
+        int[]  dataY=new int[30];
+        public int generatRandomPositiveNegitiveValue(int max , int min) {
+            Random r = new Random();
+            int ii = r.nextInt(max - min + 1) + min;
+            return (ii-140);
+        }
         public void test_draw_run() {
             mCanvas = mHolder.lockCanvas(); // 获得画布对象，开始对画布画画
             if (mCanvas != null) {
-                g_x++;
-                g_y++;
-                p.setStrokeWidth(10);
-                p.setStyle(Paint.Style.STROKE);
-                mCanvas.drawColor(Color.BLACK);
-                mCanvas.drawLine(g_x, g_y, -10+g_x, -10+g_y, p);
-                mHolder.unlockCanvasAndPost(mCanvas); // 完成画画，把画布显示在屏幕上
+                int w;
+                int h;
+                h=380;
+                w=600;
 
+                //Generate random
+                int min = 0;
+                int max = 280;
+
+                Paint paint = new Paint();
+                paint.setColor(Color.RED);
+                paint.setStrokeWidth(6);
+                dataX[0]=0;
+                for (int i = 0; i <  w/20 - 1; i++) {
+                    dataX[i+1]=(i+1)*w/20;
+                    dataY[w/20 - 1]=generatRandomPositiveNegitiveValue(max ,min);
+                    dataY[i]=dataY[i+1];
+                    Log.d("MySurfaceView","X idx " + i + "is:" +  dataX[i]);
+                    Log.d("MySurfaceView","Y idx " + i + "is:" +  dataY[i]);
+                }
+
+                mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+//                g_x++;
+//                g_y++;
+//                p.setStrokeWidth(10);
+//                p.setStyle(Paint.Style.STROKE);
+//                mCanvas.drawColor(Color.BLACK);
+                for (int i = 0; i <  w/20 -1; i++) {
+                ///for (int i = 0; i <  1; i++) {
+                    // apply some transformation on data in order to map it correctly
+                    // in the coordinates of the canvas
+                    mCanvas.drawLine(dataX[i], h/2-dataY[i], dataX[i+1], h/2-dataY[i+1],paint);
+                    //mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
+                    try {
+                        Thread.sleep(5);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+                }
+                //mCanvas.drawLine(g_x, g_y, 100, 100, p);
             }
         }
 
