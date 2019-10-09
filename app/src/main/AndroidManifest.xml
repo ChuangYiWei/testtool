@@ -11,12 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/mytheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".test_draw"></activity>
+        <activity android:name=".collection" ></activity>
         <activity android:name=".csv" />
         <activity android:name=".write" />
         <activity android:name=".bytecheck" />
         <activity android:name=".connected_list" />
-        <activity android:name=".collection" />
+        <activity android:name=".test_draw" />
         <activity android:name=".test_listview_tree" />
         <activity android:name=".expandleble" />
         <activity android:name=".scan_list" />
