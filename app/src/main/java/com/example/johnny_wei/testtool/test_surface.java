@@ -35,6 +35,10 @@ public class test_surface extends AppCompatActivity {
     int g_int;
     int mWidth = 0;
     int mHeight = 0;
+    int y_axis_positive_max = 0;//最大顯示正y軸座標
+    int y_axis_negtive_max = 0;//最大顯示負y軸座標
+    int y_data_max_value = 1;//當前y最大值,max(abs(valus)})
+    int baseline=0; //起始點座標
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,23 +103,28 @@ public class test_surface extends AppCompatActivity {
 
     public void produce() throws InterruptedException {
         synchronized (lock) {
-            System.out.println("produce enter");
+//            System.out.println("produce enter");
 
             for (int i = 0; i < add_sample; i++) {
 
-                Log.d("produce", "g_int:" + g_int);
+                //Log.d("produce", "g_int:" + g_int);
                 //g_int++;
                 if (i % 2 == 0) {
+                    //data_list.add(generatRandomPositiveNegitiveValue(500,100));
                     data_list.add(100);
                 } else {
+                    //data_list.add(-100);
                     data_list.add(-100);
                 }
-
             }
-            System.out.println("Wake up consumer thread");
+//            System.out.println("Wake up consumer thread");
         }
     }
-
+    public int generatRandomPositiveNegitiveValue(int max , int min) {
+        Random r = new Random();
+        int ii = r.nextInt(max - min + 1) + min;
+        return (ii-140);
+    }
     public class MySurfaceView extends SurfaceView implements Runnable, SurfaceHolder.Callback {
         private SurfaceHolder mHolder; // 用于控制SurfaceView
         private Thread t; // 声明一条线程
@@ -140,8 +149,11 @@ public class test_surface extends AppCompatActivity {
             super.onSizeChanged(w, h, oldw, oldh);
             Log.w("MySurfaceView","onSizeChanged Height is :" + h);
             Log.w("MySurfaceView","onSizeChanged width is :" + w);
+            y_axis_positive_max = h/2;
+            y_axis_negtive_max = h/2;
             mWidth = w;
             mHeight = h;
+            baseline = h/2;
         }
 
         /**
@@ -225,14 +237,14 @@ public class test_surface extends AppCompatActivity {
         int[] data_x=new int[sample];
         int[] data_y=new int[sample];
         public void test_draw_data_own_data() {
-
+            Log.w("test_draw_data_own_data", "test_draw_data_own_data");
             mCanvas = mHolder.lockCanvas(); // 获得画布对象，开始对画布画画
             if (mCanvas != null) {
 
                 for (int i = 0; i <  sample ; i++) {
                     data_x[i]=(i)*(mWidth/sample);
                 }
-
+                int max = 0;
                 //red color
                 p.setColor(Color.RED);
                 p.setStrokeWidth(6);
@@ -240,8 +252,16 @@ public class test_surface extends AppCompatActivity {
                     if (data_list.size() >= sample) {
                         for (int i = 0; i < sample; i++) {
                             Log.d("consume", data_list.get(i).toString());
+                            if(Math.abs(data_list.get(i)) > y_data_max_value) {
+                                y_data_max_value = Math.abs(data_list.get(i));
+                            }
                             data_y[i] = data_list.get(i);
-                            Log.d("MySurfaceView", "data_y " + i + "is:" + data_y[i]);
+                            if (data_y[i] > 0){
+                                data_y[i] = y_axis_positive_max * data_y[i] / y_data_max_value;//限制範圍落在y顯示區間內
+                            } else {
+                                data_y[i] = y_axis_negtive_max * data_y[i] / y_data_max_value;//限制範圍落在y顯示區間內
+                            }
+                            Log.w("MySurfaceView", "data_y idx " + i + "is:" + data_y[i] + ",y_max_value:" + y_data_max_value);
                         }
                         //remove first nth data
                         for (int i = 0; i < update_sample; i++) {
@@ -250,12 +270,13 @@ public class test_surface extends AppCompatActivity {
                     }
 
                 }
+                Log.w("MySurfaceView", "mWidth: " + mWidth + ",mHeight:" + mHeight);
 
                 //clear canvas
                 mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
                 for (int i = 0; i < sample -1; i++) {
-                    mCanvas.drawLine(data_x[i], mHeight/2-data_y[i], data_x[i+1], mHeight/2-data_y[i+1],p);
+                    mCanvas.drawLine(data_x[i], baseline-data_y[i], data_x[i+1], baseline-data_y[i+1],p);
                     try {
                         Thread.sleep(5);
                     } catch (InterruptedException e) {
@@ -270,11 +291,7 @@ public class test_surface extends AppCompatActivity {
         int[] dataX=new int[w/20];
         int[] dataY=new int[w/20];
 
-        public int generatRandomPositiveNegitiveValue(int max , int min) {
-            Random r = new Random();
-            int ii = r.nextInt(max - min + 1) + min;
-            return (ii-140);
-        }
+
         public void test_draw_run() {
 
             mCanvas = mHolder.lockCanvas(); // 获得画布对象，开始对画布画画
