@@ -22,6 +22,7 @@ import android.view.SurfaceView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -29,7 +30,7 @@ public class test_surface extends AppCompatActivity {
     LinearLayout layoutGet;
     LinkedList<Integer> data_list = new LinkedList<Integer>();
     private Object lock = new Object();
-    int sample = 20;
+    int sample = 150;
     int add_sample = 2;
     int update_sample = 1;
     int g_int;
@@ -45,7 +46,7 @@ public class test_surface extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_surface);
-        init_data();
+        //init_data();
         //setContentView(new MyView(this));
         layoutGet=(LinearLayout) findViewById(R.id.linear);
         //setContentView(new MySurfaceView(this));
@@ -123,11 +124,11 @@ public class test_surface extends AppCompatActivity {
     public void produce_rawdata() throws InterruptedException {
         synchronized (lock) {
 //            System.out.println("produce enter");
-            Log.d("produce", "g_int :" + g_int + ", data:" + raw_data[g_int]);
+            //Log.d("produce", "g_int :" + g_int + ", data:" + raw_data[g_int]);
 
             data_list.add(raw_data[g_int]);
             g_int++;
-            if (g_int > 60) {
+            if (g_int > raw_data.length -1) {
                 g_int = 0;
             }
         }
@@ -153,8 +154,9 @@ public class test_surface extends AppCompatActivity {
             mHolder = getHolder(); // 获得SurfaceHolder对象
             mHolder.addCallback(this); // 为SurfaceView添加状态监听
             p = new Paint(); // 创建一个画笔对象
+            p.setStrokeWidth(3);
             p.setColor(Color.RED); // 设置画笔的颜色为白色
-            setFocusable(true); // 设置焦点
+            setFocusable(true); // 设置焦点                //red color
 
         }
 
@@ -168,6 +170,9 @@ public class test_surface extends AppCompatActivity {
             mWidth = w;
             mHeight = h;
             baseline = h/2;
+            for (int i = 0; i <  sample ; i++) {
+                data_x[i]=(i)*(mWidth/sample);
+            }
         }
 
         /**
@@ -229,7 +234,7 @@ public class test_surface extends AppCompatActivity {
             while (flag) {
                 try {
                     synchronized (mHolder) {
-                        Thread.sleep(5); // 让线程休息1000毫秒
+                        Thread.sleep(1); // 让线程休息1000毫秒
                         //Draw(); // 调用自定义画画方法
                         //test_draw_run();
                         test_draw_data_own_data();
@@ -250,37 +255,42 @@ public class test_surface extends AppCompatActivity {
 
         int[] data_x=new int[sample];
         int[] data_y=new int[sample];
+        float tmp = 1;
+        LinkedList<Integer> tmp_data_list = new LinkedList<Integer>();
         public void test_draw_data_own_data() {
             Log.w("test_draw_data_own_data", "test_draw_data_own_data");
             mCanvas = mHolder.lockCanvas(); // 获得画布对象，开始对画布画画
             if (mCanvas != null) {
 
-                for (int i = 0; i <  sample ; i++) {
-                    data_x[i]=(i)*(mWidth/sample);
-                }
-                int max = 0;
-                //red color
-                p.setColor(Color.RED);
-                p.setStrokeWidth(6);
                 synchronized (lock) {
                     if (data_list.size() >= sample) {
                         for (int i = 0; i < sample; i++) {
+                            Log.d("MySurfaceView","rev"+i+":" + data_list.get(i));
+                        }
+
+                        int min;
+                        int max;
+                        for (int i = 0; i < sample; i++) {
+                            tmp_data_list.add(data_list.get(i));
+                        }
+                        min = Collections.min(data_list);
+                        for (int i = 0; i < sample; i++) {
+                            tmp_data_list.set(i, tmp_data_list.get(i) - min);
+                        }
+                        max=Collections.max(tmp_data_list);
+
+                        Log.d("tmp_data_list","tmp_data_list max:" + Collections.max(tmp_data_list) + ",tmp_data_list min:" + Collections.min(tmp_data_list));
+                        for (int i = 0; i < sample; i++) {
                             Log.d("consume", data_list.get(i).toString());
-                            if(Math.abs(data_list.get(i)) > y_data_max_value) {
-                                y_data_max_value = Math.abs(data_list.get(i));
-                            }
-                            data_y[i] = data_list.get(i);
-                            if (data_y[i] > 0){
-                                data_y[i] = y_axis_positive_max * data_y[i] / y_data_max_value;//限制範圍落在y顯示區間內
-                            } else {
-                                data_y[i] = y_axis_negtive_max * data_y[i] / y_data_max_value;//限制範圍落在y顯示區間內
-                            }
-                            Log.w("MySurfaceView", "data_y idx " + i + "is:" + data_y[i] + ",y_max_value:" + y_data_max_value);
+                            tmp = (float)tmp_data_list.get(i) / max;
+                            data_y[i] = (int)(y_axis_positive_max*tmp);
+                            Log.d("MySurfaceView", "data_y idx " + i + "tmp:" + tmp + ",data_y:" + data_y[i] + ",y_max_value:" + y_data_max_value);
                         }
                         //remove first nth data
                         for (int i = 0; i < update_sample; i++) {
                             data_list.removeFirst();
                         }
+                        tmp_data_list.clear();
                     }
 
                 }
@@ -288,16 +298,29 @@ public class test_surface extends AppCompatActivity {
 
                 //clear canvas
                 mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-
+//                for (int i = 0; i < sample -2; i+=2) {
+//                    mCanvas.drawLine(data_x[i], baseline-data_y[i], data_x[i+2], baseline-data_y[i+2],p);
+//                    Log.d("MySurfaceView", "x idx " + i + " data_x[i]:" + data_x[i]+ " data_y[i]:" + data_y[i]);
+//                    Log.d("MySurfaceView", "y idx " + i + " data_x[i+2]:" + data_x[i+2]+ " data_y[i+2]:" + data_y[i+2]);
+//                    try {
+//                        Thread.sleep(1);
+//                    } catch (InterruptedException e) {
+//                        // TODO Auto-generated catch block
+//                        e.printStackTrace();
+//                    }
+//                }
+//                mCanvas.drawLine(data_x[sample-2], baseline-data_y[sample-2], data_x[sample-1], baseline-data_y[sample-1],p);
+                //normal
                 for (int i = 0; i < sample -1; i++) {
                     mCanvas.drawLine(data_x[i], baseline-data_y[i], data_x[i+1], baseline-data_y[i+1],p);
+                    Log.d("MySurfaceView", "x idx " + i + " data_x[i]:" + data_x[i] + " data_y[i]:" + data_y[i]);
+                    Log.d("MySurfaceView", "y idx " + i + " data_x[i+1]:" + data_x[i+1]+ " data_y[i+1]:" + data_y[i+1]);
                     try {
-                        Thread.sleep(5);
+                        Thread.sleep(1);
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-
                 }
             }
         }
@@ -335,7 +358,7 @@ public class test_surface extends AppCompatActivity {
 //                p.setStyle(Paint.Style.STROKE);
 //                mCanvas.drawColor(Color.BLACK);
                 for (int i = 0; i <  w/20 -1; i++) {
-                ///for (int i = 0; i <  1; i++) {
+                    ///for (int i = 0; i <  1; i++) {
                     // apply some transformation on data in order to map it correctly
                     // in the coordinates of the canvas
                     mCanvas.drawLine(dataX[i], h/2-dataY[i], dataX[i+1], h/2-dataY[i+1],paint);
@@ -430,6 +453,15 @@ public class test_surface extends AppCompatActivity {
         }
 
     }
+
+    int[] raw_data1 = new int[]{
+            10,20,30,40,50,60,70,80,90,100,
+            10,20,30,40,50,60,70,80,90,100,
+            10,20,30,40,50,60,70,80,90,100,
+            10,20,30,40,50,60,70,80,90,100,
+            10,20,30,40,50,60,70,80,90,100,
+    };
+
     // int[] raw_data={0x21DF60,0x21DF60};
     int[] raw_data = new int[]{
             0x21DF60, 0x21DF60, 0x21E060, 0x21E000, 0x21E200,

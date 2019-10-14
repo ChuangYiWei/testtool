@@ -8,21 +8,17 @@
 
     <LinearLayout
         android:id="@+id/linear"
-        android:layout_width="629dp"
-        android:layout_height="213dp"
-        android:layout_marginTop="56dp"
-        android:layout_marginBottom="3dp"
+        android:layout_width="600dp"
+        android:layout_height="455dp"
+        android:layout_marginTop="32dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.309"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/tv_test"
+        tools:layout_editor_absoluteX="16dp"></LinearLayout>
 
     <TextView
         android:id="@+id/tv_test"
         android:layout_width="match_parent"
-        android:layout_height="38dp"
+        android:layout_height="22dp"
         android:text="123456789012345678901234567890123456789012345678901234567890"
         android:textColor="#E91E63"
         app:layout_constraintEnd_toEndOf="parent"
