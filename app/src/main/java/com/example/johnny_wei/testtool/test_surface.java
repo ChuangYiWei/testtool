@@ -30,41 +30,41 @@ public class test_surface extends AppCompatActivity {
     LinearLayout layoutGet;
     LinkedList<Integer> data_list = new LinkedList<Integer>();
     private Object lock = new Object();
-    int sample = 150;
-    int add_sample = 2;
-    int update_sample = 1;
+    int sample = 500;
+    int add_sample = 5;
+    int update_sample = 20;
     int g_int;
     int mWidth = 0;
     int mHeight = 0;
     int y_axis_positive_max = 0;//最大顯示正y軸座標
     int y_axis_negtive_max = 0;//最大顯示負y軸座標
     int y_data_max_value = 1;//當前y最大值,max(abs(valus)})
-    int baseline=0; //起始點座標
+    int baseline = 0; //起始點座標
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_surface);
-        //init_data();
+        init_data();
         //setContentView(new MyView(this));
-        layoutGet=(LinearLayout) findViewById(R.id.linear);
+        layoutGet = (LinearLayout) findViewById(R.id.linear);
         //setContentView(new MySurfaceView(this));
         layoutGet.addView(new MySurfaceView(this));
 
-        Log.d("test_surface", "layoutGet.getWidth() : "+ layoutGet.getWidth());
-        Log.d("test_surface", "layoutGet.getLayoutParams().width : "+ layoutGet.getLayoutParams().width);
-        Log.d("test_surface", "layoutGet.getLayoutParams().height : "+ layoutGet.getLayoutParams().height);
+        Log.d("test_surface", "layoutGet.getWidth() : " + layoutGet.getWidth());
+        Log.d("test_surface", "layoutGet.getLayoutParams().width : " + layoutGet.getLayoutParams().width);
+        Log.d("test_surface", "layoutGet.getLayoutParams().height : " + layoutGet.getLayoutParams().height);
 
-        layoutGet.measure(0,0);
-        Log.d("test_surface", "layoutGet.getMeasuredWidth() : "+ layoutGet.getMeasuredWidth());
-        Log.d("test_surface", "layoutGet.getMeasuredHeight() : "+ layoutGet.getMeasuredHeight());
+        layoutGet.measure(0, 0);
+        Log.d("test_surface", "layoutGet.getMeasuredWidth() : " + layoutGet.getMeasuredWidth());
+        Log.d("test_surface", "layoutGet.getMeasuredHeight() : " + layoutGet.getMeasuredHeight());
 
         //textview
         TextView tv = findViewById(R.id.tv_test);
-        Log.d("test_surface", "tv.getWidth : "+ tv.getWidth());
-        Log.d("test_surface", "tv.getLayoutParams().width : "+ tv.getLayoutParams().width);
-        Log.d("test_surface", "tv.getLayoutParams().height : "+ tv.getLayoutParams().height);
+        Log.d("test_surface", "tv.getWidth : " + tv.getWidth());
+        Log.d("test_surface", "tv.getLayoutParams().width : " + tv.getLayoutParams().width);
+        Log.d("test_surface", "tv.getLayoutParams().height : " + tv.getLayoutParams().height);
 
         //phone-----------------------
         DisplayMetrics dm = new DisplayMetrics();
@@ -73,18 +73,16 @@ public class test_surface extends AppCompatActivity {
         int vWidth = dm.widthPixels;
         int vHeight = dm.heightPixels;
 
-        Log.d("test_surface", "vWidth : "+ vWidth);
-        Log.d("test_surface", "vHeight : "+ vHeight);
+        Log.d("test_surface", "vWidth : " + vWidth);
+        Log.d("test_surface", "vHeight : " + vHeight);
 
         producer_thread.start();
     }
 
     // Create producer thread
-    Thread producer_thread = new Thread(new Runnable()
-    {
+    Thread producer_thread = new Thread(new Runnable() {
         @Override
-        public void run()
-        {
+        public void run() {
             while (true) {
                 try {
                     //produce();
@@ -92,17 +90,16 @@ public class test_surface extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                SystemClock.sleep(10);
+                SystemClock.sleep(20);
             }
         }
     });
 
-    void init_data()
-    {
-        for(int i=0;i<sample;i++) {
+    void init_data() {
+        for (int i = 0; i < sample; i++) {
             data_list.add(i);
         }
-        Log.d("test_surface","list size:" + data_list.size());
+        Log.d("test_surface", "list size:" + data_list.size());
     }
 
     public void produce() throws InterruptedException {
@@ -124,22 +121,22 @@ public class test_surface extends AppCompatActivity {
     public void produce_rawdata() throws InterruptedException {
         synchronized (lock) {
 //            System.out.println("produce enter");
-            //Log.d("produce", "g_int :" + g_int + ", data:" + raw_data[g_int]);
-
-            data_list.add(raw_data[g_int]);
-            g_int++;
-            if (g_int > raw_data.length -1) {
-                g_int = 0;
+            for (int i = 0; i < add_sample; i++) {
+                data_list.add(raw_data[g_int]);
+                g_int++;
+                if (g_int > raw_data.length - 1) {
+                    g_int = 0;
+                }
             }
         }
-//            System.out.println("Wake up consumer thread");
     }
 
-    public int generatRandomPositiveNegitiveValue(int max , int min) {
+    public int generatRandomPositiveNegitiveValue(int max, int min) {
         Random r = new Random();
         int ii = r.nextInt(max - min + 1) + min;
-        return (ii-140);
+        return (ii - 140);
     }
+
     public class MySurfaceView extends SurfaceView implements Runnable, SurfaceHolder.Callback {
         private SurfaceHolder mHolder; // 用于控制SurfaceView
         private Thread t; // 声明一条线程
@@ -163,15 +160,15 @@ public class test_surface extends AppCompatActivity {
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             super.onSizeChanged(w, h, oldw, oldh);
-            Log.w("MySurfaceView","onSizeChanged Height is :" + h);
-            Log.w("MySurfaceView","onSizeChanged width is :" + w);
-            y_axis_positive_max = h/2;
-            y_axis_negtive_max = h/2;
+            Log.w("MySurfaceView", "onSizeChanged Height is :" + h);
+            Log.w("MySurfaceView", "onSizeChanged width is :" + w);
+            y_axis_positive_max = h / 2;
+            y_axis_negtive_max = h / 2;
             mWidth = w;
             mHeight = h;
-            baseline = h/2;
-            for (int i = 0; i <  sample ; i++) {
-                data_x[i]=(i)*(mWidth/sample);
+            baseline = h / 2;
+            for (int i = 0; i < sample; i++) {
+                data_x[i] = (i) * (mWidth / sample);
             }
         }
 
@@ -180,7 +177,7 @@ public class test_surface extends AppCompatActivity {
          */
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
-            Log.w("MySurfaceView","surfaceCreated");
+            Log.w("MySurfaceView", "surfaceCreated");
             t = new Thread(this); // 创建一个线程对象
             flag = true; // 把线程运行的标识设置成true
             t.start(); // 启动线程
@@ -248,49 +245,46 @@ public class test_surface extends AppCompatActivity {
                 }
             }
         }
-        int g_x=0;
-        int g_y=0;
-        int w=800;
-        int h=380;
 
-        int[] data_x=new int[sample];
-        int[] data_y=new int[sample];
+        int g_x = 0;
+        int g_y = 0;
+        int w = 800;
+        int h = 380;
+
+        int[] data_x = new int[sample];
+        int[] data_y = new int[sample];
         float tmp = 1;
-        LinkedList<Integer> tmp_data_list = new LinkedList<Integer>();
+        int min;
+        int max;
+        int[] tmp_data_array = new int[sample];
         public void test_draw_data_own_data() {
             Log.w("test_draw_data_own_data", "test_draw_data_own_data");
             mCanvas = mHolder.lockCanvas(); // 获得画布对象，开始对画布画画
             if (mCanvas != null) {
-
+                Log.w("MySurfaceView", "data_list size:" + data_list.size());
                 synchronized (lock) {
                     if (data_list.size() >= sample) {
                         for (int i = 0; i < sample; i++) {
-                            Log.d("MySurfaceView","rev"+i+":" + data_list.get(i));
+                            tmp_data_array[i] = data_list.get(i);
                         }
-
-                        int min;
-                        int max;
+                        min = findMin(tmp_data_array);
                         for (int i = 0; i < sample; i++) {
-                            tmp_data_list.add(data_list.get(i));
+                            tmp_data_array[i] = tmp_data_array[i] - min;
                         }
-                        min = Collections.min(data_list);
-                        for (int i = 0; i < sample; i++) {
-                            tmp_data_list.set(i, tmp_data_list.get(i) - min);
-                        }
-                        max=Collections.max(tmp_data_list);
+                        max = findMax(tmp_data_array);
 
-                        Log.d("tmp_data_list","tmp_data_list max:" + Collections.max(tmp_data_list) + ",tmp_data_list min:" + Collections.min(tmp_data_list));
+                        Log.d("tmp_data_list", "tmp_data_array max:" + max + ",tmp_data_array min:" + min);
                         for (int i = 0; i < sample; i++) {
                             Log.d("consume", data_list.get(i).toString());
-                            tmp = (float)tmp_data_list.get(i) / max;
-                            data_y[i] = (int)(y_axis_positive_max*tmp);
+                            //tmp = (float) tmp_data_list.get(i) / max;
+                            tmp = (float) tmp_data_array[i] / max;
+                            data_y[i] = (int) (y_axis_positive_max * tmp);
                             Log.d("MySurfaceView", "data_y idx " + i + "tmp:" + tmp + ",data_y:" + data_y[i] + ",y_max_value:" + y_data_max_value);
                         }
                         //remove first nth data
                         for (int i = 0; i < update_sample; i++) {
                             data_list.removeFirst();
                         }
-                        tmp_data_list.clear();
                     }
 
                 }
@@ -298,23 +292,10 @@ public class test_surface extends AppCompatActivity {
 
                 //clear canvas
                 mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-//                for (int i = 0; i < sample -2; i+=2) {
-//                    mCanvas.drawLine(data_x[i], baseline-data_y[i], data_x[i+2], baseline-data_y[i+2],p);
-//                    Log.d("MySurfaceView", "x idx " + i + " data_x[i]:" + data_x[i]+ " data_y[i]:" + data_y[i]);
-//                    Log.d("MySurfaceView", "y idx " + i + " data_x[i+2]:" + data_x[i+2]+ " data_y[i+2]:" + data_y[i+2]);
-//                    try {
-//                        Thread.sleep(1);
-//                    } catch (InterruptedException e) {
-//                        // TODO Auto-generated catch block
-//                        e.printStackTrace();
-//                    }
-//                }
-//                mCanvas.drawLine(data_x[sample-2], baseline-data_y[sample-2], data_x[sample-1], baseline-data_y[sample-1],p);
-                //normal
-                for (int i = 0; i < sample -1; i++) {
-                    mCanvas.drawLine(data_x[i], baseline-data_y[i], data_x[i+1], baseline-data_y[i+1],p);
-                    Log.d("MySurfaceView", "x idx " + i + " data_x[i]:" + data_x[i] + " data_y[i]:" + data_y[i]);
-                    Log.d("MySurfaceView", "y idx " + i + " data_x[i+1]:" + data_x[i+1]+ " data_y[i+1]:" + data_y[i+1]);
+                for (int i = 0; i < sample -update_sample; i+=update_sample) {
+                    mCanvas.drawLine(data_x[i], baseline-data_y[i], data_x[i+update_sample], baseline-data_y[i+update_sample],p);
+                    Log.d("MySurfaceView", "x idx " + i + " data_x[i]:" + data_x[i]+ " data_y[i]:" + data_y[i]);
+                    Log.d("MySurfaceView", "y idx " + i + " data_x[i+2]:" + data_x[i+update_sample]+ " data_y[i+2]:" + data_y[i+update_sample]);
                     try {
                         Thread.sleep(1);
                     } catch (InterruptedException e) {
@@ -322,11 +303,24 @@ public class test_surface extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+//                mCanvas.drawLine(data_x[sample-2], baseline-data_y[sample-2], data_x[sample-1], baseline-data_y[sample-1],p);
+                //normal
+//                for (int i = 0; i < sample - 1; i++) {
+//                    mCanvas.drawLine(data_x[i], baseline - data_y[i], data_x[i + 1], baseline - data_y[i + 1], p);
+////                    Log.d("MySurfaceView", "x idx " + i + " data_x[i]:" + data_x[i] + " data_y[i]:" + data_y[i]);
+////                    Log.d("MySurfaceView", "y idx " + i + " data_x[i+1]:" + data_x[i+1]+ " data_y[i+1]:" + data_y[i+1]);
+//                    try {
+//                        Thread.sleep(1);
+//                    } catch (InterruptedException e) {
+//                        // TODO Auto-generated catch block
+//                        e.printStackTrace();
+//                    }
+//                }
             }
         }
 
-        int[] dataX=new int[w/20];
-        int[] dataY=new int[w/20];
+        int[] dataX = new int[w / 20];
+        int[] dataY = new int[w / 20];
 
 
         public void test_draw_run() {
@@ -341,11 +335,11 @@ public class test_surface extends AppCompatActivity {
                 Paint paint = new Paint();
                 paint.setColor(Color.RED);
                 paint.setStrokeWidth(6);
-                dataX[0]=0;
-                for (int i = 0; i <  w/20 - 1; i++) {
-                    dataX[i+1]=(i+1)*w/20;
-                    dataY[w/20 - 1]=generatRandomPositiveNegitiveValue(max ,min);
-                    dataY[i]=dataY[i+1];
+                dataX[0] = 0;
+                for (int i = 0; i < w / 20 - 1; i++) {
+                    dataX[i + 1] = (i + 1) * w / 20;
+                    dataY[w / 20 - 1] = generatRandomPositiveNegitiveValue(max, min);
+                    dataY[i] = dataY[i + 1];
 //                    Log.d("MySurfaceView","X idx " + i + "is:" +  dataX[i]);
 //                    Log.d("MySurfaceView","Y idx " + i + "is:" +  dataY[i]);
                 }
@@ -357,11 +351,11 @@ public class test_surface extends AppCompatActivity {
 //                p.setStrokeWidth(10);
 //                p.setStyle(Paint.Style.STROKE);
 //                mCanvas.drawColor(Color.BLACK);
-                for (int i = 0; i <  w/20 -1; i++) {
+                for (int i = 0; i < w / 20 - 1; i++) {
                     ///for (int i = 0; i <  1; i++) {
                     // apply some transformation on data in order to map it correctly
                     // in the coordinates of the canvas
-                    mCanvas.drawLine(dataX[i], h/2-dataY[i], dataX[i+1], h/2-dataY[i+1],paint);
+                    mCanvas.drawLine(dataX[i], h / 2 - dataY[i], dataX[i + 1], h / 2 - dataY[i + 1], paint);
                     //mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
                     try {
                         Thread.sleep(5);
@@ -406,12 +400,11 @@ public class test_surface extends AppCompatActivity {
     }
 
 
-
-
     //内部类
-    class MyView extends SurfaceView implements SurfaceHolder.Callback{
+    class MyView extends SurfaceView implements SurfaceHolder.Callback {
 
         SurfaceHolder holder;
+
         public MyView(Context context) {
             super(context);
             holder = this.getHolder();//获取holder
@@ -437,7 +430,7 @@ public class test_surface extends AppCompatActivity {
         }
 
         //内部类的内部类
-        class MyThread implements Runnable{
+        class MyThread implements Runnable {
 
             @Override
             public void run() {
@@ -445,7 +438,7 @@ public class test_surface extends AppCompatActivity {
                 Paint mPaint = new Paint();
                 mPaint.setColor(Color.BLUE);
 
-                canvas.drawRect(new RectF(100,100,200,200), mPaint);
+                canvas.drawRect(new RectF(100, 100, 200, 200), mPaint);
                 holder.unlockCanvasAndPost(canvas);//解锁画布，提交画好的图像
 
             }
@@ -454,12 +447,70 @@ public class test_surface extends AppCompatActivity {
 
     }
 
+    /*find max and min and return max and min*/
+    int[] findMax_Min(int[] arrays)
+    {
+        int max = arrays[0];
+        int min = arrays[0];
+        int length = arrays.length;
+        for (int i = 1; i < length; i++) {
+            if (arrays[i] > max) {
+                max = arrays[i];
+            }
+            if (arrays[i] < min) {
+                min = arrays[i];
+            }
+        }
+        int[] convertedValues = new int[2];
+        convertedValues[0] = min;
+        convertedValues[1] = max;
+        return  convertedValues;
+    }
+
+    int findMin(int[] arrays)
+    {
+        int min = arrays[0];
+        int length = arrays.length;
+        for (int i = 1; i < length; i++) {
+            if (arrays[i] < min) {
+                min = arrays[i];
+            }
+        }
+        return min;
+    }
+
+    int findMax(int[] arrays)
+    {
+        int max = arrays[0];
+        int length = arrays.length;
+        for (int i = 1; i < length; i++) {
+            if (arrays[i] > max) {
+                max = arrays[i];
+            }
+        }
+        return max;
+    }
     int[] raw_data1 = new int[]{
-            10,20,30,40,50,60,70,80,90,100,
-            10,20,30,40,50,60,70,80,90,100,
-            10,20,30,40,50,60,70,80,90,100,
-            10,20,30,40,50,60,70,80,90,100,
-            10,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,100,
+            0,20,30,40,50,60,70,80,90,500,
     };
 
     // int[] raw_data={0x21DF60,0x21DF60};
@@ -1455,6 +1506,11 @@ public class test_surface extends AppCompatActivity {
             0x223E00,
             0x223A80,
             0x223520,
+            0,
+            0,
+            0,
+            0,
+            0,
 
     };
 }
