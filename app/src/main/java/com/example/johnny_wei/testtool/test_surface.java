@@ -94,7 +94,7 @@ public class test_surface extends AppCompatActivity {
         Log.d("test_surface", "vWidth : " + vWidth);
         Log.d("test_surface", "vHeight : " + vHeight);
 
-        producer_thread.start();
+        //producer_thread.start();
     }
 
     // Create producer thread
@@ -249,10 +249,11 @@ public class test_surface extends AppCompatActivity {
             while (flag) {
                 try {
                     synchronized (mHolder) {
-                        Thread.sleep(1); // 让线程休息1000毫秒
+                        Thread.sleep(500); // 让线程休息1000毫秒
                         //Draw(); // 调用自定义画画方法
                         //test_draw_run();
-                        test_draw_data_own_data();
+                        //test_draw_data_own_data();
+                        test_simple_draw_data_own_data();
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -264,6 +265,35 @@ public class test_surface extends AppCompatActivity {
             }
         }
 
+        int sample_idx=0;
+        public void test_simple_draw_data_own_data() {
+            mCanvas = mHolder.lockCanvas(); // 获得画布对象，开始对画布画画
+            if (mCanvas != null) {
+                Log.w("MySurfaceView", "data_list size:" + data_list.size());
+                Paint p1 = new Paint(); // 创建一个画笔对象
+                p1.reset();
+                p1.setStrokeWidth(3);
+                //p1.setStyle(Paint.Style.STROKE);
+                p1.setColor(0xffff0000);
+
+                synchronized (lock) {
+                    data_y[sample_idx] = data_list.getFirst();
+                    data_list.removeFirst();
+                    data_y[sample_idx+1]=data_list.getFirst();
+                }
+                mCanvas.drawLine(data_x[sample_idx], baseline-data_y[sample_idx], data_x[sample_idx+1], baseline-data_y[sample_idx+1],p1);
+                Log.d("MySurfaceView", "sample_idx " + sample_idx + ": " + data_x[sample_idx]+ " data_y[i]:" + data_y[sample_idx]);
+                Log.d("MySurfaceView", "sample_idx" + sample_idx + " :" + data_x[sample_idx+1] + " data_y[i+1]:" + data_y[sample_idx+1]);
+                //Log.w("MySurfaceView", "mWidth: " + mWidth + ",mHeight:" + mHeight);
+                sample_idx++;
+                if(sample_idx == 100) {
+                    //clear canvas
+                    Log.e("MySurfaceView", "clear canvas");
+                    mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                    sample_idx=0;
+                }
+            }
+        }
         int g_x = 0;
         int g_y = 0;
         int w = 800;
@@ -505,7 +535,7 @@ public class test_surface extends AppCompatActivity {
         }
         return max;
     }
-    int[] raw_data1 = new int[]{
+    int[] raw_data = new int[]{
             99,20,30,40,50,60,70,80,90,100,
             0,20,30,40,50,60,70,80,90,100,
             0,20,30,40,50,60,70,80,90,100,
@@ -538,7 +568,7 @@ public class test_surface extends AppCompatActivity {
             0,20,30,40,50,60,70,80,90,99,
     };
 
-    int[] raw_data = new int[]{
+    int[] raw_data1 = new int[]{
             0x21DF60,0x21DF60,0x21E060,0x21E000,0x21E200,0x21E880,0x21EF40,0x21F5A0,0x21FAA0,0x21FF40,
             0x220480,0x220640,0x220800,0x220AA0,0x220B60,0x220C40,0x220BA0,0x220A20,0x220860,0x220500,
             0x220100,0x21FDE0,0x21FBA0,0x21F700,0x21F020,0x21E960,0x21E2A0,0x21DF80,0x21E0C0,0x21E0E0,
