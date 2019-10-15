@@ -30,7 +30,8 @@
         <activity android:name=".invok" />
         <activity android:name=".time" />
         <activity android:name=".serviceExample" />
-        <activity android:name=".test_surface" android:screenOrientation="landscape">
+        <activity android:name=".test_surface" android:screenOrientation="landscape" android:configChanges="keyboard|keyboardHidden|orientation">
+<!--        <activity android:name=".test_surface" android:screenOrientation="landscape">-->
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
