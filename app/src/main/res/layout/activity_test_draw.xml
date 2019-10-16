@@ -6,10 +6,30 @@
     android:layout_height="match_parent"
     tools:context=".test_draw">
 
-    <com.example.johnny_wei.testtool.drawUtil.PaintView
-        android:id="@+id/paintView"
-        android:layout_width="389dp"
-        android:layout_height="683dp"
+<!--    <com.example.johnny_wei.testtool.drawUtil.PaintView-->
+<!--        android:id="@+id/paintView"-->
+<!--        android:layout_width="389dp"-->
+<!--        android:layout_height="683dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+    <LinearLayout
+        android:id="@+id/lin_layout"
+        android:layout_width="336dp"
+        android:layout_height="539dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+
+    <Button
+        android:id="@+id/button23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:onClick="clk_reset"
+        android:text="reset"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
