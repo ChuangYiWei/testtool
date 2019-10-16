@@ -14,9 +14,15 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class TestPathView extends View {
-
+    private final String TAG = getClass().getSimpleName();
     private Path mPath;
     private Paint mPaint;
+    int baseline = 0; //起始點座標
+    int sample = 10;
+    int[] data_x = new int[sample];
+    int mWidth = 0;
+    int mHeight = 0;
+
     //手指按下的位置
     private float startX,startY;
     public  Handler ui_handler = new Handler(Looper.getMainLooper());
@@ -48,27 +54,21 @@ public class TestPathView extends View {
     int sample_idx=0;
     void mydraw() throws InterruptedException
     {
-        Log.d("MovePathView", "sample_idx:"+sample_idx);
         if(sample_idx ==0)
         {
-            mPath.moveTo(0,106);
+            mPath.moveTo(0,baseline);
         }
-        else if(sample_idx ==1)
+        Log.d("MovePathView", "sample_idx:"+sample_idx);
+        mPath.lineTo(data_x[sample_idx],baseline-raw_data[sample_idx]);
+        int tmp_y=baseline-raw_data[sample_idx];
+        Log.d("MovePathView", "x:"+data_x[sample_idx] + " y:" + tmp_y);
+        if(sample_idx ==9)
         {
-            mPath.lineTo(300,436);
-        }
-        else if(sample_idx ==2)
-        {
-            mPath.lineTo(500,106);
-        }
-        else if(sample_idx ==3)
-        {
-            mPath.lineTo(700,436);
-        }
-        else if(sample_idx ==4)
-        {
+            //last one
             sample_idx =0;
             mPath.reset();
+            invalidate();
+            return;
         }
         sample_idx++;
         invalidate();
@@ -94,6 +94,13 @@ public class TestPathView extends View {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        Log.w(TAG, "onSizeChanged:"+ "w" + w + " h" + h);
+        int mWidth = w;
+        int mHeight = h;
+        baseline = mHeight/2;
+        for (int i = 0; i < sample; i++) {
+            data_x[i] = (i) * (mWidth / sample);
+        }
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
@@ -135,4 +142,10 @@ public class TestPathView extends View {
         invalidate();
     }
 
+    int[] raw_data = new int[]{
+            100, -100,  100, -100, 100, -100 ,100, -100,100,-100,
+            10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+            10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+            10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+    };
 }
