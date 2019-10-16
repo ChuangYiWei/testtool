@@ -65,7 +65,8 @@ public class TestPathView extends View {
         public void run() {
             while (true) {
                 try {
-                    produce();
+                    //produce();
+                    produce_rawdata();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -83,6 +84,20 @@ public class TestPathView extends View {
                 } else {
                     //data_list.add(-100);
                     data_list.add(-100);
+                }
+            }
+        }
+    }
+
+    int g_int=0;
+    public void produce_rawdata() throws InterruptedException {
+        synchronized (lock) {
+//            System.out.println("produce enter");
+            for (int i = 0; i < add_sample; i++) {
+                data_list.add(raw_data[g_int]);
+                g_int++;
+                if (g_int > raw_data.length - 1) {
+                    g_int = 0;
                 }
             }
         }
