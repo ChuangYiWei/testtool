@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.example.johnny_wei.testtool.drawUtil.MovePathView;
 import com.example.johnny_wei.testtool.drawUtil.PaintView;
 
 import java.util.ArrayList;
@@ -30,13 +31,19 @@ public class test_draw extends AppCompatActivity {
     public int[] data_array = new int[1000];
     public static test_draw static_test_draw;
     PaintView pv;
+    MovePathView mv;
+    LinearLayout layoutGet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(new Panel(this));
-        pv = new PaintView(this, null);
-        setContentView(pv);
-        //setContentView(R.layout.activity_test_draw);
+        //pv = new PaintView(this, null);
+        setContentView(R.layout.activity_test_draw);
+        layoutGet = (LinearLayout) findViewById(R.id.lin_layout);
+        mv = new MovePathView(this,null);
+        layoutGet.addView(mv);
+        //setContentView(mv);
+
         static_test_draw = this;
         init();
 
@@ -51,6 +58,10 @@ public class test_draw extends AppCompatActivity {
 
     public void clk_test(View view) {
         pv.start_draw();
+    }
+
+    public void clk_reset(View view) {
+        mv.reset();
     }
 }
 

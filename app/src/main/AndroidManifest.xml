@@ -16,7 +16,7 @@
         <activity android:name=".write" />
         <activity android:name=".bytecheck" />
         <activity android:name=".connected_list" />
-        <activity android:name=".test_draw" />
+        <activity android:name=".test_surface" />
         <activity android:name=".test_listview_tree" />
         <activity android:name=".expandleble" />
         <activity android:name=".scan_list" />
@@ -30,8 +30,8 @@
         <activity android:name=".invok" />
         <activity android:name=".time" />
         <activity android:name=".serviceExample" />
-        <activity android:name=".test_surface" android:screenOrientation="landscape" android:configChanges="keyboard|keyboardHidden|orientation">
-<!--        <activity android:name=".test_surface" android:screenOrientation="landscape">-->
+<!--        <activity android:name=".test_surface" android:screenOrientation="landscape" android:configChanges="keyboard|keyboardHidden|orientation">-->
+        <activity android:name=".test_draw" >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
