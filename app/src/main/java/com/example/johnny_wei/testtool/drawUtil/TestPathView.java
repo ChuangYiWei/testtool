@@ -13,42 +13,79 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.LinkedList;
+
 public class TestPathView extends View {
     private final String TAG = getClass().getSimpleName();
     private Path mPath;
     private Paint mPaint;
     int baseline = 0; //起始點座標
-    int sample = 10;
+    int sample = 100;
     int[] data_x = new int[sample];
+    int add_sample = 6;
     int mWidth = 0;
     int mHeight = 0;
+    private Object lock = new Object();
 
+    LinkedList<Integer> data_list = new LinkedList<Integer>();
     //手指按下的位置
     private float startX,startY;
     public  Handler ui_handler = new Handler(Looper.getMainLooper());
     public TestPathView(Context context) {
         super(context);
         init();
+        //init_data();
         ui_handler.postDelayed(ui_runnable,1000);
+        producer_thread.start();
+    }
 
+    void init_data() {
+        for (int i = 0; i < 300; i++) {
+            data_list.add(i*10);
+        }
+        Log.d("test_surface", "list size:" + data_list.size());
     }
 
     private Runnable ui_runnable = new Runnable() {
         @Override
         public void run() {
-            Log.d("MovePathView", "invokeRun");
             try {
-                mydraw();
+                //mydraw();
+                mydraw2();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            ui_handler.postDelayed(ui_runnable,1000);
+            ui_handler.postDelayed(ui_runnable,1);
         }
     };
 
-    public void startDraw()
-    {
+    // Create producer thread
+    Thread producer_thread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            while (true) {
+                try {
+                    produce();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                SystemClock.sleep(200);
+            }
+        }
+    });
 
+    public void produce() throws InterruptedException {
+        synchronized (lock) {
+            for (int i = 0; i < add_sample; i++) {
+                if (i % 2 == 0) {
+                    //data_list.add(generatRandomPositiveNegitiveValue(500,100));
+                    data_list.add(100);
+                } else {
+                    //data_list.add(-100);
+                    data_list.add(-100);
+                }
+            }
+        }
     }
 
     int sample_idx=0;
@@ -63,6 +100,37 @@ public class TestPathView extends View {
         int tmp_y=baseline-raw_data[sample_idx];
         Log.d("MovePathView", "x:"+data_x[sample_idx] + " y:" + tmp_y);
         if(sample_idx ==9)
+        {
+            //last one
+            sample_idx =0;
+            mPath.reset();
+            invalidate();
+            return;
+        }
+        sample_idx++;
+        invalidate();
+    }
+
+    void mydraw2() throws InterruptedException
+    {
+        Log.d(TAG, "data_list.size() is:" + data_list.size());
+        if(data_list.size() ==0)
+        {
+            Log.d(TAG, "data_list.size() is 0");
+            return;
+        }
+        if(sample_idx ==0)
+        {
+            mPath.moveTo(0,baseline);
+        }
+        Log.d("MovePathView", "sample_idx:"+sample_idx);
+        synchronized (lock) {
+            int tmp_y = baseline - data_list.getFirst();
+            mPath.lineTo(data_x[sample_idx], tmp_y);
+            Log.d("MovePathView", "x:" + data_x[sample_idx] + " y:" + tmp_y);
+            data_list.removeFirst();
+        }
+        if(sample_idx == sample - 1)
         {
             //last one
             sample_idx =0;
