@@ -40,7 +40,7 @@ public class test_draw extends AppCompatActivity {
         //pv = new PaintView(this, null);
         setContentView(R.layout.activity_test_draw);
         layoutGet = (LinearLayout) findViewById(R.id.lin_layout);
-        mv = new MovePathView(this,null);
+        mv = new MovePathView(this);
         layoutGet.addView(mv);
         //setContentView(mv);
 
