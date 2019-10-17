@@ -31,7 +31,7 @@
         <activity android:name=".time" />
         <activity android:name=".serviceExample" />
 <!--        <activity android:name=".test_surface" android:screenOrientation="landscape" android:configChanges="keyboard|keyboardHidden|orientation">-->
-        <activity android:name=".test_draw" android:screenOrientation="landscape">
+        <activity android:name=".test_draw" android:screenOrientation="landscape" android:theme="@style/Theme.AppCompat.NoActionBar">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

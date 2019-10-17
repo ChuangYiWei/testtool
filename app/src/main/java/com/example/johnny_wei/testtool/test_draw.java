@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class test_draw extends AppCompatActivity {
-
+    private final String TAG = getClass().getSimpleName();
     public List<String> data_list = new ArrayList<>();
     public int[] data_array = new int[1000];
     public static test_draw static_test_draw;
@@ -50,6 +50,24 @@ public class test_draw extends AppCompatActivity {
         static_test_draw = this;
         init();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.w(TAG, "onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.w(TAG, "onPause");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.w(TAG, "onDestroy");
     }
 
     public void init()
