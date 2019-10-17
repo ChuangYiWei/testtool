@@ -1,5 +1,6 @@
 package com.example.johnny_wei.testtool;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +19,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.example.johnny_wei.testtool.drawUtil.MovePathView;
 import com.example.johnny_wei.testtool.drawUtil.PaintView;
@@ -31,10 +35,13 @@ public class test_draw extends AppCompatActivity {
     public List<String> data_list = new ArrayList<>();
     public int[] data_array = new int[1000];
     public static test_draw static_test_draw;
+    Activity mActivity = this;
     PaintView pv;
     MovePathView mv;
     TestPathView test_view;
     LinearLayout layoutGet;
+    RadioButton rdx_ecg;
+    RadioButton rdx_ppg;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +54,32 @@ public class test_draw extends AppCompatActivity {
         layoutGet.addView(test_view);
         //setContentView(mv);
 
+        radio_setup();
         static_test_draw = this;
         init();
 
     }
+    private void radio_setup() {
+        rdx_ecg = findViewById(R.id.radio_ecg);
+        rdx_ppg = findViewById(R.id.radio_ppg);
+        RadioGroup radioGroup_tx_rx = findViewById(R.id.radio_ppg_ecg);
+        radioGroup_tx_rx.setOnCheckedChangeListener(mOnCheckedChangeListener);
+    }
+
+    private RadioGroup.OnCheckedChangeListener mOnCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
+
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            switch (checkedId) {
+                case R.id.radio_ecg:
+                    Toast.makeText(mActivity, "ECG select", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.radio_ppg:
+                    Toast.makeText(mActivity, "PPG select", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onResume() {

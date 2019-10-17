@@ -6,12 +6,39 @@
     android:layout_height="match_parent"
     tools:context=".test_draw">
 
-<!--    <com.example.johnny_wei.testtool.drawUtil.PaintView-->
-<!--        android:id="@+id/paintView"-->
-<!--        android:layout_width="389dp"-->
-<!--        android:layout_height="683dp"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
+    <!--    <com.example.johnny_wei.testtool.drawUtil.PaintView-->
+    <!--        android:id="@+id/paintView"-->
+    <!--        android:layout_width="389dp"-->
+    <!--        android:layout_height="683dp"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <RadioGroup
+        android:id="@+id/radio_ppg_ecg"
+        android:layout_width="335dp"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/button23"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.092"
+        app:layout_constraintStart_toEndOf="@+id/button23"
+        app:layout_constraintTop_toTopOf="@+id/button23"
+        app:layout_constraintVertical_bias="0.0">
+
+        <RadioButton
+            android:id="@+id/radio_ecg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="ECG" />
+
+        <RadioButton
+            android:id="@+id/radio_ppg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="PPG" />
+    </RadioGroup>
 
     <LinearLayout
         android:id="@+id/lin_layout"
@@ -37,4 +64,5 @@
         android:text="reset"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </android.support.constraint.ConstraintLayout>
