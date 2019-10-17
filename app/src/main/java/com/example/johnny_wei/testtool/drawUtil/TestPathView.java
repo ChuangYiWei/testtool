@@ -20,15 +20,19 @@ public class TestPathView extends View {
     private Path mPath;
     private Paint mPaint;
     int baseline = 0; //起始點座標
-    int sample = 300;
+    int sample = 200;
     int[] data_x = new int[sample];
     int add_sample = 6;
     int mWidth = 0;
     int mHeight = 0;
     int max=1;
     int min=0;
-    int produce_ms=200;
-    int draw_ms=50;
+    int out_range_max=1;
+    int out_range_min=0;
+    int new_max=1;
+    int new_min=0;
+    int produce_ms=100;
+    int draw_ms=5;
     int y_axis_positive_max = 0;//最大顯示正y軸座標
     private Object lock = new Object();
 
@@ -163,6 +167,7 @@ public class TestPathView extends View {
         invalidate();
     }
     int tmp_first_data=0;
+    int range_in_min_max_data=0;
     int current_min=0;
     int current_max=1;
     int tmp_minus_min;
@@ -179,15 +184,14 @@ public class TestPathView extends View {
             Log.d(TAG, "data_list.size() is 0");
             return;
         }
-        if(data_list.size() < 80)
+        if(first_init && data_list.size() < 80  )
         {
             Log.d(TAG, "data_list.size() < 20");
             return;
         }
-        if(data_list.size() > 80 && first_init)
-        {
-            min=data_list.getFirst();
-            for(int i=0;i<80;i++) {
+        if (first_init && data_list.size() > 80) {
+            min = data_list.getFirst();
+            for (int i = 0; i < 80; i++) {
                 if (data_list.get(i) < min) {
                     min = data_list.get(i);
                 }
@@ -195,36 +199,69 @@ public class TestPathView extends View {
                     max = data_list.get(i);
                 }
             }
+
+            out_range_max = max ;
+            out_range_min = min ;
             first_init = false;
         }
-        if(sample_idx ==0)
-        {
-            mPath.moveTo(0,baseline);
-        }
 
+        if (sample_idx == 0) {
+            mPath.moveTo(0, baseline);
+        }
 
         Log.d("MovePathView", "sample_idx:"+sample_idx);
         synchronized (lock) {
             tmp_first_data = data_list.getFirst();
 
-            tmp_minus_min= tmp_first_data -min;
+            //control display range
+            if (tmp_first_data > max) {
+                range_in_min_max_data = out_range_max;
+            } else if (tmp_first_data < min) {
+                range_in_min_max_data = out_range_min;
+            } else {
+                range_in_min_max_data = tmp_first_data;
+            }
+
+            //scale
+            tmp_minus_min= range_in_min_max_data - min;
             max_min_interval = max-min;
             f_tmp = (float)tmp_minus_min/max_min_interval;
             scaled = (int) (y_axis_positive_max * f_tmp);
             data_y = baseline - scaled;
             mPath.lineTo(data_x[sample_idx], data_y);
-            Log.d("MovePathView", "min:" + min + " max:" + max+", max_min_interval:" +max_min_interval);
-            Log.d("MovePathView", "x:" + data_x[sample_idx] + " y:" + data_y);
+            Log.d(TAG, "min:" + min + " max:" + max+", max_min_interval:" +max_min_interval + ",range_in_min_max_data"+range_in_min_max_data);
+            Log.d(TAG, "x:" + data_x[sample_idx] + " y:" + data_y);
             Log.d(TAG, "tmp_first_data:" + tmp_first_data + " ,tmp_minus_min:"+tmp_minus_min+" f_tmp:" + f_tmp + ",scaled:" + data_y+",baseline:"+baseline+"y_axis_positive_max"+y_axis_positive_max);
-
+            Log.d(TAG, "out_range_min:" + out_range_min + ",out_range_max:" + out_range_max);
             data_list.removeFirst();
+            //find min max in last 80 sample
+            if (sample > 80) {
+                if (sample_idx > sample - 80) {
+                    if (sample_idx == (sample - 80 + 1)) {
+                        new_min = tmp_first_data;
+                        new_max = tmp_first_data;
+                    }
+                    if (tmp_first_data < new_min) {
+                        new_min = tmp_first_data;
+                        out_range_min = new_min;
+                    }
+                    if (tmp_first_data > new_max) {
+                        new_max = tmp_first_data;
+                        out_range_max = new_max;
+                    }
+                    Log.d(TAG, "current new_min:" + new_min + ",current new_max:" + new_max);
+                }
+            }
         }
-        if(sample_idx == sample - 1)
-        {
-            current_min = min;
-            current_max = max;
+        //last one , reset and redraw, update min/max
+        if (sample_idx == sample - 1) {
+            if (sample > 80) {
+                min = new_min;
+                max = new_max;
+                Log.w(TAG, "new_min:" + new_min + "new_max:" + new_max);
+            }
             //last one
-            sample_idx =0;
+            sample_idx = 0;
             mPath.reset();
             invalidate();
             return;
@@ -305,6 +342,18 @@ public class TestPathView extends View {
 
 
     int[] raw_data1 = new int[]{
+            400, 450,  460, 800, 500, 100 ,100, 100,100,100,
+            400, 450,  460, 800, 500, 100 ,100, 100,100,100,
+            400, 450,  460, 800, 500, 100 ,100, 100,100,100,
+            400, 450,  460, 5000, 500, 100 ,100, 100,100,100,
+            400, 450,  460, 800, 500, 100 ,100, 100,100,100,
+            400, 450,  460, 800, 500, 100 ,100, 100,100,100,
+            400, 450,  460, 800, 500, 100 ,100, 100,100,100,
+            400, 450,  460, 800, 500, 100 ,100, 100,100,100,
+            400, 450,  460, 800, 500, 100 ,100, 100,100,100,
+            400, 450,  460, 800, 500, 100 ,100, 100,100,100,
+            400, 450,  460, 800, 500, 100 ,100, 100,100,100,
+            400, 450,  460, 800, 500, 100 ,100, 100,100,100,
             400, 450,  460, 800, 500, 100 ,100, 100,100,100,
 
     };
