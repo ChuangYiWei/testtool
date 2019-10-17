@@ -14,7 +14,19 @@ import java.util.List;
 
 public class bytecheck extends AppCompatActivity {
     private final byte[] bytearray={0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F};
-
+    private byte[] raw_data =
+            {0x21, (byte) 0xDF, 0x60, 0x21, (byte) 0xDF,
+             0x60, 0x21, (byte) 0xE0, 0x60, 0x21,
+             (byte) 0xE0, 0x00, 0x21, (byte) 0xE2, 0x00,
+             0x21, (byte) 0xE8, (byte) 0x80,  0x21, (byte) 0xEF
+            };
+    private byte[] raw_data1 =
+            {0x21, (byte) 0x21, 0x21, 0x21, (byte) 0xDF,
+                    0x60, 0x21, (byte) 0xE0, 0x60, 0x21,
+                    (byte) 0xE0, 0x00, 0x21, (byte) 0xE2, 0x00,
+                    0x21, (byte) 0xE8, (byte) 0x80,  0x21, (byte) 0xEF
+            };
+    private byte[] test_array={(byte)0x80, 0x21, (byte) 0xE8,(byte)0x80};
     private final String TAG = getClass().getSimpleName();
     LinkedList<String> testStr;
     @Override
@@ -35,7 +47,7 @@ public class bytecheck extends AppCompatActivity {
         GetsubByteStr("040F0400011D04040C08000000081D00D307",0,1);
         GetsubByteStr("040E07012D0C000E0006",0,7);
         SetsubByteStr();
-
+        convertECG();
 //        HCI_check_evt_success("040E0C01032000254D000000000000");
 //        HCI_check_evt_success("040F0400011D04040C08000000081D00D307");
 //        HCI_check_evt_success("040E07012D0C000E0006");
@@ -46,6 +58,40 @@ public class bytecheck extends AppCompatActivity {
 //        checkLength();
 //        checkUARTLength();
 
+    }
+
+    void convertECG()
+    {
+        for(int i=0;i<18;i+=3)
+        {
+            int converted_data =0;
+            converted_data = (0xFF & 0) << 24 |
+                    (0xFF & raw_data1[i]) << 16 |
+                    (0xFF & raw_data1[i + 1]) << 8 |
+                    (0xFF & raw_data1[i + 2]);
+//            converted_data =  (raw_data1[i+2] & 0xFF) << 0 |
+//                              (raw_data1[i+1] & 0xFF) << 8 |
+//                              (raw_data1[i+0] & 0xFF) << 16;
+            Log.d(TAG,"raw_data[i]:" + String.format("0x%8x",raw_data1[i]<< 16));
+            Log.d(TAG,"raw_data[i+1]:" + String.format("0x%8x",raw_data1[i+1]<< 8));
+            Log.d(TAG,"raw_data[i+2]:" + String.format("0x%8x",raw_data1[i+2]));
+            Log.d(TAG,"converted_data:" + String.format("0x%8x",converted_data));
+            Log.d(TAG,"converted_data2:" + String.format("0x%8x",byteArrayToInt2(raw_data1,i)));
+            Log.d(TAG,"byteArrayToInt:" + String.format("0x%8x",byteArrayToInt(test_array,0)));
+        }
+    }
+
+    public static int byteArrayToInt(byte[] b, int index){
+        return   b[index+3] & 0xFF |
+                (b[index+2] & 0xFF) << 8 |
+                (b[index+1] & 0xFF) << 16 |
+                (b[index+0] & 0xFF) << 24;
+    }
+    public static int byteArrayToInt2(byte[] b, int index){
+        return   //b[index+3] & 0xFF |
+                (b[index+2] & 0xFF) << 0 |
+                (b[index+1] & 0xFF) << 8 |
+                (b[index+0] & 0xFF) << 16;
     }
 
     void read_remote_version()
