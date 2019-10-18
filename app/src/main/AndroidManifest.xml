@@ -2,7 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.johnny_wei.testtool">
-    <!-- add from android API 23 -->
+
+    <uses-feature android:name="android.hardware.usb.host" /> <!-- storage -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- //usb driver use -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,16 +20,17 @@
         android:supportsRtl="true"
         android:theme="@style/mytheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".collection" ></activity>
+        <activity android:name=".spinner_option"></activity>
+        <activity android:name=".collection" />
         <activity android:name=".csv" />
         <activity android:name=".write" />
-        <activity android:name=".bytecheck" />
+        <activity android:name=".test_draw" />
         <activity android:name=".connected_list" />
         <activity android:name=".test_surface" />
         <activity android:name=".test_listview_tree" />
         <activity android:name=".expandleble" />
         <activity android:name=".scan_list" />
-        <activity android:name=".spinner_option" />
+        <activity android:name=".bytecheck" />
         <activity android:name=".customview" /> <!-- <activity android:name=".test_ble"> -->
         <activity android:name=".xmlandinvoke" />
         <activity android:name=".uart" />
@@ -29,10 +39,10 @@
         <activity android:name=".ble" />
         <activity android:name=".invok" />
         <activity android:name=".time" />
-        <activity android:name=".serviceExample" />
-<!--        <activity android:name=".test_surface" android:screenOrientation="landscape" android:configChanges="keyboard|keyboardHidden|orientation">-->
-        <activity android:name=".test_draw" android:screenOrientation="landscape" android:theme="@style/Theme.AppCompat.NoActionBar">
-
+        <activity android:name=".serviceExample" /> <!-- <activity android:name=".test_surface" android:screenOrientation="landscape" android:theme="@style/Theme.AppCompat.NoActionBar" android:configChanges="keyboard|keyboardHidden|orientation"> -->
+        <activity
+            android:name=".aleart_test"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -63,15 +73,5 @@
             android:enabled="true"
             android:exported="true" />
     </application>
-
-    <uses-feature android:name="android.hardware.usb.host" /> <!-- storage -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- //usb driver use -->
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
 </manifest>
