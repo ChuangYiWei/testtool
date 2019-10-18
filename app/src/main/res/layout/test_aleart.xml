@@ -1,29 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/edt_name_alert"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="johnny"
-        android:textColor="#E91E63"
+    <RadioGroup
+        android:id="@+id/radio_ppg_ecg"
+        android:layout_width="214dp"
+        android:layout_height="177dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="117dp"
-        android:layout_height="77dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="76dp"
-        android:text="123"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <RadioButton
+            android:id="@+id/radio_ecg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ECG" />
+
+        <RadioButton
+            android:id="@+id/radio_ppg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PPG" />
+
+        <RadioButton
+            android:id="@+id/radio_stop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/STOP" />
+    </RadioGroup>
 </android.support.constraint.ConstraintLayout>
