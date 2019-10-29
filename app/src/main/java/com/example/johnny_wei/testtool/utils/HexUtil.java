@@ -284,4 +284,29 @@ public class HexUtil {
         }
     }
 
+    Long convert_4byte_to_Long(byte[] bytedata, int index)
+    {
+
+        return (long)(0xFF & 0) << 64 |
+                (long)(0xFF & 0) << 48 |
+                (long)(0xFF & 0) << 40 |
+                (long)(0xFF & 0) << 32 |
+                (long)(0xFF & bytedata[index]) << 24 |
+                (long)(0xFF & bytedata[index + 1]) << 16 |
+                (long)(0xFF & bytedata[index + 2]) << 8 |
+                (long)(0xFF & bytedata[index + 3]);
+    }
+
+    Long convert_3byte_to_Long(byte[] bytedata, int index)
+    {
+        return (long)(0xFF & 0) << 64 |
+                (long)(0xFF & 0) << 48 |
+                (long)(0xFF & 0) << 40 |
+                (long)(0xFF & 0) << 32 |
+                (long)(0xFF & 0) << 24 |
+                (long)(0xFF & bytedata[index]) << 16 |
+                (long)(0xFF & bytedata[index+1]) << 8 |
+                (long)(0xFF & bytedata[index+2]);
+    }
+
 }
