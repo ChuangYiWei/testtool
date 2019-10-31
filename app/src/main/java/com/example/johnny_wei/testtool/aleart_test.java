@@ -1,5 +1,6 @@
 package com.example.johnny_wei.testtool;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class aleart_test extends AppCompatActivity {
+    Activity mActivity = this;
     private final String TAG = getClass().getSimpleName();
     EditText txt;
     LayoutInflater inflater;
@@ -97,6 +99,33 @@ public class aleart_test extends AppCompatActivity {
         });
         alertDialog1 = builder.create();
         alertDialog1.show();
+    }
+
+    //
+    EditText editText;
+    android.app.AlertDialog.Builder editDialog;
+    void show_dialog_edit()
+    {
+        editDialog = new android.app.AlertDialog.Builder(mActivity);
+        editText= new EditText(mActivity);
+        editDialog.setView(editText);
+        editText.setText("");
+        editDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            // do something when the button is clicked
+            public void onClick(DialogInterface dialog, int arg1) {
+                Log.d("open_file_intent", "edit txt:" + (editText.getText().toString()));
+                dialog.cancel();
+            }
+        });
+        editDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            // do something when the button is clicked
+            public void onClick(DialogInterface dialog, int arg1) {
+                //...
+                dialog.cancel();
+            }
+        });
+
+        editDialog.show();
     }
 
 }

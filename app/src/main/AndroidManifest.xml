@@ -39,10 +39,10 @@
         <activity android:name=".handler" />
         <activity android:name=".ble" />
         <activity android:name=".invok" />
-        <activity android:name=".bytecheck" />
+        <activity android:name=".open_file_intent" />
         <activity android:name=".serviceExample" /> <!-- <activity android:name=".test_surface" android:screenOrientation="landscape" android:theme="@style/Theme.AppCompat.NoActionBar" android:configChanges="keyboard|keyboardHidden|orientation"> -->
         <activity
-            android:name=".open_file_intent"
+            android:name=".bytecheck"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

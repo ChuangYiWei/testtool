@@ -60,6 +60,46 @@ public class bytecheck extends AppCompatActivity {
 //        checkLength();
 //        checkUARTLength();
 
+        String Keycode = "Abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()";
+        List<String> keycode_list = new ArrayList<>();
+        for(int i =0;i<Keycode.length();i++){
+            keycode_list.add(Keycode);
+        }
+        String revKeycode = "Abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()";
+
+        compareKeyCode(revKeycode,keycode_list);
+
+    }
+
+    boolean compareKeyCode(String revKeycode,List<String> keycode_list)
+    {
+        if(revKeycode.length() == 0 ||
+                keycode_list.size() == 0)
+        {
+            Log.d(TAG,"size can't not be zero");
+        }
+
+        String keyCode = keycode_list.get(0);
+        Log.d(TAG,"keyCode:" + keyCode);
+        Log.d(TAG,"revKeycode:" + revKeycode);
+        if(revKeycode.length() != keyCode.length())
+        {
+            Log.d(TAG,"size not match");
+            Log.d(TAG,"revKeycode:" + revKeycode);
+            Log.d(TAG,"real keycode:" + keyCode);
+            return false;
+        }
+
+        for(int i =0;i<keyCode.length();i++){
+            if(revKeycode.charAt(i) != keyCode.charAt(i))
+            {
+                Log.d(TAG,"revKeycode:" + revKeycode.charAt(i) + " is not equal to " + "keyCode:" + keyCode.charAt(i));
+                return false;
+            }
+        }
+
+        //show wrong key code
+        return true;
     }
 
     void convertECG()

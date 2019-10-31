@@ -29,8 +29,7 @@ public class open_file_intent extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_txt);
-        editDialog = new AlertDialog.Builder(open_file_intent.this);
-        editText= new EditText(open_file_intent.this);
+
 
         //read current edit text
         HandlerThread ht = new HandlerThread("userdefine");
@@ -46,6 +45,8 @@ public class open_file_intent extends AppCompatActivity {
 
     void showdeditText()
     {
+        editDialog = new AlertDialog.Builder(open_file_intent.this);
+        editText= new EditText(open_file_intent.this);
         //editText.setText("01");
         editDialog.setView(editText);
         editText.setText("1234");
