@@ -54,6 +54,39 @@ public class write extends AppCompatActivity {
 
         writefile();
         readline("HID_CMD/HID_KB.txt");
+
+        List<String> mouse_list = new ArrayList<>();
+        readline("HID_CMD/mouse_cmd.txt",mouse_list);
+    }
+
+    //filename is folder+file under sd card root dir
+    void readline(String filename,List<String> str_list)
+    {
+        StringBuilder text = new StringBuilder();
+        try {
+            File file = new File(PATH_SD,filename);
+
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = br.readLine()) != null) {
+                str_list.add(line);
+                text.append(line);
+                text.append('\n');
+            }
+            br.close() ;
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        //save string in list
+        for(int i=0;i<str_list.size();i++)
+        {
+            Log.d(className, "string_list " + i + " :" + str_list.get(i));
+            String[] axis = str_list.get(i).split(",");
+            Log.d(className, "axis :" + axis[0]);
+            Log.d(className, "axis1 :" + axis[1]);
+            Log.d(className, "axis1 :" + axis[2]);
+            Log.d(className, "axis1 :" + axis[3]);
+        }
     }
 
     //filename is folder+file under sd card root dir

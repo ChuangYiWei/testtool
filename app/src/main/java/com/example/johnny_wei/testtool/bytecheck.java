@@ -1,5 +1,6 @@
 package com.example.johnny_wei.testtool;
 
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,10 @@ import com.example.johnny_wei.testtool.utils.DevUtil;
 import com.example.johnny_wei.testtool.utils.strUtil;
 
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,16 +64,50 @@ public class bytecheck extends AppCompatActivity {
 //        comparephyaddr();
 //        checkLength();
 //        checkUARTLength();
-
+/*
         String Keycode = "Abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()";
         List<String> keycode_list = new ArrayList<>();
         for(int i =0;i<Keycode.length();i++){
             keycode_list.add(Keycode);
         }
         String revKeycode = "Abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()";
-
         compareKeyCode(revKeycode,keycode_list);
+*/
+        List<String> mouse_list = new ArrayList<>();
+        readline("HID_CMD/mouse_cmd.txt",mouse_list);
 
+    }
+
+    static final String PATH_SD = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+    //filename is folder+file under sd card root dir
+    void readline(String filename,List<String> str_list)
+    {
+        StringBuilder text = new StringBuilder();
+        try {
+            File file = new File(PATH_SD,filename);
+
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = br.readLine()) != null) {
+                str_list.add(line);
+                text.append(line);
+                text.append('\n');
+            }
+            br.close() ;
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        //save string in list
+        for(int i=0;i<str_list.size();i++)
+        {
+            Log.d(TAG, "string_list " + i + " :" + str_list.get(i));
+            String[] axis = str_list.get(i).split(",");
+            Log.d(TAG, "axis :" + axis[0]);
+            Log.d(TAG, "axis1 :" + axis[1]);
+            Log.d(TAG, "axis1 :" + axis[2]);
+            Log.d(TAG, "axis1 :" + axis[3]);
+        }
     }
 
     boolean compareKeyCode(String revKeycode,List<String> keycode_list)
