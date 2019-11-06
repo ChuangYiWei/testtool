@@ -80,6 +80,9 @@ public class bytecheck extends AppCompatActivity {
 
     static final String PATH_SD = Environment.getExternalStorageDirectory().getAbsolutePath();
 
+    String axis;
+    String op;
+    String distance;
     //filename is folder+file under sd card root dir
     void readline(String filename,List<String> str_list)
     {
@@ -102,11 +105,21 @@ public class bytecheck extends AppCompatActivity {
         for(int i=0;i<str_list.size();i++)
         {
             Log.d(TAG, "string_list " + i + " :" + str_list.get(i));
-            String[] axis = str_list.get(i).split(",");
-            Log.d(TAG, "axis :" + axis[0]);
-            Log.d(TAG, "axis1 :" + axis[1]);
-            Log.d(TAG, "axis1 :" + axis[2]);
-            Log.d(TAG, "axis1 :" + axis[3]);
+            String[] split_array = str_list.get(i).split(",");
+            Log.d(TAG, "axis size :" + split_array.length);
+            Log.d(TAG, "cmd :" + split_array[0]);
+            if (split_array.length == 4) {
+                axis     = split_array[1]; //x or y
+                op       = split_array[2]; // + or -
+                distance = split_array[3];
+                Log.d(TAG, axis + op + distance);
+
+                float expected_X= (float)0.0;
+                float curX= (float)0.0;
+                Log.d(TAG, "distance :" +  Float.parseFloat(distance));
+
+            }
+
         }
     }
 

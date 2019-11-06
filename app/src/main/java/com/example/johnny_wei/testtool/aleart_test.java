@@ -36,8 +36,8 @@ public class aleart_test extends AppCompatActivity {
     RadioButton rdx_ecg;
     RadioButton rdx_ppg;
     private void radio_setup() {
-        rdx_ecg = findViewById(R.id.radio_ecg);
-        rdx_ppg = findViewById(R.id.radio_ppg);
+        rdx_ecg = dialogView.findViewById(R.id.radio_ecg);
+        rdx_ppg = dialogView.findViewById(R.id.radio_ppg);
         RadioGroup radioGroup_tx_rx = dialogView.findViewById(R.id.radio_ppg_ecg);
         radioGroup_tx_rx.setOnCheckedChangeListener(mOnCheckedChangeListener);
     }

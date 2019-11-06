@@ -20,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/mytheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".time"></activity>
+        <activity android:name=".aleart_test"></activity>
+        <activity android:name=".time" />
         <activity android:name=".spinner_option" />
         <activity android:name=".collection" />
         <activity android:name=".csv" />
@@ -31,7 +32,7 @@
         <activity android:name=".test_listview_tree" />
         <activity android:name=".expandleble" />
         <activity android:name=".scan_list" />
-        <activity android:name=".aleart_test" />
+        <activity android:name=".bytecheck" />
         <activity android:name=".customview" /> <!-- <activity android:name=".test_ble"> -->
         <activity android:name=".xmlandinvoke" />
         <activity android:name=".uart" />
@@ -42,7 +43,7 @@
         <activity android:name=".open_file_intent" />
         <activity android:name=".serviceExample" /> <!-- <activity android:name=".test_surface" android:screenOrientation="landscape" android:theme="@style/Theme.AppCompat.NoActionBar" android:configChanges="keyboard|keyboardHidden|orientation"> -->
         <activity
-            android:name=".bytecheck"
+            android:name=".test_view_tool"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
