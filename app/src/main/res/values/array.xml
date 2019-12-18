@@ -5,4 +5,8 @@
     <item>1234</item>
     <item>5678</item>
 </array>
+<array name="baud_rate">
+    <item>115200</item>
+    <item>921600</item>
+</array>
 </resources>

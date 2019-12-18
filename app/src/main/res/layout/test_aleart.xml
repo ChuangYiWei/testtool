@@ -7,8 +7,8 @@
 
     <RadioGroup
         android:id="@+id/radio_ppg_ecg"
-        android:layout_width="214dp"
-        android:layout_height="177dp"
+        android:layout_width="209dp"
+        android:layout_height="123dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -40,4 +40,36 @@
         android:text="alert"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radio_ppg_ecg" />
+
+    <Spinner
+        android:id="@+id/alert_00_spinner"
+        style="@style/Platform.Widget.AppCompat.Spinner"
+        android:layout_width="210dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="28dp"
+        android:background="#ffff00"
+        android:popupBackground="#ff00ff"
+        android:spinnerMode="dropdown"
+        android:text="please"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/alert_edt" />
+
+    <CheckBox
+        android:id="@+id/checkBox_0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:text="01"
+        app:layout_constraintStart_toEndOf="@+id/radio_ppg_ecg"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/checkBox_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="02"
+        app:layout_constraintStart_toStartOf="@+id/checkBox_0"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_0" />
 </android.support.constraint.ConstraintLayout>

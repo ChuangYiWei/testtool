@@ -10,9 +10,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class aleart_test extends AppCompatActivity {
@@ -21,7 +26,8 @@ public class aleart_test extends AppCompatActivity {
     EditText txt;
     LayoutInflater inflater;
     AlertDialog.Builder builder;
-     View dialogView;
+    View dialogView;
+    EditText alertEdt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,12 +41,14 @@ public class aleart_test extends AppCompatActivity {
 
     RadioButton rdx_ecg;
     RadioButton rdx_ppg;
+
     private void radio_setup() {
         rdx_ecg = dialogView.findViewById(R.id.radio_ecg);
         rdx_ppg = dialogView.findViewById(R.id.radio_ppg);
         RadioGroup radioGroup_tx_rx = dialogView.findViewById(R.id.radio_ppg_ecg);
         radioGroup_tx_rx.setOnCheckedChangeListener(mOnCheckedChangeListener);
     }
+
     private RadioGroup.OnCheckedChangeListener mOnCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
 
         @Override
@@ -56,6 +64,62 @@ public class aleart_test extends AppCompatActivity {
         }
     };
 
+    CheckBox checkBox1;
+    CheckBox checkBox2;
+
+    void setup_alert_checkbox()
+    {
+        checkBox1 = (CheckBox)dialogView.findViewById(R.id.checkBox_0);
+        checkBox2 = (CheckBox)dialogView.findViewById(R.id.checkBox_1);
+
+
+        checkBox1.setOnCheckedChangeListener(checkBoxOnCheckedChange);
+        checkBox2.setOnCheckedChangeListener(checkBoxOnCheckedChange);
+
+    }
+
+    private CompoundButton.OnCheckedChangeListener checkBoxOnCheckedChange =
+            new CompoundButton.OnCheckedChangeListener()
+            {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+                { //buttonView 為目前觸發此事件的 CheckBox, isChecked 為此 CheckBox 目前的選取狀態
+                    if(isChecked)//等於 buttonView.isChecked()
+                    {
+                        Toast.makeText(getApplicationContext(),buttonView.getText()+" 被選取", Toast.LENGTH_LONG).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(),buttonView.getText()+" 被取消", Toast.LENGTH_LONG).show();
+                    }
+                }
+            };
+
+    //不知道為何default顯示不出來
+    void setup_alert_Spinner()
+    {
+        String[] testModeArray = {"115200","9600"};
+        Spinner notifySpinner;
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, testModeArray);
+        notifySpinner= (Spinner)dialogView.findViewById(R.id.alert_00_spinner);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        notifySpinner.setSelection(1, true);
+        notifySpinner.setAdapter(adapter);
+        notifySpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView adapterView, View view, int position, long id) {
+
+                Log.d(TAG,"position:" + position);
+                Toast.makeText(mActivity, "You choose " + adapterView.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
+            }
+            @Override
+            public void onNothingSelected(AdapterView arg0) {
+                Toast.makeText(mActivity, "You did not choose", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     public void clk_start(View view) {
         //custom view
 //custom alert
@@ -68,12 +132,16 @@ public class aleart_test extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //do something
+                        Log.d(TAG,"Edit text is:" + alertEdt.getText().toString());
                     }
                 });
         AlertDialog dialog = builder.create();
 //        AlertDialog dialog = (AlertDialog) createAddPersonDialog();
         dialog.show();
+        alertEdt = dialogView.findViewById(R.id.alert_edt);
         radio_setup();
+        setup_alert_Spinner();
+        setup_alert_checkbox();
     }
 
     AlertDialog alertDialog1;
