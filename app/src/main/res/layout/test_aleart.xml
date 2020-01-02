@@ -59,11 +59,20 @@
         android:id="@+id/checkBox_0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
         android:text="01"
         app:layout_constraintStart_toEndOf="@+id/radio_ppg_ecg"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioButton
+        android:id="@+id/radio_00"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="R00"
+        app:layout_constraintStart_toStartOf="@+id/checkBox_1"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_1" />
 
     <CheckBox
         android:id="@+id/checkBox_1"
@@ -72,4 +81,12 @@
         android:text="02"
         app:layout_constraintStart_toStartOf="@+id/checkBox_0"
         app:layout_constraintTop_toBottomOf="@+id/checkBox_0" />
+
+    <RadioButton
+        android:id="@+id/radio_01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="R01"
+        app:layout_constraintStart_toStartOf="@+id/radio_00"
+        app:layout_constraintTop_toBottomOf="@+id/radio_00" />
 </android.support.constraint.ConstraintLayout>

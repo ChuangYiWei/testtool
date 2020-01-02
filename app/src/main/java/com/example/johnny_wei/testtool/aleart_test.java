@@ -42,6 +42,7 @@ public class aleart_test extends AppCompatActivity {
     RadioButton rdx_ecg;
     RadioButton rdx_ppg;
 
+    //group
     private void radio_setup() {
         rdx_ecg = dialogView.findViewById(R.id.radio_ecg);
         rdx_ppg = dialogView.findViewById(R.id.radio_ppg);
@@ -78,12 +79,14 @@ public class aleart_test extends AppCompatActivity {
 
     }
 
+    //這是CompoundButton,不是RadioGroup
     private CompoundButton.OnCheckedChangeListener checkBoxOnCheckedChange =
             new CompoundButton.OnCheckedChangeListener()
             {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
                 { //buttonView 為目前觸發此事件的 CheckBox, isChecked 為此 CheckBox 目前的選取狀態
+
                     if(isChecked)//等於 buttonView.isChecked()
                     {
                         Toast.makeText(getApplicationContext(),buttonView.getText()+" 被選取", Toast.LENGTH_LONG).show();
@@ -92,8 +95,25 @@ public class aleart_test extends AppCompatActivity {
                     {
                         Toast.makeText(getApplicationContext(),buttonView.getText()+" 被取消", Toast.LENGTH_LONG).show();
                     }
+
+                    Log.d(TAG,"buttonView.getId():"+buttonView.getId());
+                    Log.d(TAG,"R.id.checkBox_0:"+R.id.checkBox_0);
+                    Log.d(TAG,"R.id.checkBox_1:"+R.id.checkBox_1);
+
                 }
             };
+
+
+    RadioButton r00;
+    RadioButton r01;
+    //選了之後無法uncheck,通常不會這麼用
+    void setup_radio_multi()
+    {
+        r00 = dialogView.findViewById(R.id.radio_00);
+        r01 = dialogView.findViewById(R.id.radio_01);
+        r00.setOnCheckedChangeListener(checkBoxOnCheckedChange);
+        r01.setOnCheckedChangeListener(checkBoxOnCheckedChange);
+    }
 
     //不知道為何default顯示不出來
     void setup_alert_Spinner()
@@ -142,6 +162,7 @@ public class aleart_test extends AppCompatActivity {
         radio_setup();
         setup_alert_Spinner();
         setup_alert_checkbox();
+        setup_radio_multi();
     }
 
     AlertDialog alertDialog1;
