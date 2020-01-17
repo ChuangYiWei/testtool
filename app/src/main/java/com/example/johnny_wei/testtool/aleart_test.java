@@ -118,7 +118,7 @@ public class aleart_test extends AppCompatActivity {
     //不知道為何default顯示不出來
     void setup_alert_Spinner()
     {
-        String[] testModeArray = {"115200","9600"};
+        String[] testModeArray = {"921600","115200","9600"};
         Spinner notifySpinner;
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, testModeArray);
         notifySpinner= (Spinner)dialogView.findViewById(R.id.alert_00_spinner);

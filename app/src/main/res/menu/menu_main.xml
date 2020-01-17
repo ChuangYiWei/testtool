@@ -13,4 +13,8 @@
         android:id="@+id/action_about"
         android:title="關於"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/baud_rate"
+        android:title="baud_rate"
+        app:showAsAction="never"/>
 </menu>

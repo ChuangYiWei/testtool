@@ -48,10 +48,11 @@
         android:layout_height="45dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="28dp"
-        android:background="#ffff00"
-        android:popupBackground="#ff00ff"
+        android:background="#000000"
+        android:popupBackground="#000000"
         android:spinnerMode="dropdown"
-        android:text="please"
+        android:textColor="#FFEB3B"
+        android:text="No action"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/alert_edt" />
 

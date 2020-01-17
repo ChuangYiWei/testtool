@@ -43,8 +43,8 @@
         <activity android:name=".open_file_intent" />
         <activity android:name=".serviceExample" /> <!-- <activity android:name=".test_surface" android:screenOrientation="landscape" android:theme="@style/Theme.AppCompat.NoActionBar" android:configChanges="keyboard|keyboardHidden|orientation"> -->
         <activity
-            android:name=".aleart_test"
-            android:screenOrientation="landscape">
+            android:name=".aleart_test">
+            <!--android:screenOrientation="landscape"-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

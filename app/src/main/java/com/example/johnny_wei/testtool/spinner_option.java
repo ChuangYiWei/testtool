@@ -1,8 +1,11 @@
 package com.example.johnny_wei.testtool;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +17,10 @@ import android.widget.Toast;
 import com.example.johnny_wei.testtool.config.globalConfig;
 
 public class spinner_option extends AppCompatActivity {
-
+    LayoutInflater inflater;
+    AlertDialog.Builder builder;
+    View dialogView;
+    private final String TAG = getClass().getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,9 +72,35 @@ public class spinner_option extends AppCompatActivity {
             Toast.makeText(this, "使用說明", Toast.LENGTH_SHORT).show();
             return true;
         }
+        else if (id == R.id.action_help) {
+            // 按下「使用說明」要做的事
+            Toast.makeText(this, "幫忙", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        else if (id == R.id.baud_rate) {
+            // 按下「使用說明」要做的事
+            Toast.makeText(this, "baud rate", Toast.LENGTH_SHORT).show();
+            inflater = this.getLayoutInflater();
+            dialogView = inflater.inflate(R.layout.test_aleart, null);
+            builder = new AlertDialog.Builder(this);
+            builder.setTitle("這是標題")
+                    .setView(dialogView)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //do something
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+//        AlertDialog dialog = (AlertDialog) createAddPersonDialog();
+            dialog.show();
 
+            Toast.makeText(this, "baud_rate", Toast.LENGTH_SHORT).show();
 
+            return true;
+        }
         return super.onOptionsItemSelected(item);
+
     }
 
 }
