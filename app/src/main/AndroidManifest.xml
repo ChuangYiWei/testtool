@@ -22,7 +22,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".test_view_tool"></activity>
         <activity android:name=".time" />
-        <activity android:name=".spinner_option" />
+        <activity android:name=".aleart_test" />
         <activity android:name=".collection" />
         <activity android:name=".csv" />
         <activity android:name=".write" />
@@ -43,7 +43,7 @@
         <activity android:name=".open_file_intent" />
         <activity android:name=".serviceExample" /> <!-- <activity android:name=".test_surface" android:screenOrientation="landscape" android:theme="@style/Theme.AppCompat.NoActionBar" android:configChanges="keyboard|keyboardHidden|orientation"> -->
         <activity
-            android:name=".aleart_test">
+            android:name=".spinner_option">
             <!--android:screenOrientation="landscape"-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -118,12 +119,14 @@ public class aleart_test extends AppCompatActivity {
     //不知道為何default顯示不出來
     void setup_alert_Spinner()
     {
-        String[] testModeArray = {"921600","115200","9600"};
+        String[] testModeArray = {"115200","921600","9600"};
         Spinner notifySpinner;
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, testModeArray);
+        //ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, testModeArray);
+        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.myspinner, testModeArray);
         notifySpinner= (Spinner)dialogView.findViewById(R.id.alert_00_spinner);
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.myspinner);
         notifySpinner.setSelection(1, true);
         notifySpinner.setAdapter(adapter);
         notifySpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
@@ -131,6 +134,7 @@ public class aleart_test extends AppCompatActivity {
             public void onItemSelected(AdapterView adapterView, View view, int position, long id) {
 
                 Log.d(TAG,"position:" + position);
+
                 Toast.makeText(mActivity, "You choose " + adapterView.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
             }
             @Override

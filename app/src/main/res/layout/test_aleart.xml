@@ -43,7 +43,6 @@
 
     <Spinner
         android:id="@+id/alert_00_spinner"
-        style="@style/Platform.Widget.AppCompat.Spinner"
         android:layout_width="210dp"
         android:layout_height="45dp"
         android:layout_marginStart="32dp"

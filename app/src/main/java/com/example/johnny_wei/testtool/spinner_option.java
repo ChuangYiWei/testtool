@@ -25,16 +25,16 @@ public class spinner_option extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spinner_option);//使用Spinner
-        setupSpinner();
+        //setupSpinner();
     }
 
     void setupSpinner()
     {
         Spinner notifySpinner = (Spinner)findViewById(R.id.notify_spinner);
         String[] testModeArray = {"SPI mode","UART mode", "AIR UART CMD mode", "AIR HCI CMD mode"};
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, testModeArray);
+        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.myspinner, testModeArray);
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.myspinner);
         notifySpinner.setAdapter(adapter);
         notifySpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
             public void onItemSelected(AdapterView adapterView, View view, int position, long id){
@@ -64,6 +64,7 @@ public class spinner_option extends AppCompatActivity {
         // 依照id判斷點了哪個項目並做相應事件
         if (id == R.id.action_settings) {
             // 按下「設定」要做的事
+            setupSpinner();
             Toast.makeText(this, "設定", Toast.LENGTH_SHORT).show();
             return true;
         }
