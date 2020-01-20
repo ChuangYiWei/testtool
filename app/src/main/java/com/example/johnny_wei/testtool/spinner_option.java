@@ -60,8 +60,8 @@ public class spinner_option extends AppCompatActivity {
     RadioButton baudrate_921600;
     //group
     private void setup_setting_baudrate() {
-        linerView.findViewById(R.id.cons02_baudrate).setVisibility(View.VISIBLE);
-        View constraintView = (ConstraintLayout)linerView.findViewById(R.id.cons02_baudrate);
+        linerView.findViewById(R.id.cons_02_baudrate).setVisibility(View.VISIBLE);
+        View constraintView = (ConstraintLayout)linerView.findViewById(R.id.cons_02_baudrate);
         baudrate_115200 = constraintView.findViewById(R.id.con02_radio_115200);
         baudrate_921600 = constraintView.findViewById(R.id.con02_radio_921600);
         RadioGroup radioGroup_baudrate = constraintView.findViewById(R.id.con02_radioGr_baudrate);
@@ -143,7 +143,7 @@ public class spinner_option extends AppCompatActivity {
             cb.setChecked(true);
             linerView.addView(cb);
 
-            constraintView = (ConstraintLayout)linerView.findViewById(R.id.cons02_baudrate);
+            constraintView = (ConstraintLayout)linerView.findViewById(R.id.cons_02_baudrate);
 
             //constraint layout自己新增layout不會像linear一樣排好
 //            TextView m2 = new TextView(this);
