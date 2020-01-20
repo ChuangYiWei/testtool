@@ -1,5 +1,6 @@
 package com.example.johnny_wei.testtool;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
@@ -13,12 +14,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.johnny_wei.testtool.config.globalConfig;
 
 public class spinner_option extends AppCompatActivity {
     LayoutInflater inflater;
@@ -27,6 +29,7 @@ public class spinner_option extends AppCompatActivity {
     LinearLayout linerView;
     ConstraintLayout constraintView;
     private final String TAG = getClass().getSimpleName();
+    Activity mActivity = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +48,53 @@ public class spinner_option extends AppCompatActivity {
         notifySpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
             public void onItemSelected(AdapterView adapterView, View view, int position, long id){
 
+                Toast.makeText(spinner_option.this, "You choose "+adapterView.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
+            }
+            public void onNothingSelected(AdapterView arg0) {
+                Toast.makeText(spinner_option.this, "You did not choose", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    RadioButton baudrate_115200;
+    RadioButton baudrate_921600;
+    //group
+    private void setup_setting_baudrate() {
+        linerView.findViewById(R.id.cons02_baudrate).setVisibility(View.VISIBLE);
+        View constraintView = (ConstraintLayout)linerView.findViewById(R.id.cons02_baudrate);
+        baudrate_115200 = constraintView.findViewById(R.id.con02_radio_115200);
+        baudrate_921600 = constraintView.findViewById(R.id.con02_radio_921600);
+        RadioGroup radioGroup_baudrate = constraintView.findViewById(R.id.con02_radioGr_baudrate);
+        radioGroup_baudrate.setOnCheckedChangeListener(mOnCheckedChangeListener);
+    }
+
+    private RadioGroup.OnCheckedChangeListener mOnCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
+
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            switch (checkedId) {
+                case R.id.con02_radio_115200:
+                    Toast.makeText(mActivity, "115200 select", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.con02_radio_921600:
+                    Toast.makeText(mActivity, "921600 select", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
+
+    void setup_setting_Spinner()
+    {
+        linerView.findViewById(R.id.cons03_csv).setVisibility(View.VISIBLE);
+        View constraintView = (ConstraintLayout)linerView.findViewById(R.id.cons03_csv);
+        Spinner notifySpinner = (Spinner)constraintView.findViewById(R.id.con03_spin_csv);
+        String[] Baudrate_Array = getResources().getStringArray(R.array.csv_file_list);
+        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.myspinner, Baudrate_Array);
+
+        adapter.setDropDownViewResource(R.layout.myspinner);
+        notifySpinner.setAdapter(adapter);
+        notifySpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+            public void onItemSelected(AdapterView adapterView, View view, int position, long id){
                 Toast.makeText(spinner_option.this, "You choose "+adapterView.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
             }
             public void onNothingSelected(AdapterView arg0) {
@@ -73,8 +123,8 @@ public class spinner_option extends AppCompatActivity {
             inflater = this.getLayoutInflater();
             linerView = (LinearLayout) inflater.inflate(R.layout.test_linear, null);
             //測試把view關掉
-            linerView.findViewById(R.id.linear_00_tv_01).setVisibility(View.GONE);
-            linerView.findViewById(R.id.line_00).setVisibility(View.GONE);
+            linerView.findViewById(R.id.Cons_00_showlog).setVisibility(View.VISIBLE);
+            linerView.findViewById(R.id.line_00).setVisibility(View.VISIBLE);
             //自己新增
             TextView m1 = new TextView(this);
             String str= "linerView added 1";
@@ -88,15 +138,18 @@ public class spinner_option extends AppCompatActivity {
             m11.setText(str11);
             linerView.addView(m11);
 
-            constraintView = (ConstraintLayout)linerView.findViewById(R.id.constraint_00);
-            //xml裡面寫的改掉
-            TextView mtext =  constraintView.findViewById(R.id.cons_tv_00);
-            mtext.setText("content in xml being modifid \n");
+            CheckBox cb = new CheckBox(this);
+            cb.setText("Tutlane");
+            cb.setChecked(true);
+            linerView.addView(cb);
 
-            TextView m2 = new TextView(this);
-            String str2= "constraintView added 1";
-            m2.setText(str2);
-            constraintView.addView(m2);
+            constraintView = (ConstraintLayout)linerView.findViewById(R.id.cons02_baudrate);
+
+            //constraint layout自己新增layout不會像linear一樣排好
+//            TextView m2 = new TextView(this);
+//            String str2= "constraintView added 1";
+//            m2.setText(str2);
+//            constraintView.addView(m2);
 
             builder = new AlertDialog.Builder(this);
             builder.setTitle("這是標題")
@@ -111,6 +164,8 @@ public class spinner_option extends AppCompatActivity {
 //        AlertDialog dialog = (AlertDialog) createAddPersonDialog();
             dialog.show();
 
+            setup_setting_Spinner();
+            setup_setting_baudrate();
             Toast.makeText(this, "設定", Toast.LENGTH_SHORT).show();
             return true;
         }

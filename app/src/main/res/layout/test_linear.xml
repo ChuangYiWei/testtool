@@ -7,25 +7,42 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/linear_00_tv_01"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/Cons_00_showlog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="11"
-        android:textSize="20sp" />
+        android:visibility="gone">
+
+        <CheckBox
+            android:id="@+id/Cons_00__showlog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="show_log"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
     <View
         android:id="@+id/line_00"
         android:layout_width="match_parent"
-        android:background="@android:color/darker_gray"
-        android:layout_height="3dp" />
+        android:layout_height="3dp"
+        android:background="@android:color/darker_gray" />
 
-    <TextView
-        android:id="@+id/linear_00_tv_02"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/Cons_01_sreenOn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="22"
-        android:textSize="20sp" />
+        android:layout_height="50dp"
+        android:visibility="gone">
+
+        <CheckBox
+            android:id="@+id/checkBox4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="screen on forever"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
     <View
         android:id="@+id/line_01"
@@ -35,15 +52,64 @@
         />
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraint_00"
+        android:id="@+id/cons02_baudrate"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="100dp"
+        android:visibility="gone">
+
+        <RadioGroup
+            android:id="@+id/con02_radioGr_baudrate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Baud rate config" />
+
+            <RadioButton
+                android:id="@+id/con02_radio_115200"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="115200" />
+
+            <RadioButton
+                android:id="@+id/con02_radio_921600"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="921600" />
+        </RadioGroup>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <View
+        android:id="@+id/line02"
+        android:layout_width="wrap_content"
+        android:layout_height="3dp"
+        android:background= "#ff0000"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cons03_csv"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:visibility="gone">
+
+        <Spinner
+            android:id="@+id/con03_spin_csv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView20" />
 
         <TextView
-            android:id="@+id/cons_tv_00"
-            android:layout_width="115dp"
-            android:layout_height="60dp"
-            android:text="cons_tv00 content"
+            android:id="@+id/textView20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="config file"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>

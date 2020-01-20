@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-<array name="notify_array">
+<integer-array name="notify_array">
     <item>1234</item>
     <item>5678</item>
-</array>
-<array name="baud_rate">
-    <item>115200</item>
-    <item>921600</item>
-</array>
+</integer-array>
+<string-array name="csv_file_list">
+    <item>test1.csv</item>
+    <item>test2.csv</item>
+</string-array>
 </resources>
