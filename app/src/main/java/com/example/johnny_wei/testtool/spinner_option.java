@@ -18,6 +18,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ public class spinner_option extends AppCompatActivity {
     AlertDialog.Builder builder;
     View dialogView;
     LinearLayout linerView;
+    View scrollView;
     ConstraintLayout constraintView;
     private final String TAG = getClass().getSimpleName();
     Activity mActivity = this;
@@ -175,8 +177,24 @@ public class spinner_option extends AppCompatActivity {
             Toast.makeText(this, "使用說明", Toast.LENGTH_SHORT).show();
             return true;
         }
-        else if (id == R.id.action_help) {
+        else if (id == R.id.action_scroll) {
             // 按下「使用說明」要做的事
+            inflater = this.getLayoutInflater();
+            scrollView = (View) inflater.inflate(R.layout.test_scroll, null);
+            linerView = scrollView.findViewById(R.id.scroll_linear_00);
+
+            builder = new AlertDialog.Builder(this);
+            builder.setTitle("這是標題")
+                    .setView(scrollView)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //do something
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+//        AlertDialog dialog = (AlertDialog) createAddPersonDialog();
+            dialog.show();
             Toast.makeText(this, "幫忙", Toast.LENGTH_SHORT).show();
             return true;
         }

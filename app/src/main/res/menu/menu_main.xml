@@ -10,8 +10,8 @@
         android:title="Help"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_about"
-        android:title="關於"
+        android:id="@+id/action_scroll"
+        android:title="scroll"
         app:showAsAction="never"/>
     <item
         android:id="@+id/baud_rate"
