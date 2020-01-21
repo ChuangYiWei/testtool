@@ -15,10 +15,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -152,22 +152,25 @@ public class spinner_option extends AppCompatActivity {
 //            String str2= "constraintView added 1";
 //            m2.setText(str2);
 //            constraintView.addView(m2);
-
+            final EditText edt = linerView.findViewById(R.id.Cons_00_showlog).findViewById(R.id.cons_00__edt);
+            edt.setText("please input");
             builder = new AlertDialog.Builder(this);
             builder.setTitle("這是標題")
                     .setView(linerView)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+
+                            Log.d(TAG,"input text is:"+ edt.getText().toString());
                             //do something
                         }
                     });
             AlertDialog dialog = builder.create();
-//        AlertDialog dialog = (AlertDialog) createAddPersonDialog();
             dialog.show();
 
             setup_setting_Spinner();
             setup_setting_baudrate();
+
             Toast.makeText(this, "設定", Toast.LENGTH_SHORT).show();
             return true;
         }
@@ -181,7 +184,7 @@ public class spinner_option extends AppCompatActivity {
             // 按下「使用說明」要做的事
             inflater = this.getLayoutInflater();
             scrollView = (View) inflater.inflate(R.layout.test_scroll, null);
-            linerView = scrollView.findViewById(R.id.scroll_linear_00);
+            linerView = scrollView.findViewById(R.id.scroll_linear);
 
             builder = new AlertDialog.Builder(this);
             builder.setTitle("這是標題")
@@ -193,7 +196,6 @@ public class spinner_option extends AppCompatActivity {
                         }
                     });
             AlertDialog dialog = builder.create();
-//        AlertDialog dialog = (AlertDialog) createAddPersonDialog();
             dialog.show();
             Toast.makeText(this, "幫忙", Toast.LENGTH_SHORT).show();
             return true;
