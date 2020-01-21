@@ -1,67 +1,41 @@
 package com.example.johnny_wei.testtool;
-
-import android.content.Context;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import java.io.BufferedReader;
+import com.example.johnny_wei.testtool.csv_util.CSV_ReaderUtil;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 public class csv extends AppCompatActivity {
     static final String PATH_SD = Environment.getExternalStorageDirectory().getAbsolutePath();
-
-    public class CSVReader {
-        Context context;
-        String fileName;
-        List<String[]> rows = new ArrayList<>();
-
-        public CSVReader(Context context, String fileName) {
-            this.context = context;
-            this.fileName = fileName;
-        }
-
-        public List<String[]> readCSV() throws IOException {
-            //InputStream is = context.getAssets().open(fileName);
-            //InputStreamReader isr = new InputStreamReader(is);
-            File file = new File(PATH_SD,fileName);
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-            String csvSplitBy = ",";
-
-            br.readLine();
-
-            while ((line = br.readLine()) != null) {
-                String[] row = line.split(csvSplitBy);
-                rows.add(row);
-            }
-            return rows;
-        }
-    }
-
+    private final String TAG = getClass().getSimpleName();
+    String config_folder = "01_config";
+    String config_name = "test_config.csv";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_csv);
-        String filename = "converted.csv";
+        String filename = PATH_SD +
+                          File.separator +
+                          config_folder +
+                          File.separator +
+                          config_name;
+        is_File_Exist(filename);
         readcsv(filename);
     }
 
     void readcsv(String filename)
     {
         List<String[]> rows = new ArrayList<>();
-        CSVReader csvReader = new CSVReader(csv.this, filename);
-        try {
-            rows = csvReader.readCSV();
-        } catch (IOException e) {
-            e.printStackTrace();
+        CSV_ReaderUtil csvReader = new CSV_ReaderUtil(csv.this, filename);
+        rows = csvReader.readCSV();
+
+        if (rows == null) {
+            Log.e(TAG, "rows is null");
+            return;
         }
 
         for (int i = 0; i < rows.size(); i++) {
@@ -70,6 +44,16 @@ public class csv extends AppCompatActivity {
         }
     }
 
+    boolean is_File_Exist(String absfileName)
+    {
+        File file = new File(absfileName);
+        if (!file.exists()) {
+            Log.d(TAG, "fileName: " + absfileName + " not exist");
+            return false;
+        }
+        Log.d(TAG, "fileName: " + absfileName + " exist");
+        return true;
+    }
 
     //write csv
 //    https://www.mkyong.com/java/how-to-export-data-to-csv-file-java/

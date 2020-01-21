@@ -90,7 +90,7 @@ public class spinner_option extends AppCompatActivity {
         linerView.findViewById(R.id.cons03_csv).setVisibility(View.VISIBLE);
         View constraintView = (ConstraintLayout)linerView.findViewById(R.id.cons03_csv);
         Spinner notifySpinner = (Spinner)constraintView.findViewById(R.id.con03_spin_csv);
-        String[] Baudrate_Array = getResources().getStringArray(R.array.csv_file_list);
+        final String[] Baudrate_Array = getResources().getStringArray(R.array.csv_file_list);
         ArrayAdapter adapter = new ArrayAdapter(this, R.layout.myspinner, Baudrate_Array);
 
         adapter.setDropDownViewResource(R.layout.myspinner);
@@ -98,6 +98,7 @@ public class spinner_option extends AppCompatActivity {
         notifySpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
             public void onItemSelected(AdapterView adapterView, View view, int position, long id){
                 Toast.makeText(spinner_option.this, "You choose "+adapterView.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
+                Log.d(TAG,"select file is:" + Baudrate_Array[position]);
             }
             public void onNothingSelected(AdapterView arg0) {
                 Toast.makeText(spinner_option.this, "You did not choose", Toast.LENGTH_LONG).show();
@@ -182,6 +183,7 @@ public class spinner_option extends AppCompatActivity {
         }
         else if (id == R.id.action_scroll) {
             // 按下「使用說明」要做的事
+            //TODO add test item in scroll
             inflater = this.getLayoutInflater();
             scrollView = (View) inflater.inflate(R.layout.test_scroll, null);
             linerView = scrollView.findViewById(R.id.scroll_linear);
