@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.example.johnny_wei.testtool.utils.DevUtil.printDeviceInfo;
+
 public class collection extends AppCompatActivity {
     String TAG = getClass().getSimpleName();
 
@@ -33,11 +35,34 @@ public class collection extends AppCompatActivity {
         init_data();
         // Start both threads
 
-        t1.start();
-        SystemClock.sleep(1000);
-        t2.start();
+        //-------------------------------------------------------
+//        t1.start();
+//        SystemClock.sleep(1000);
+//        t2.start();
+        //-------------------------------------------------------
         //LinkedHashMap_demo();
 //        demo();
+        hashmapDemo();
+        printDeviceInfo();
+    }
+    //-------------------------------------------------------
+    void hashmapDemo()
+    {
+        //1.先加入支援的hci cmd function
+        //2.csv抓到時對應function
+        String org_cmd = "01030C00";
+        Log.d(TAG,"parsing first 6 chara:" + org_cmd.substring(0,6));
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("01130C","Write_Local_Name_Command");
+        map.put("01030C","HCI_Reset");
+        Log.d(TAG,"key set:" + map.keySet().toString());
+        Log.d(TAG,"entry set:" + map.entrySet().toString());
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            System.out.println("key= " + entry.getKey() + ", value=" + entry.getValue());
+        }
+        Log.d(TAG,"get key 01030C00:" +map.get("01030C"));
+        Log.d(TAG,"get key not exit :" +map.get("xxx"));
+
     }
     //--------------------------------------------------------
     void init_data()
