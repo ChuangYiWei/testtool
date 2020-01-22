@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.johnny_wei.testtool.csv_util.CSV_ReaderUtil;
+import com.example.johnny_wei.testtool.utils.csv_util.CSV_ReaderUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +14,12 @@ public class csv extends AppCompatActivity {
     private final String TAG = getClass().getSimpleName();
     String config_folder = "01_config";
     String config_name = "test_config.csv";
+    int itme_idx = 0;
+    int func_name_idx = 1;
+    int cmd_idx = 3;
+    int evt_idx= 4;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +29,9 @@ public class csv extends AppCompatActivity {
                           config_folder +
                           File.separator +
                           config_name;
+        //check file exist
         is_File_Exist(filename);
+        //check list is null or not
         readcsv(filename);
     }
 
@@ -41,11 +49,14 @@ public class csv extends AppCompatActivity {
         for (int i = 0; i < rows.size(); i++) {
             Log.d("row len:", String.format("row len %s", rows.get(i).length));
             Log.d("csv_test", String.format("row %s:%s,%s", i, rows.get(i)[0], rows.get(i)[1]));
+            Log.d(TAG,"item:"+rows.get(i)[itme_idx]);
+            Log.d(TAG,"func_name:"+rows.get(i)[func_name_idx]);
+            Log.d(TAG,"cmd:"+rows.get(i)[cmd_idx]);
+            Log.d(TAG,"evt:"+rows.get(i)[evt_idx]);
         }
     }
 
-    boolean is_File_Exist(String absfileName)
-    {
+    boolean is_File_Exist(String absfileName) {
         File file = new File(absfileName);
         if (!file.exists()) {
             Log.d(TAG, "fileName: " + absfileName + " not exist");
