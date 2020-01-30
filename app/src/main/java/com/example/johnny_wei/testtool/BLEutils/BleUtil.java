@@ -14,14 +14,25 @@ import static android.content.pm.PackageManager.FEATURE_BLUETOOTH_LE;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_COARSE_LOCATION;
 
 public class BleUtil {
+    private static String DevMac;
+
     public static void enableBluetooth(Activity activity, int requestCode) {
         Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         activity.startActivityForResult(intent, requestCode);
     }
 
     public static String GetDevMAC(Activity activity) {
-        return android.provider.Settings.Secure.getString(activity.getContentResolver(), "bluetooth_address");
+        DevMac = android.provider.Settings.Secure.getString(activity.getContentResolver(), "bluetooth_address");
+        return DevMac;
     }
+
+    //this funcction works only if GetDevMAC has been called
+    public static String GetBluetoothMAC() {
+        if(DevMac == null)
+            return "";
+        return DevMac;
+    }
+//    DevMac
 
     public static void enableBluetoothPermisison(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

@@ -32,7 +32,9 @@ import com.example.johnny_wei.testtool.config.globalConfig;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static android.bluetooth.BluetoothDevice.TRANSPORT_LE;
@@ -43,6 +45,9 @@ public class LiteBle  {
     public static LiteBle StaticLiteble;
     private Context mContext = null;
     IBLECallback IbleCB = null;
+    Map<IBLECallback, String> bleCallbackMap = new HashMap<IBLECallback, String>();
+
+    boolean BLE_DEBUG = false;
     IBLEScanCallback IbleScanCB = null;
     private BluetoothManager mbluetoothManager;
     private BluetoothAdapter mbluetoothAdapter;
@@ -60,6 +65,7 @@ public class LiteBle  {
 
     public static final int STATE_DISCONNECTED = 0;
     public static final int STATE_SCANNING = 1;
+    public static final int STATE_STOP_SCANNING = 2;
     public static final int STATE_CONNECTING = 2;
     public static final int STATE_CONNECTED = 3;
     public static final int STATE_SERVICES_DISCOVERED = 4;
@@ -90,9 +96,17 @@ public class LiteBle  {
         Log.w(TAG,"LiteBle open thread id:" + Thread.currentThread().getId());
     }
 
-    public void setCallback(IBLECallback cb)
+    public void listenBLECallback(IBLECallback cb, String tag)
     {
-        IbleCB = cb;
+//        IbleCB = cb;
+        Log.w(TAG,"listenBLECallback cb:" + cb);
+        bleCallbackMap.put(cb,tag);
+    }
+
+    public void unlistenBLECallback(IBLECallback cb)
+    {
+        Log.w(TAG,"unlistenBLECallback cb:" + cb);
+        bleCallbackMap.remove(cb);
     }
 
     public void listenScanCallback(IBLEScanCallback cb)
@@ -125,15 +139,17 @@ public class LiteBle  {
     public void startLeScan(final BluetoothAdapter.LeScanCallback scanCallback, final long scanTime) {
 
         // Stops scanning after a pre-defined scan period.
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                stopLeScan(scanCallback);
-                fireScanCallback(STATE_DISCONNECTED);
-                isMainThread();
-            }
-        }, scanTime);
+        if(0 != scanTime) {
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    stopLeScan(scanCallback);
+                    fireScanCallback(STATE_STOP_SCANNING);
+                    isMainThread();
+                }
+            }, scanTime);
+        }
 
         connectionState = STATE_SCANNING;
         mbluetoothAdapter.startLeScan(scanCallback);
@@ -143,8 +159,10 @@ public class LiteBle  {
     void fireScanCallback(int connectionState) {
         if (IbleScanCB != null) {
             if (connectionState == STATE_SCANNING) {
+                Log.w(TAG,"callback STATE_SCANNING");
                 IbleScanCB.OnScanStart();
-            } else if (connectionState == STATE_DISCONNECTED) {
+            } else if (connectionState == STATE_STOP_SCANNING) {
+                Log.w(TAG,"callback STATE_STOP_SCANNING");
                 IbleScanCB.OnScanStop();
             }
         }
@@ -153,14 +171,14 @@ public class LiteBle  {
     public void stopLeScan(BluetoothAdapter.LeScanCallback scanCallback) {
         mbluetoothAdapter.stopLeScan(scanCallback);
         if (connectionState == STATE_SCANNING) {
-            connectionState = STATE_DISCONNECTED;
+            connectionState = STATE_STOP_SCANNING;
         }
         fireScanCallback(connectionState);
     }
 
     @RequiresApi(21)
     public void startAPI21_LeScan(final ScanCallback scanCallback, final long scanTime) {
-        mBluetoothLeScanner = BluetoothAdapter.getDefaultAdapter().getBluetoothLeScanner();
+        mBluetoothLeScanner = mbluetoothAdapter.getBluetoothLeScanner();
         // Stops scanning after a pre-defined scan period.
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -168,7 +186,7 @@ public class LiteBle  {
             public void run() {
                 mBluetoothLeScanner.stopScan(scanCallback);
                 isMainThread();
-                fireScanCallback(STATE_DISCONNECTED);
+                fireScanCallback(STATE_STOP_SCANNING);
             }
         }, scanTime);
 
@@ -179,17 +197,19 @@ public class LiteBle  {
 
     @RequiresApi(21)
     public void startAPI21_LeScan(final ScanCallback scanCallback, List<ScanFilter> filters, ScanSettings settings, final long scanTime) {
-        mBluetoothLeScanner = BluetoothAdapter.getDefaultAdapter().getBluetoothLeScanner();
+        mBluetoothLeScanner = mbluetoothAdapter.getBluetoothLeScanner();
         // Stops scanning after a pre-defined scan period.
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mBluetoothLeScanner.stopScan(scanCallback);
-                isMainThread();
-                fireScanCallback(STATE_DISCONNECTED);
-            }
-        }, scanTime);
+        if (scanTime != 0) {
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mBluetoothLeScanner.stopScan(scanCallback);
+                    isMainThread();
+                    fireScanCallback(STATE_STOP_SCANNING);
+                }
+            }, scanTime);
+        }
 
         connectionState = STATE_SCANNING;
         mBluetoothLeScanner.startScan(filters, settings, scanCallback);
@@ -200,7 +220,7 @@ public class LiteBle  {
     public void stopAPI21_LeScan(ScanCallback scanCallback) {
         mBluetoothLeScanner.stopScan(scanCallback);
         if (connectionState == STATE_SCANNING) {
-            connectionState = STATE_DISCONNECTED;
+            connectionState = STATE_STOP_SCANNING;
         }
         fireScanCallback(connectionState);
     }
@@ -334,6 +354,11 @@ public class LiteBle  {
         return true;
     }
 
+    public String GetBluetoothDeviceAddress()
+    {
+        return mBluetoothDeviceAddress;
+    }
+
     /**
      * Disconnects an existing connection or cancel a pending connection. The
      * disconnection result is reported asynchronously through the
@@ -350,6 +375,7 @@ public class LiteBle  {
         runOnMainThread(new Runnable() {
             @Override
             public void run() {
+                if(mBluetoothGatt == null){return;}
                 mBluetoothGatt.disconnect();
                 refresDeviceCache();
                 mBluetoothGatt.close();
@@ -404,6 +430,37 @@ public class LiteBle  {
         return true;
     }
 
+    public boolean enableNotifybyCharacteristic(
+            BluetoothGattCharacteristic chara,
+            final String descriptorUUID
+    )
+    {
+
+        if (chara == null) {
+            Log.e(TAG, "BluetoothGattCharacteristic is null");
+            return false;
+        }
+
+        if (!mBluetoothGatt.setCharacteristicNotification(chara, true)) {
+            Log.e(TAG,  "setCharacteristicNotification fail");
+            return false;
+        }
+
+        BluetoothGattDescriptor descriptor = chara.getDescriptor(UUID.fromString(descriptorUUID));
+
+        if (null != descriptor) {
+            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            if (!mBluetoothGatt.writeDescriptor(descriptor)) {
+                Log.e(TAG, "writeDescriptor fail");
+                return false;
+            }
+        } else {
+            Log.e(TAG,  "null descriptor");
+            return false;
+        }
+        return true;
+    }
+
     /**
      * write data to characteristic
      */
@@ -411,6 +468,10 @@ public class LiteBle  {
             final String serviceUUID,
             final String characteristicUUID,
             byte[] bytes) {
+        if (mBluetoothGatt == null) {
+            Log.e(TAG, "null mBluetoothGatt");
+            return false;
+        }
         Log.d(TAG,"writeDataToCharacteristic:" + characteristicUUID);
         BluetoothGattService service = getService(mBluetoothGatt, serviceUUID);
         if (service == null) {
@@ -461,7 +522,53 @@ public class LiteBle  {
         return true;
     }
 
+    /**
+     * read descriptor data
+     */
+    public boolean readDescriptor(
+            final String serviceUUID,
+            final String characteristicUUID,
+            final String descriptorUUID) {
+        Log.d(TAG, "readDescriptor uuid:" + descriptorUUID);
 
+        if (mbluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.d(TAG, "BluetoothAdapter null");
+            return false;
+        }
+        UUID service_uuid = UUID.fromString(serviceUUID);
+        UUID chara_uuid = UUID.fromString(characteristicUUID);
+        BluetoothGattService service = mBluetoothGatt.getService(service_uuid);
+
+        if (service == null) {
+            Log.e(TAG, "service is null");
+            return false;
+        }
+
+        BluetoothGattCharacteristic chara = service.getCharacteristic(chara_uuid);
+        if (chara == null) {
+            Log.e(TAG, "BluetoothGattCharacteristic is null");
+            return false;
+        }
+
+        BluetoothGattDescriptor descriptor = chara.getDescriptor(UUID.fromString(descriptorUUID));
+        mBluetoothGatt.readDescriptor(descriptor);
+
+        return true;
+    }
+
+    private static String bytes2String(byte[] inputbyte){
+        String back = "";
+        if (inputbyte != null) {
+            if (inputbyte.length > 0) {
+                final StringBuilder stringBuilder = new StringBuilder(inputbyte.length);
+                for (byte byteChar : inputbyte) {
+                    stringBuilder.append(String.format("%02X", byteChar));
+                }
+                back = stringBuilder.toString();
+            }
+        }
+        return back;
+    }
 
     /*gatt callback*/
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
@@ -497,17 +604,22 @@ public class LiteBle  {
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             Log.d(TAG, "onServicesDiscovered.");
+            String err = "";
             if (BluetoothGatt.GATT_SUCCESS == status) {
                 connectionState =  STATE_SERVICES_DISCOVERED;
-                if(CBnotNULL()) {
-                    IbleCB.SrvDiscoverSuccessCB();
-                }
             } else {
-                if(CBnotNULL()) {
-                    String err = "";
-                    IbleCB.SrvDiscoverFailCB(err + status);
+                   printConnectException(gatt, status);
+            }
+            //fire callback
+            if (bleCallbackMap.size() != 0) {
+                for (Map.Entry<IBLECallback, String> entry : bleCallbackMap.entrySet()) {
+                    Log.d(TAG, "fire callback = " + entry.getKey() + " to class " + entry.getValue());
+                    if (BluetoothGatt.GATT_SUCCESS == status) {
+                        entry.getKey().SrvDiscoverSuccessCB();
+                    } else {
+                        entry.getKey().SrvDiscoverFailCB(err + status);
+                    }
                 }
-                printConnectException(gatt, status);
             }
             super.onServicesDiscovered(gatt, status);
         }
@@ -516,16 +628,22 @@ public class LiteBle  {
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             Log.d(TAG, "onCharacteristicRead");
             if (BluetoothGatt.GATT_SUCCESS == status) {
-                if(CBnotNULL()) {
-                    IbleCB.readCharacteristicSuccessCB(
-                            characteristic.getUuid().toString(),
-                            characteristic.getValue());
-                }
             } else {
-                if(CBnotNULL()) {
-                    IbleCB.readCharacteristicFailCB(characteristic.getUuid().toString(), status);
-                }
                 Log.e(TAG, "onCharacteristicRead fail");
+            }
+            //fire callback
+            if (bleCallbackMap.size() != 0) {
+                for (Map.Entry<IBLECallback, String> entry : bleCallbackMap.entrySet()) {
+                    Log.d(TAG, "fire callback = " + entry.getKey() + " to class " + entry.getValue());
+                    if (BluetoothGatt.GATT_SUCCESS == status) {
+                        entry.getKey().readCharacteristicSuccessCB(
+                                characteristic.getUuid().toString(),
+                                characteristic.getValue());
+                    } else {
+                        Log.e(TAG, "fire callback = " + entry.getKey() + " to class " + entry.getValue());
+                        entry.getKey().readCharacteristicFailCB(characteristic.getUuid().toString(), status);
+                    }
+                }
             }
             //printbytes(characteristic.getValue());
             super.onCharacteristicRead(gatt, characteristic, status);
@@ -535,30 +653,41 @@ public class LiteBle  {
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             Log.d(TAG, "onCharacteristicWrite");
             if (BluetoothGatt.GATT_SUCCESS == status) {
-                if(CBnotNULL()) {
-                    IbleCB.writeCharacteristicSuccessCB(
-                            characteristic.getUuid().toString(),
-                            characteristic.getValue());
-                }
             } else {
-                if(CBnotNULL()) {
-                    IbleCB.writeCharacteristicFailCB(characteristic.getUuid().toString(), status);
-                }
                 Log.e(TAG, "onCharacteristicWrite fail");
+            }
+            //fire callback
+            if (bleCallbackMap.size() != 0) {
+                for (Map.Entry<IBLECallback, String> entry : bleCallbackMap.entrySet()) {
+                    Log.d(TAG, "fire callback = " + entry.getKey() + " to class " + entry.getValue());
+                    if (BluetoothGatt.GATT_SUCCESS == status) {
+                        entry.getKey().writeCharacteristicSuccessCB(
+                                characteristic.getUuid().toString(),
+                                characteristic.getValue());
+                    } else {
+                        entry.getKey().writeCharacteristicFailCB(characteristic.getUuid().toString(), status);
+                    }
+                }
             }
             super.onCharacteristicWrite(gatt, characteristic, status);
         }
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-            Log.d(TAG, "onCharacteristicChanged");
-            if(CBnotNULL()) {
-                IbleCB.CharaValueChangedSuccessCB(
-                        characteristic.getUuid().toString(),
-                        characteristic.getValue()
-                );
+            Log.w(TAG, "onCharacteristicChanged");
+
+            //fire callback
+            if (bleCallbackMap.size() != 0) {
+                for (Map.Entry<IBLECallback, String> entry : bleCallbackMap.entrySet()) {
+                    Log.d(TAG, "fire callback = " + entry.getKey() + " to class " + entry.getValue());
+                    entry.getKey().CharaValueChangedSuccessCB(
+                            characteristic.getUuid().toString(),
+                            characteristic.getValue());
+                }
             }
-            printbytes(characteristic.getValue());
+            if(BLE_DEBUG) {
+                printbytes(characteristic.getValue());
+            }
             super.onCharacteristicChanged(gatt, characteristic);
         }
 
@@ -566,16 +695,22 @@ public class LiteBle  {
         public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
             Log.d(TAG, "onDescriptorRead");
             if (BluetoothGatt.GATT_SUCCESS == status) {
-                if(CBnotNULL()) {
-                    IbleCB.readDescSuccessCB(
-                            descriptor.getUuid().toString(),
-                            descriptor.getValue());
-                }
             } else {
-                if(CBnotNULL()) {
-                    IbleCB.readDescFailCB(descriptor.getUuid().toString(), status);
-                }
                 Log.e(TAG, "onDescriptorRead fail");
+            }
+
+            //fire callback
+            if (bleCallbackMap.size() != 0) {
+                for (Map.Entry<IBLECallback, String> entry : bleCallbackMap.entrySet()) {
+                    Log.d(TAG, "fire callback = " + entry.getKey() + " to class " + entry.getValue());
+                    if (BluetoothGatt.GATT_SUCCESS == status) {
+                        entry.getKey().readDescSuccessCB(
+                                descriptor.getUuid().toString(),
+                                descriptor.getValue());
+                    } else {
+                        entry.getKey().readDescFailCB(descriptor.getUuid().toString(), status);
+                    }
+                }
             }
             super.onDescriptorRead(gatt, descriptor, status);
         }
@@ -584,16 +719,22 @@ public class LiteBle  {
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
             Log.d(TAG, "onDescriptorWrite");
             if (BluetoothGatt.GATT_SUCCESS == status) {
-                if(CBnotNULL()) {
-                    IbleCB.writeDescSuccessCB(
-                            descriptor.getUuid().toString(),
-                            descriptor.getValue());
-                }
             } else {
-                if(CBnotNULL()) {
-                    IbleCB.writeDescFailCB(descriptor.getUuid().toString(), status);
+                Log.e(TAG, "onDescriptorWrite fail");
+            }
+
+            //fire callback
+            if (bleCallbackMap.size() != 0) {
+                for (Map.Entry<IBLECallback, String> entry : bleCallbackMap.entrySet()) {
+                    Log.d(TAG, "onDescriptorWrite callback = " + entry.getKey() + " to class " + entry.getValue());
+                    if (BluetoothGatt.GATT_SUCCESS == status) {
+                        entry.getKey().writeDescSuccessCB(
+                                descriptor.getUuid().toString(),
+                                descriptor.getValue());
+                    } else {
+                        entry.getKey().writeDescFailCB(descriptor.getUuid().toString(), status);
+                    }
                 }
-                Log.e(TAG, "onDescriptorRead fail");
             }
             super.onDescriptorWrite(gatt, descriptor, status);
         }
@@ -640,8 +781,10 @@ public class LiteBle  {
             errStr = "unknow: " + gattStatus;
             Log.e(TAG, "ConnectException received: " + gattStatus);
         }
-        if(CBnotNULL()) {
-            IbleCB.ConnectFailCB(errStr);
+        //fire callback
+        for (Map.Entry<IBLECallback, String> entry : bleCallbackMap.entrySet()) {
+            Log.d(TAG, "fire callback = " + entry.getKey() + " to class " + entry.getValue());
+            entry.getKey().ConnectFailCB(errStr);
         }
     }
 
@@ -688,7 +831,7 @@ public class LiteBle  {
             Log.d(TAG, "from main thread:");
             runnable.run();
         } else {
-            Log.d(TAG, "not main thread:");
+            Log.d(TAG, "not main thread, use main thread handler:");
             handler.post(runnable);
         }
 //        runOnMainThread(new Runnable() {
@@ -709,12 +852,24 @@ public class LiteBle  {
 
     private void sendCallback(int state)
     {
+        if (bleCallbackMap.size() == 0) {
+            Log.e(TAG,"empty callback");
+            return;
+        }
         switch (state) {
             case STATE_CONNECTED:
-                IbleCB.ConnectedCB();
+                //fire callback
+                for (Map.Entry<IBLECallback, String> entry : bleCallbackMap.entrySet()) {
+                    Log.d(TAG, "fire callback = " + entry.getKey() + " to class " + entry.getValue());
+                    entry.getKey().ConnectedCB();
+                }
                 break;
             case STATE_DISCONNECTED:
-                IbleCB.DisConnectCB();
+                //fire callback
+                for (Map.Entry<IBLECallback, String> entry : bleCallbackMap.entrySet()) {
+                    Log.d(TAG, "fire callback = " + entry.getKey() + " to class " + entry.getValue());
+                    entry.getKey().DisConnectCB();
+                }
                 break;
             default:
                 break;
@@ -724,6 +879,45 @@ public class LiteBle  {
     private boolean CBnotNULL()
     {
         return (IbleCB != null);
+    }
+
+    //use for throughput
+    /**
+     * Write characteristic, requesting acknoledgement by the remote device
+     public static final int WRITE_TYPE_DEFAULT = 0x02;
+     /**
+     * Write characteristic without requiring a response by the remote device
+     public static final int WRITE_TYPE_NO_RESPONSE = 0x01;
+     */
+    BluetoothGattCharacteristic g_throughput_chara;
+    public boolean Set_throughput_chara_writeType(
+            String serviceUUID,
+            String characteristicUUID,
+            int writetype)
+    {
+
+        Log.d(TAG,"writeDataToCharacteristic:" + characteristicUUID);
+        BluetoothGattService service = getService(mBluetoothGatt, serviceUUID);
+        if (service == null) {
+            Log.e(TAG,  "service is null");
+            return false;
+        }
+        g_throughput_chara = getCharacteristic(service, characteristicUUID);
+        if (g_throughput_chara == null) {
+            Log.e(TAG, "BluetoothGattCharacteristic is null");
+            return false;
+        }
+
+        g_throughput_chara.setWriteType(writetype);
+        Log.e(TAG, "g_throughput_chara.getProperties():" + g_throughput_chara.getProperties());
+        return true;
+    }
+
+    public BluetoothGattCharacteristic Get_throughput_chara() {
+        if (null == g_throughput_chara) {
+            return null;
+        }
+        return g_throughput_chara;
     }
 
 }

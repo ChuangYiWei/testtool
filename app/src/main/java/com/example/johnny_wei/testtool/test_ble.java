@@ -357,7 +357,7 @@ public class test_ble extends AppCompatActivity  {
     private class GattCB extends LiteBLECallback {
         GattCB() {
             //this reference(pointer) is GattCB
-            liteBluetooth.setCallback(this);
+            liteBluetooth.listenBLECallback(this,TAG);
         }
         //implement callback
         @Override

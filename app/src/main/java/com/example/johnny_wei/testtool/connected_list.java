@@ -113,7 +113,7 @@ public class connected_list extends AppCompatActivity {
     private class GattCB extends LiteBLECallback {
         GattCB() {
             //this reference(pointer) is GattCB
-            StaticLiteble.setCallback(this);
+            StaticLiteble.listenBLECallback(this,TAG);
         }
 
         //implement callback
