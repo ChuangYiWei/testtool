@@ -7,7 +7,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -55,7 +54,7 @@ public class ble extends AppCompatActivity {
     }
 
     private void setupview() {
-        ed_mac = findViewById(R.id.ed_mac);
+        ed_mac = findViewById(R.id.mb_ed_mac);
     }
 
 

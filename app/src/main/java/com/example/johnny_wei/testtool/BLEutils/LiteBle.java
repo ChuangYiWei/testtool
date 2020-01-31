@@ -43,6 +43,9 @@ import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQ
 
 public class LiteBle  {
     public static LiteBle StaticLiteble;
+    public static LiteBle[] StaticLitebleArray = {null,null};
+
+
     private Context mContext = null;
     IBLECallback IbleCB = null;
     Map<IBLECallback, String> bleCallbackMap = new HashMap<IBLECallback, String>();
@@ -93,9 +96,18 @@ public class LiteBle  {
         mbluetoothAdapter = mbluetoothManager.getAdapter();
         StaticLiteble = this;
 
-        Log.w(TAG,"LiteBle open thread id:" + Thread.currentThread().getId());
+        Log.w(TAG,"StaticLiteble:" + StaticLiteble);
     }
 
+    // 0: dut, 1:MB
+    public LiteBle(Context context, int dev_type) {
+        this.mContext = context;
+        mbluetoothManager = (BluetoothManager) mContext.getApplicationContext().getSystemService(Context.BLUETOOTH_SERVICE);
+        mbluetoothAdapter = mbluetoothManager.getAdapter();
+        StaticLitebleArray[dev_type] = this;
+        Log.d(TAG,"StaticLitebleArray["+dev_type+']' + StaticLitebleArray[dev_type]);
+        Log.d(TAG,"LiteBle open thread id:" + Thread.currentThread().getId());
+    }
     public void listenBLECallback(IBLECallback cb, String tag)
     {
 //        IbleCB = cb;

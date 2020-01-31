@@ -11,8 +11,8 @@
         android:id="@+id/button9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:onClick="clk_scan"
         android:text="scan"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,57 +22,53 @@
         android:id="@+id/button10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
         android:onClick="clk_stopscan"
         android:text="stop_scan"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button9" />
+        app:layout_constraintStart_toEndOf="@+id/button9"
+        app:layout_constraintTop_toTopOf="@+id/button9" />
 
     <Button
         android:id="@+id/button11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="16dp"
         android:onClick="clk_getState"
         android:text="get_state"
-        app:layout_constraintStart_toEndOf="@+id/button9"
+        app:layout_constraintStart_toEndOf="@+id/button10"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="84dp"
         android:text="TextView"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/button10"
+        app:layout_constraintStart_toEndOf="@+id/mb_ed_mac"
         app:layout_constraintTop_toBottomOf="@+id/button11" />
 
     <Button
         android:id="@+id/button12"
         android:layout_width="91dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:onClick="clk_connect"
-        android:text="connect"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:onClick="clk_MB_connect"
+        android:text="MB_connect"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button10" />
+        app:layout_constraintTop_toBottomOf="@+id/button9" />
 
     <EditText
-        android:id="@+id/ed_mac"
+        android:id="@+id/mb_ed_mac"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="20:18:11:30:18:34"
+        android:text="00:11:22:33:44:55"
         app:layout_constraintStart_toEndOf="@+id/button12"
-        app:layout_constraintTop_toBottomOf="@+id/tv_status" />
+        app:layout_constraintTop_toBottomOf="@+id/button9" />
 
     <Button
         android:id="@+id/button13"
@@ -80,43 +76,41 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:onClick="clk_disconn"
-        android:text="dis_conn"
+        android:onClick="clk_MB_disconn"
+        android:text="MB_dis_conn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button12" />
 
     <Button
-        android:id="@+id/button14"
+        android:id="@+id/button18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:onClick="clk_reboot_BT"
-        android:text="reboot_BT"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="16dp"
+        android:onClick="clk_readphy"
+        android:text="BLE5_phy"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button13" />
+        app:layout_constraintTop_toBottomOf="@+id/button29" />
+
+    <Button
+        android:id="@+id/button20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="28dp"
+        android:onClick="clk_support"
+        android:text="BLE5_support"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button18" />
 
     <Button
         android:id="@+id/button15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:onClick="clk_notify"
-        android:text="notify"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button14" />
-
-    <Button
-        android:id="@+id/button16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:onClick="clk_write_data"
-        android:text="write_data"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button15" />
+        android:onClick="clk_enable_notify"
+        android:text="MB_en_notify"
+        app:layout_constraintStart_toEndOf="@+id/button13"
+        app:layout_constraintTop_toTopOf="@+id/button13" />
 
     <Button
         android:id="@+id/button17"
@@ -129,24 +123,95 @@
         app:layout_constraintTop_toTopOf="@+id/button16" />
 
     <Button
-        android:id="@+id/button18"
+        android:id="@+id/button16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
-        android:onClick="clk_readphy"
-        android:text="BLE5_phy"
+        android:layout_marginTop="8dp"
+        android:onClick="clk_write_data"
+        android:text="write_data"
+        app:layout_constraintStart_toEndOf="@+id/button13"
+        app:layout_constraintTop_toBottomOf="@+id/button15" />
+
+    <EditText
+        android:id="@+id/dut_edt_mac"
+        android:layout_width="165dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="20:19:10:03:AA:BB"
+        app:layout_constraintStart_toEndOf="@+id/button25"
+        app:layout_constraintTop_toTopOf="@+id/button25" />
+
+    <Button
+        android:id="@+id/button27"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="clk_dut_state"
+        android:text="DUT_STATE"
+        app:layout_constraintStart_toEndOf="@+id/dut_edt_mac"
+        app:layout_constraintTop_toTopOf="@+id/dut_edt_mac" />
+
+    <Button
+        android:id="@+id/button14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="clk_reboot_BT"
+        android:text="reboot_BT"
+        app:layout_constraintStart_toEndOf="@+id/button18"
+        app:layout_constraintTop_toTopOf="@+id/button18" />
+
+    <Button
+        android:id="@+id/button25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="28dp"
+        android:onClick="clk_dut_conn"
+        android:text="DUT_conn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button16" />
 
     <Button
-        android:id="@+id/button20"
+        android:id="@+id/button26"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:onClick="clk_support"
-        android:text="BLE5_support"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="28dp"
+        android:onClick="clk_dut_disconn"
+        android:text="DUT_DISOCNN"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button18" />
+        app:layout_constraintTop_toBottomOf="@+id/button25" />
+
+    <Button
+        android:id="@+id/button28"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:onClick="clk_dut_enable_notify"
+        android:text="dut_en_notify"
+        app:layout_constraintStart_toEndOf="@+id/button26"
+        app:layout_constraintTop_toTopOf="@+id/button26" />
+
+    <Button
+        android:id="@+id/button29"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="clk_dut_write_data"
+        android:text="dut_write"
+        app:layout_constraintStart_toStartOf="@+id/button28"
+        app:layout_constraintTop_toBottomOf="@+id/button28" />
+
+    <Button
+        android:id="@+id/button30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="16dp"
+        android:onClick="clk_dut_readData"
+        android:text="dut_read"
+        app:layout_constraintStart_toEndOf="@+id/button29"
+        app:layout_constraintTop_toBottomOf="@+id/button28" />
+
 </android.support.constraint.ConstraintLayout>
