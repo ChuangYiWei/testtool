@@ -366,6 +366,32 @@ public class LiteBle  {
         return true;
     }
 
+    public boolean connectRetry(final String address) {
+        int idx = -1;
+        while (idx < 5) {
+            idx++;
+            if (isConnected()) {
+                Log.d(TAG, "connected skip retry");
+                break;
+            }
+            if (idx <= 2) {
+                //if fail reconnect
+                Log.d(TAG, "ble not connected," + "retry:" + idx);
+                connect(address);
+            } else if (idx == 3) {
+                Log.w(TAG, "reboot bluetooth" + "retry:" + idx);
+                rebootBluetooth();
+                connect(address);
+            } else if (idx == 4) {
+                Log.e(TAG,"retry fail ");
+                return false;
+            }
+            SystemClock.sleep(5000);
+        }
+        return true;
+    }
+
+
     public String GetBluetoothDeviceAddress()
     {
         return mBluetoothDeviceAddress;

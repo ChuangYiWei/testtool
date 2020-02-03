@@ -78,6 +78,7 @@ public class test_ble extends AppCompatActivity  {
         liteBluetooth_DUT = StaticLiteble;
         liteBluetooth = new LiteBle(thisActivity,1);
         liteBluetooth.enableBluetoothIfDisabled(thisActivity, 1);
+
         gatt_cb = new GattCB();
         dut_gatt_cb = new DUT_GattCB();
 
@@ -188,7 +189,8 @@ public class test_ble extends AppCompatActivity  {
     }};
 
     public void clk_dut_conn(View view) {
-        liteBluetooth_DUT.connect(dut_ed_mac.getText().toString());
+        //liteBluetooth_DUT.connect(dut_ed_mac.getText().toString());
+        liteBluetooth_DUT.connectRetry(dut_ed_mac.getText().toString());
     }
 
     public void clk_dut_disconn(View view) {
@@ -280,7 +282,8 @@ public class test_ble extends AppCompatActivity  {
     }
 
     public void clk_MB_connect(View view) {
-        liteBluetooth.connect(ed_mac.getText().toString());
+        liteBluetooth.connectRetry(ed_mac.getText().toString());
+//        liteBluetooth.connect(ed_mac.getText().toString());
     }
 
     public void clk_MB_disconn(View view) {
@@ -443,6 +446,11 @@ public class test_ble extends AppCompatActivity  {
         public void CharaValueChangedSuccessCB(String UUID, byte[] CBData) {
             Log.e(TAG, "MB CharaValueChanged uuid:" + UUID);
             printbytes(CBData);
+            byte bytes[] = {(byte)0x01, 0x02, 0x03};
+            liteBluetooth.writeDataToCharacteristic(
+                    globalConfig.UUID_SERVICE,
+                    globalConfig.UUID_WRITE_CHARA,
+                    bytes);
         }
 
 
@@ -519,6 +527,11 @@ public class test_ble extends AppCompatActivity  {
         public void CharaValueChangedSuccessCB(String UUID, byte[] CBData) {
             Log.e(TAG, "DUT CharaValueChanged uuid:" + UUID);
             printbytes(CBData);
+            byte bytes[] = {(byte)0x04, 0x05, 0x06};
+            liteBluetooth_DUT.writeDataToCharacteristic(
+                    globalConfig.UUID_SERVICE,
+                    globalConfig.UUID_WRITE_CHARA,
+                    bytes);
         }
 
 

@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.johnny_wei.testtool.BLEutils.LiteBle;
-
+//mock up , create ble instance
 public class mockup extends AppCompatActivity {
     //BLE
     private LiteBle liteBluetooth;
