@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -33,6 +34,7 @@ import com.example.johnny_wei.testtool.BLEutils.callback.LiteBLECallback;
 import com.example.johnny_wei.testtool.config.globalConfig;
 import com.example.johnny_wei.testtool.utils.DevUtil;
 import com.example.johnny_wei.testtool.utils.Permission;
+import com.example.johnny_wei.testtool.utils.commonUtil;
 
 
 import java.util.List;
@@ -43,11 +45,17 @@ import static com.example.johnny_wei.testtool.BLEutils.LiteBle.StaticLiteble;
 import static com.example.johnny_wei.testtool.config.globalConfig.BLE5_API_LEVEL;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_COARSE_LOCATION;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE;
+import static com.example.johnny_wei.testtool.config.globalConfig.UUID_NOTIFY_CHARA;
+import static com.example.johnny_wei.testtool.config.globalConfig.UUID_SERVICE;
+import static com.example.johnny_wei.testtool.config.globalConfig.UUID_WRITE_CHARA;
+import static com.example.johnny_wei.testtool.config.globalConfig.UUID_WRITE_DESCRIPTOR;
+import static com.example.johnny_wei.testtool.utils.commonUtil.intToByteArray;
 
 
 public class test_ble extends AppCompatActivity  {
     String TAG = getClass().getSimpleName();
     Activity thisActivity = this;
+
     private LiteBle liteBluetooth;
     private LiteBle liteBluetooth_DUT;
     private Handler m_userHandler;
@@ -59,6 +67,13 @@ public class test_ble extends AppCompatActivity  {
     GattCB gatt_cb;
     DUT_GattCB dut_gatt_cb;
     private PopupWindow mPopupWindow;
+
+    int mb_tx_pkt_count = 0;
+    int mb_rx_pkt_count = 0;
+    int mb_max_pkt_count = 0x7FFFFFFF;
+    int dut_tx_pkt_count = 0;
+    int dut_rx_pkt_count = 0;
+    int dut_max_pkt_count = 0x7FFFFFFF;
 
     @RequiresApi(21)
     private ScanCallback mScanCallback;
@@ -75,8 +90,11 @@ public class test_ble extends AppCompatActivity  {
         HandlerThread ht_thread = new HandlerThread("name");
         ht_thread.start();
         m_userHandler = new Handler(ht_thread.getLooper());
+        //DUT
         liteBluetooth_DUT = StaticLiteble;
-        liteBluetooth = new LiteBle(thisActivity,1);
+
+        //MB
+        liteBluetooth = new LiteBle(thisActivity,1);//1:MB
         liteBluetooth.enableBluetoothIfDisabled(thisActivity, 1);
 
         gatt_cb = new GattCB();
@@ -204,6 +222,20 @@ public class test_ble extends AppCompatActivity  {
         liteBluetooth_DUT.printServices(liteBluetooth_DUT.getBluetoothGatt());
     }
 
+    public void clk_mb_loop(View view) {
+        //先reset再傳
+        mb_reset2Default();
+        byte tx[] = intToByteArray(mb_tx_pkt_count);
+        mb_send_data(UUID_SERVICE,UUID_WRITE_CHARA,tx);
+    }
+
+    public void clk_dut_loop(View view) {
+        //先reset再傳
+        dut_reset2Default();
+        byte tx[] = intToByteArray(dut_tx_pkt_count);
+        dut_send_data(UUID_SERVICE,UUID_WRITE_CHARA,tx);
+    }
+
 
     @RequiresApi(21)
     public class LeScannerAPI21 extends ScanCallback
@@ -301,16 +333,16 @@ public class test_ble extends AppCompatActivity  {
 
     public void clk_enable_notify(View view) {
         liteBluetooth.enableCharacteristicNotify(
-                globalConfig.UUID_SERVICE,
-                globalConfig.UUID_NOTIFY_CHARA,
-                globalConfig.UUID_WRITE_DESCRIPTOR);
+                UUID_SERVICE,
+                UUID_NOTIFY_CHARA,
+                UUID_WRITE_DESCRIPTOR);
     }
 
     public void clk_write_data(View view) {
         byte bytes[] = {0x0, 0x9, 0x9};
         liteBluetooth.writeDataToCharacteristic(
-                globalConfig.UUID_SERVICE,
-                globalConfig.UUID_WRITE_CHARA,
+                UUID_SERVICE,
+                UUID_WRITE_CHARA,
                 bytes
         );
     }
@@ -321,16 +353,16 @@ public class test_ble extends AppCompatActivity  {
 
     public void clk_dut_enable_notify(View view) {
         liteBluetooth_DUT.enableCharacteristicNotify(
-                globalConfig.UUID_SERVICE,
-                globalConfig.UUID_NOTIFY_CHARA,
-                globalConfig.UUID_WRITE_DESCRIPTOR);
+                UUID_SERVICE,
+                UUID_NOTIFY_CHARA,
+                UUID_WRITE_DESCRIPTOR);
     }
 
     public void clk_dut_write_data(View view) {
         byte bytes[] = {0x1, 0x2, 0x3};
         liteBluetooth_DUT.writeDataToCharacteristic(
-                globalConfig.UUID_SERVICE,
-                globalConfig.UUID_WRITE_CHARA,
+                UUID_SERVICE,
+                UUID_WRITE_CHARA,
                 bytes
         );
     }
@@ -410,6 +442,13 @@ public class test_ble extends AppCompatActivity  {
         }
 
         @Override
+        public void SrvDiscoverSuccessCB() {
+            Log.w(TAG, "SrvDiscoverSuccessCB callback !!!");
+            liteBluetooth.enableCharacteristicNotify(UUID_SERVICE,UUID_NOTIFY_CHARA,UUID_WRITE_DESCRIPTOR);
+            super.SrvDiscoverSuccessCB();
+        }
+
+        @Override
         public void DisConnectCB() {
             Log.w(TAG, "MB disconnected callback !!!");
         }
@@ -445,12 +484,21 @@ public class test_ble extends AppCompatActivity  {
         @Override
         public void CharaValueChangedSuccessCB(String UUID, byte[] CBData) {
             Log.e(TAG, "MB CharaValueChanged uuid:" + UUID);
-            printbytes(CBData);
-            byte bytes[] = {(byte)0x01, 0x02, 0x03};
-            liteBluetooth.writeDataToCharacteristic(
-                    globalConfig.UUID_SERVICE,
-                    globalConfig.UUID_WRITE_CHARA,
-                    bytes);
+//            printbytes(CBData);
+//            byte bytes[] = {(byte)0x01, 0x02, 0x03};
+//            liteBluetooth.writeDataToCharacteristic(
+//                    UUID_SERVICE,
+//                    UUID_WRITE_CHARA,
+//                    bytes);
+
+            mb_tx_pkt_count++;
+            mb_rx_pkt_count++;
+            if (mb_max_pkt_count == mb_tx_pkt_count) {
+                dut_reset2Default();
+            }
+            byte tx[] = intToByteArray(mb_tx_pkt_count);
+            Log.d(TAG,"send data : 0x" + String.format("%08X", mb_tx_pkt_count));
+            mb_send_data(UUID_SERVICE, UUID_WRITE_CHARA, tx);
         }
 
 
@@ -491,6 +539,13 @@ public class test_ble extends AppCompatActivity  {
         }
 
         @Override
+        public void SrvDiscoverSuccessCB() {
+            Log.w(TAG, "DUT SrvDiscoverSuccessCB callback !!!");
+            liteBluetooth_DUT.enableCharacteristicNotify(UUID_SERVICE,UUID_NOTIFY_CHARA,UUID_WRITE_DESCRIPTOR);
+            super.SrvDiscoverSuccessCB();
+        }
+
+        @Override
         public void DisConnectCB() {
             Log.w(TAG, "DUT_GattCB disconnected callback !!!");
         }
@@ -526,12 +581,21 @@ public class test_ble extends AppCompatActivity  {
         @Override
         public void CharaValueChangedSuccessCB(String UUID, byte[] CBData) {
             Log.e(TAG, "DUT CharaValueChanged uuid:" + UUID);
-            printbytes(CBData);
-            byte bytes[] = {(byte)0x04, 0x05, 0x06};
-            liteBluetooth_DUT.writeDataToCharacteristic(
-                    globalConfig.UUID_SERVICE,
-                    globalConfig.UUID_WRITE_CHARA,
-                    bytes);
+//            printbytes(CBData);
+//            byte bytes[] = {(byte)0x04, 0x05, 0x06};
+//            liteBluetooth_DUT.writeDataToCharacteristic(
+//                    UUID_SERVICE,
+//                    UUID_WRITE_CHARA,
+//                    bytes);
+            // prepare send next
+            dut_tx_pkt_count++;
+            dut_rx_pkt_count++;
+            if (dut_max_pkt_count == dut_tx_pkt_count) {
+                dut_reset2Default();
+            }
+            byte tx[] = intToByteArray(dut_tx_pkt_count);
+            Log.d(TAG,"send data : 0x" + String.format("%08X", dut_tx_pkt_count));
+            dut_send_data(UUID_SERVICE, UUID_WRITE_CHARA, tx);
         }
 
 
@@ -567,6 +631,33 @@ public class test_ble extends AppCompatActivity  {
             printStr = printStr + String.format("%02x", data);
         }
         Log.d(TAG, "printbytes:" + printStr);
+    }
+
+    void mb_reset2Default()
+    {
+        mb_tx_pkt_count = 0;
+        mb_rx_pkt_count = 0;
+    }
+
+    void dut_reset2Default()
+    {
+        dut_tx_pkt_count = 0;
+        dut_rx_pkt_count = 0;
+    }
+
+    //write data to specific uuid
+    private void mb_send_data(String service_uuid,
+                           String chara_uuid,
+                           final byte[] bytes)
+    {
+        liteBluetooth.writeDataToCharacteristic(service_uuid, chara_uuid, bytes);
+    }
+
+    private void dut_send_data(String service_uuid,
+                              String chara_uuid,
+                              final byte[] bytes)
+    {
+        liteBluetooth_DUT.writeDataToCharacteristic(service_uuid, chara_uuid, bytes);
     }
 
     @Override

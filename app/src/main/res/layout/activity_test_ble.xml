@@ -66,7 +66,7 @@
         android:layout_marginTop="4dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="00:11:22:33:44:55"
+        android:text="20:20:02:03:13:47"
         app:layout_constraintStart_toEndOf="@+id/button12"
         app:layout_constraintTop_toBottomOf="@+id/button9" />
 
@@ -80,28 +80,6 @@
         android:text="MB_dis_conn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button12" />
-
-    <Button
-        android:id="@+id/button18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="16dp"
-        android:onClick="clk_readphy"
-        android:text="BLE5_phy"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button29" />
-
-    <Button
-        android:id="@+id/button20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="28dp"
-        android:onClick="clk_support"
-        android:text="BLE5_support"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button18" />
 
     <Button
         android:id="@+id/button15"
@@ -132,52 +110,65 @@
         app:layout_constraintStart_toEndOf="@+id/button13"
         app:layout_constraintTop_toBottomOf="@+id/button15" />
 
-    <EditText
-        android:id="@+id/dut_edt_mac"
-        android:layout_width="165dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="20:19:10:03:AA:BB"
-        app:layout_constraintStart_toEndOf="@+id/button25"
-        app:layout_constraintTop_toTopOf="@+id/button25" />
-
     <Button
         android:id="@+id/button27"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         android:onClick="clk_dut_state"
         android:text="DUT_STATE"
         app:layout_constraintStart_toEndOf="@+id/dut_edt_mac"
         app:layout_constraintTop_toTopOf="@+id/dut_edt_mac" />
 
     <Button
-        android:id="@+id/button14"
+        android:id="@+id/button18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="clk_reboot_BT"
-        android:text="reboot_BT"
-        app:layout_constraintStart_toEndOf="@+id/button18"
-        app:layout_constraintTop_toTopOf="@+id/button18" />
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="28dp"
+        android:onClick="clk_readphy"
+        android:text="BLE5_phy"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button29" />
+
+    <Button
+        android:id="@+id/button20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="56dp"
+        android:onClick="clk_support"
+        android:text="BLE5_support"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button18" />
+
+    <EditText
+        android:id="@+id/dut_edt_mac"
+        android:layout_width="165dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="4dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="20:20:02:03:13:51"
+        app:layout_constraintStart_toEndOf="@+id/button25"
+        app:layout_constraintTop_toTopOf="@+id/button25" />
 
     <Button
         android:id="@+id/button25"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="20dp"
         android:onClick="clk_dut_conn"
         android:text="DUT_conn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button16" />
+        app:layout_constraintTop_toBottomOf="@+id/button31" />
 
     <Button
         android:id="@+id/button26"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="32dp"
         android:onClick="clk_dut_disconn"
         android:text="DUT_DISOCNN"
         app:layout_constraintStart_toStartOf="parent"
@@ -187,7 +178,7 @@
         android:id="@+id/button28"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="16dp"
         android:onClick="clk_dut_enable_notify"
         android:text="dut_en_notify"
         app:layout_constraintStart_toEndOf="@+id/button26"
@@ -197,7 +188,8 @@
         android:id="@+id/button29"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="12dp"
         android:onClick="clk_dut_write_data"
         android:text="dut_write"
         app:layout_constraintStart_toStartOf="@+id/button28"
@@ -207,11 +199,42 @@
         android:id="@+id/button30"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
         android:onClick="clk_dut_readData"
         android:text="dut_read"
         app:layout_constraintStart_toEndOf="@+id/button29"
         app:layout_constraintTop_toBottomOf="@+id/button28" />
+
+    <Button
+        android:id="@+id/button14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:onClick="clk_reboot_BT"
+        android:text="reboot_BT"
+        app:layout_constraintStart_toEndOf="@+id/button18"
+        app:layout_constraintTop_toTopOf="@+id/button18" />
+
+    <Button
+        android:id="@+id/button31"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:onClick="clk_mb_loop"
+        android:text="MB_Loop"
+        app:layout_constraintEnd_toStartOf="@+id/button16"
+        app:layout_constraintTop_toBottomOf="@+id/button13" />
+
+    <Button
+        android:id="@+id/button32"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="36dp"
+        android:onClick="clk_dut_loop"
+        android:text="DUT_LOOP"
+        app:layout_constraintEnd_toStartOf="@+id/button29"
+        app:layout_constraintTop_toBottomOf="@+id/button26" />
 
 </android.support.constraint.ConstraintLayout>
