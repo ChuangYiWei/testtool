@@ -1,17 +1,20 @@
-package com.example.johnny_wei.testtool;
-public class Person2 {
+package com.example.johnny_wei.testtool.BLETest;
+
+import com.example.johnny_wei.testtool.invok;
+
+public class Invoke_sample {
 
     private int age;
     private String name;
     protected int height;
     public String school;
 
-    Person2(){
-        this.name = "Person2";
+    Invoke_sample(){
+        this.name = "Invoke_sample";
         age = 22;
     }
 
-    Person2(String name) {
+    public Invoke_sample(String name) {
         this.name = name;
     }
 
