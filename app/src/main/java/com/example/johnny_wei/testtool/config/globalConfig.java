@@ -7,6 +7,10 @@ public class globalConfig {
 
     public static final int BLE5_API_LEVEL = 26;
 
+    //device
+    public static final int DUT = 0;
+    public static final int MB = 1;
+
     //drop down menu
     public static final int SPI_MODE = 0;
     public static final int UART_MODE = 1;

@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/mytheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".test_ble"></activity>
+        <activity android:name=".mockup"></activity>
         <activity android:name=".test_view_tool" />
         <activity android:name=".time" />
         <activity android:name=".aleart_test" />
@@ -43,7 +43,7 @@
         <activity android:name=".invok" />
         <activity android:name=".open_file_intent" />
         <activity android:name=".serviceExample" /> <!-- <activity android:name=".test_surface" android:screenOrientation="landscape" android:theme="@style/Theme.AppCompat.NoActionBar" android:configChanges="keyboard|keyboardHidden|orientation"> -->
-        <activity android:name=".mockup">
+        <activity android:name=".test_ble">
 
             <!-- android:screenOrientation="landscape" -->
             <intent-filter>

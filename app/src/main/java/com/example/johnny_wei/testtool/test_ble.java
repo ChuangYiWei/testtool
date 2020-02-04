@@ -42,7 +42,10 @@ import java.util.List;
 import static android.bluetooth.BluetoothDevice.PHY_LE_2M;
 import static android.bluetooth.BluetoothDevice.PHY_OPTION_NO_PREFERRED;
 import static com.example.johnny_wei.testtool.BLEutils.LiteBle.StaticLiteble;
+import static com.example.johnny_wei.testtool.BLEutils.LiteBle.StaticLitebleArray;
 import static com.example.johnny_wei.testtool.config.globalConfig.BLE5_API_LEVEL;
+import static com.example.johnny_wei.testtool.config.globalConfig.DUT;
+import static com.example.johnny_wei.testtool.config.globalConfig.MB;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_COARSE_LOCATION;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE;
 import static com.example.johnny_wei.testtool.config.globalConfig.UUID_NOTIFY_CHARA;
@@ -90,12 +93,13 @@ public class test_ble extends AppCompatActivity  {
         HandlerThread ht_thread = new HandlerThread("name");
         ht_thread.start();
         m_userHandler = new Handler(ht_thread.getLooper());
+
         //DUT
-        liteBluetooth_DUT = StaticLiteble;
+        liteBluetooth_DUT = new LiteBle(thisActivity, DUT);//0:DUT
+        liteBluetooth_DUT.enableBluetoothIfDisabled(thisActivity, 1);
 
         //MB
-        liteBluetooth = new LiteBle(thisActivity,1);//1:MB
-        liteBluetooth.enableBluetoothIfDisabled(thisActivity, 1);
+        liteBluetooth = new LiteBle(MB);//1:MB
 
         gatt_cb = new GattCB();
         dut_gatt_cb = new DUT_GattCB();
@@ -472,8 +476,8 @@ public class test_ble extends AppCompatActivity  {
 
         @Override
         public void writeCharacteristicSuccessCB(String UUID, byte[] CBData) {
-            Log.w(TAG, "MB write uuid " + UUID);
-            printbytes(CBData);
+            //Log.w(TAG, "MB write uuid " + UUID);
+            //printbytes(CBData);
         }
 
         @Override
@@ -569,8 +573,8 @@ public class test_ble extends AppCompatActivity  {
 
         @Override
         public void writeCharacteristicSuccessCB(String UUID, byte[] CBData) {
-            Log.w(TAG, "DUT write uuid " + UUID);
-            printbytes(CBData);
+//            Log.w(TAG, "DUT write uuid " + UUID);
+//            printbytes(CBData);
         }
 
         @Override

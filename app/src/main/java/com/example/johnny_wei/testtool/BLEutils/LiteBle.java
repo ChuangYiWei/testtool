@@ -52,8 +52,8 @@ public class LiteBle  {
 
     boolean BLE_DEBUG = false;
     IBLEScanCallback IbleScanCB = null;
-    private BluetoothManager mbluetoothManager;
-    private BluetoothAdapter mbluetoothAdapter;
+    private static BluetoothManager mbluetoothManager;
+    private static BluetoothAdapter mbluetoothAdapter;
     private BluetoothGatt mBluetoothGatt;
     private String mBluetoothDeviceAddress;
 
@@ -90,6 +90,9 @@ public class LiteBle  {
     public static final int CB_STATE_DESC_WRITE_SUCCESS = 0x18;
     public static final int CB_STATE_DESC_WRITE_FAIL = 0x19;
 
+    /**
+     * bluetoothManager and bluetoothAdapter have only one instance in application
+     */
     public LiteBle(Context context) {
         this.mContext = context = context.getApplicationContext();
         mbluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
@@ -98,8 +101,14 @@ public class LiteBle  {
 
         Log.w(TAG,"StaticLiteble:" + StaticLiteble);
     }
-
-    // 0: dut, 1:MB
+    /**
+     * 2020/02/03 add
+     * bluetoothManager and bluetoothAdapter have only one instance in application
+     * @param context use for get bluetooth adapter
+     * @param dev_type index for control multiple device
+     * 0: DUT, 1:MB
+     */
+    //
     public LiteBle(Context context, int dev_type) {
         this.mContext = context;
         mbluetoothManager = (BluetoothManager) mContext.getApplicationContext().getSystemService(Context.BLUETOOTH_SERVICE);
@@ -108,6 +117,18 @@ public class LiteBle  {
         Log.d(TAG,"StaticLitebleArray["+dev_type+']' + StaticLitebleArray[dev_type]);
         Log.d(TAG,"LiteBle open thread id:" + Thread.currentThread().getId());
     }
+
+    /**
+     * 2020/02/03 add
+     * 0: DUT, 1:MB, without context, it must be create after getting bluetoothManager from LiteBle(Context context, int dev_type)
+     * @param dev_type index for control multiple device
+     */
+    public LiteBle(int dev_type) {
+        StaticLitebleArray[dev_type] = this;
+        Log.d(TAG,"StaticLitebleArray["+dev_type+']' + StaticLitebleArray[dev_type]);
+        Log.d(TAG,"LiteBle open thread id:" + Thread.currentThread().getId());
+    }
+
     public void listenBLECallback(IBLECallback cb, String tag)
     {
 //        IbleCB = cb;
