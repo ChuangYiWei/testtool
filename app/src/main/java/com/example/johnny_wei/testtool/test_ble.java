@@ -82,7 +82,7 @@ public class test_ble extends AppCompatActivity  {
     private ScanCallback mScanCallback;
 
     private ConstraintLayout mConstraintLayout;
-
+    int scan_only_reqest_cdoe = 2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,6 +112,9 @@ public class test_ble extends AppCompatActivity  {
         {
             mScanCallback = new LeScannerAPI21();
         }
+
+        Intent go2intent = new Intent(this,mockup.class);
+        this.startActivityForResult(go2intent, scan_only_reqest_cdoe);
 
     }
     private void setupview() {
@@ -289,9 +292,15 @@ public class test_ble extends AppCompatActivity  {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG,"requestCode:"+requestCode);
+        //request code is back from the class we call
         if(requestCode == 1  && resultCode == RESULT_OK){
             Log.d(TAG,"open bluetooth OK");
-        }else if(requestCode == 1 && resultCode == RESULT_CANCELED){
+        }else if(requestCode == scan_only_reqest_cdoe && resultCode == RESULT_OK){
+            Toast.makeText(test_ble.this,data.getExtras().getString("EXTRAS_DEVICE_ADDRESS"),Toast.LENGTH_LONG).show();
+            Log.d(TAG,"get device name:"+data.getExtras().getString("EXTRAS_DEVICE_ADDRESS"));
+        }
+        else if(requestCode == 1 && resultCode == RESULT_CANCELED){
             Toast.makeText(test_ble.this,"please open bluetooth !! ",Toast.LENGTH_LONG).show();
             finish();
         }

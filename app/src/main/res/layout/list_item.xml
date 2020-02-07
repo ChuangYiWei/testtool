@@ -35,11 +35,12 @@
         android:id="@+id/L2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="8dp"
         android:text="TextView"
         android:textColor="@android:color/holo_blue_bright"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.165"
         app:layout_constraintStart_toEndOf="@+id/L1"
         app:layout_constraintTop_toTopOf="@+id/L1" />
 
