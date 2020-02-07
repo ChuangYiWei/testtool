@@ -17,4 +17,9 @@
         android:id="@+id/baud_rate"
         android:title="baud_rate"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/test_file"
+        android:title="test_file"
+        app:showAsAction="never"/>
+
 </menu>

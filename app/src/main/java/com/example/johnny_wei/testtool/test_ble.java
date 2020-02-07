@@ -45,6 +45,7 @@ import static com.example.johnny_wei.testtool.config.globalConfig.DUT;
 import static com.example.johnny_wei.testtool.config.globalConfig.MB;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_COARSE_LOCATION;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE;
+import static com.example.johnny_wei.testtool.config.globalConfig.REQ_CODE_BLE_DEV_ACT;
 import static com.example.johnny_wei.testtool.config.globalConfig.UUID_NOTIFY_CHARA;
 import static com.example.johnny_wei.testtool.config.globalConfig.UUID_SERVICE;
 import static com.example.johnny_wei.testtool.config.globalConfig.UUID_WRITE_CHARA;
@@ -79,7 +80,7 @@ public class test_ble extends AppCompatActivity  {
     private ScanCallback mScanCallback;
 
     private ConstraintLayout mConstraintLayout;
-    int scan_only_reqest_cdoe = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,8 +112,8 @@ public class test_ble extends AppCompatActivity  {
         }
 
         /**go to select ble device*/
-//        Intent go2intent = new Intent(this, ble_dev_select.class);
-//        this.startActivityForResult(go2intent, scan_only_reqest_cdoe);
+        Intent go2intent = new Intent(this, ble_dev_select.class);
+        this.startActivityForResult(go2intent, REQ_CODE_BLE_DEV_ACT);
 
     }
     private void setupview() {
@@ -294,7 +295,7 @@ public class test_ble extends AppCompatActivity  {
         //request code is back from the class we call
         if(requestCode == 1  && resultCode == RESULT_OK){
             Log.d(TAG,"open bluetooth OK");
-        }else if(requestCode == scan_only_reqest_cdoe && resultCode == RESULT_OK){
+        }else if(requestCode == REQ_CODE_BLE_DEV_ACT && resultCode == RESULT_OK){
             Toast.makeText(test_ble.this,data.getExtras().getString("EXTRAS_DEVICE_ADDRESS"),Toast.LENGTH_LONG).show();
             Log.d(TAG,"get device name:"+data.getExtras().getString("EXTRAS_DEVICE_ADDRESS"));
         }

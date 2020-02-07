@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,12 +20,13 @@
         android:supportsRtl="true"
         android:theme="@style/mytheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".BLEutils.BLE_ACTIVITY.ble_dev_select"></activity>
+        <activity android:name=".BLETest.TEST_ACTIVITY.test_item_select"></activity>
+        <activity android:name=".BLEutils.BLE_ACTIVITY.ble_dev_select" />
         <activity android:name=".test_view_tool" />
         <activity android:name=".time" />
         <activity android:name=".aleart_test" />
         <activity android:name=".collection" />
-        <activity android:name=".spinner_option" />
+        <activity android:name=".test_ble" />
         <activity android:name=".write" />
         <activity android:name=".test_draw" />
         <activity android:name=".connected_list" />
@@ -44,7 +44,7 @@
         <activity android:name=".invok" />
         <activity android:name=".open_file_intent" />
         <activity android:name=".serviceExample" /> <!-- <activity android:name=".test_surface" android:screenOrientation="landscape" android:theme="@style/Theme.AppCompat.NoActionBar" android:configChanges="keyboard|keyboardHidden|orientation"> -->
-        <activity android:name=".test_ble">
+        <activity android:name=".spinner_option">
 
             <!-- android:screenOrientation="landscape" -->
             <intent-filter>

@@ -11,6 +11,10 @@ public class globalConfig {
     public static final int DUT = 0;
     public static final int MB = 1;
 
+    //request code
+    public static final int REQ_CODE_BLE_DEV_ACT = 2;
+    public static final int REQ_CODE_TEST_ITEM_ACT = 3;
+
     //drop down menu
     public static final int SPI_MODE = 0;
     public static final int UART_MODE = 1;

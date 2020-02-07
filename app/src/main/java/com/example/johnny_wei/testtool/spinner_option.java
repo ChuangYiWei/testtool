@@ -2,6 +2,7 @@ package com.example.johnny_wei.testtool;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
@@ -22,6 +23,10 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.johnny_wei.testtool.BLETest.TEST_ACTIVITY.test_item_select;
+
+import static com.example.johnny_wei.testtool.config.globalConfig.REQ_CODE_TEST_ITEM_ACT;
 
 public class spinner_option extends AppCompatActivity {
     LayoutInflater inflater;
@@ -146,6 +151,18 @@ public class spinner_option extends AppCompatActivity {
             cb.setChecked(true);
             linerView.addView(cb);
 
+            /* add fake text view, can't scroll if we don't use scroll view*/
+            /*
+            int i=0;
+            for(i=0;i<10;i++)
+            {
+                TextView m = new TextView(this);
+                String s= "linerView added"+i;
+                m.setText(s);
+                linerView.addView(m);
+            }
+            */
+
             constraintView = (ConstraintLayout)linerView.findViewById(R.id.cons_02_baudrate);
 
             //constraint layout自己新增layout不會像linear一樣排好
@@ -188,6 +205,16 @@ public class spinner_option extends AppCompatActivity {
             scrollView = (View) inflater.inflate(R.layout.test_scroll, null);
             linerView = scrollView.findViewById(R.id.scroll_linear);
 
+            /* add fake text view, can't scroll if we don't use scroll view*/
+            int i=0;
+            for(i=0;i<30;i++)
+            {
+                TextView m = new TextView(this);
+                String s= "linerView added"+i;
+                m.setText(s);
+                linerView.addView(m);
+            }
+
             builder = new AlertDialog.Builder(this);
             builder.setTitle("這是標題")
                     .setView(scrollView)
@@ -224,8 +251,14 @@ public class spinner_option extends AppCompatActivity {
 
             return true;
         }
+        else if (id == R.id.test_file) {
+        Intent go2intent = new Intent(this, test_item_select.class);
+        this.startActivityForResult(go2intent, REQ_CODE_TEST_ITEM_ACT);
+        }
         return super.onOptionsItemSelected(item);
 
     }
+
+
 
 }
