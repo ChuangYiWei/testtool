@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/mytheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".mockup"></activity>
+        <activity android:name=".BLEutils.BLE_ACTIVITY.ble_dev_select"></activity>
         <activity android:name=".test_view_tool" />
         <activity android:name=".time" />
         <activity android:name=".aleart_test" />

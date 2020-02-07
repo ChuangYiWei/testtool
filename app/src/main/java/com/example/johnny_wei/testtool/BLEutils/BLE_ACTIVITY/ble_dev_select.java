@@ -1,4 +1,4 @@
-package com.example.johnny_wei.testtool;
+package com.example.johnny_wei.testtool.BLEutils.BLE_ACTIVITY;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -7,7 +7,6 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Intent;
-import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,10 +17,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.johnny_wei.testtool.BLEutils.BleUtil;
-import com.example.johnny_wei.testtool.BLEutils.LiteBle;
+import com.example.johnny_wei.testtool.R;
 import com.example.johnny_wei.testtool.adapter.RowItem;
 import com.example.johnny_wei.testtool.adapter.customAdapter;
-import com.example.johnny_wei.testtool.utils.DevUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,10 +27,9 @@ import java.util.List;
 
 import static com.example.johnny_wei.testtool.BLEutils.LiteBle.StaticLitebleArray;
 import static com.example.johnny_wei.testtool.config.globalConfig.DUT;
-import static com.example.johnny_wei.testtool.config.globalConfig.MB;
 
 //mock up , create ble instance
-public class mockup extends AppCompatActivity {
+public class ble_dev_select extends AppCompatActivity {
     String TAG = getClass().getSimpleName();
 
     //adapter
@@ -53,7 +50,7 @@ public class mockup extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mockup);
+        setContentView(R.layout.activity_ble_dev_select);
         init();
         setupAdapter();
         dev_scan();

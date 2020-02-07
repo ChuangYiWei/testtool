@@ -7,7 +7,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -29,20 +28,18 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.johnny_wei.testtool.BLEutils.BLE_ACTIVITY.ble_dev_select;
 import com.example.johnny_wei.testtool.BLEutils.LiteBle;
 import com.example.johnny_wei.testtool.BLEutils.callback.LiteBLECallback;
 import com.example.johnny_wei.testtool.config.globalConfig;
 import com.example.johnny_wei.testtool.utils.DevUtil;
 import com.example.johnny_wei.testtool.utils.Permission;
-import com.example.johnny_wei.testtool.utils.commonUtil;
 
 
 import java.util.List;
 
 import static android.bluetooth.BluetoothDevice.PHY_LE_2M;
 import static android.bluetooth.BluetoothDevice.PHY_OPTION_NO_PREFERRED;
-import static com.example.johnny_wei.testtool.BLEutils.LiteBle.StaticLiteble;
-import static com.example.johnny_wei.testtool.BLEutils.LiteBle.StaticLitebleArray;
 import static com.example.johnny_wei.testtool.config.globalConfig.BLE5_API_LEVEL;
 import static com.example.johnny_wei.testtool.config.globalConfig.DUT;
 import static com.example.johnny_wei.testtool.config.globalConfig.MB;
@@ -113,8 +110,9 @@ public class test_ble extends AppCompatActivity  {
             mScanCallback = new LeScannerAPI21();
         }
 
-        Intent go2intent = new Intent(this,mockup.class);
-        this.startActivityForResult(go2intent, scan_only_reqest_cdoe);
+        /**go to select ble device*/
+//        Intent go2intent = new Intent(this, ble_dev_select.class);
+//        this.startActivityForResult(go2intent, scan_only_reqest_cdoe);
 
     }
     private void setupview() {
