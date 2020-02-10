@@ -5,26 +5,42 @@
     android:id="@+id/cons_0"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BLETest.TEST_ACTIVITY.test_item_select">
+    tools:context=".BLETest.TEST_ACTIVITY.testcase_select">
 
-    <LinearLayout
-        android:id="@+id/Linear_0_1"
-        android:layout_width="234dp"
-        android:layout_height="338dp"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="76dp"
-        android:orientation="vertical"
+    <ScrollView
+        android:id="@+id/sv_view"
+        android:layout_width="0dp"
+        android:layout_height="500dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/Linear_testcase"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
     <Button
         android:id="@+id/button33"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:onClick="clk_testcase_ok"
         android:text="@android:string/ok"
-        android:onClick="sel_ok"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Linear_0_1" />
+        app:layout_constraintTop_toBottomOf="@+id/sv_view" />
+
+    <Button
+        android:id="@+id/button34"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:onClick="clk_toggle"
+        android:text="toggle"
+        app:layout_constraintStart_toEndOf="@+id/button33"
+        app:layout_constraintTop_toTopOf="@+id/button33" />
 </android.support.constraint.ConstraintLayout>

@@ -24,9 +24,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.johnny_wei.testtool.BLETest.TEST_ACTIVITY.test_item_select;
+import com.example.johnny_wei.testtool.BLETest.TEST_ACTIVITY.testcase_select;
 
-import static com.example.johnny_wei.testtool.config.globalConfig.REQ_CODE_BLE_DEV_ACT;
 import static com.example.johnny_wei.testtool.config.globalConfig.REQ_CODE_TEST_ITEM_ACT;
 
 public class spinner_option extends AppCompatActivity {
@@ -43,8 +42,7 @@ public class spinner_option extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spinner_option);//使用Spinner
         //setupSpinner();
-        Intent go2intent = new Intent(spinner_option.this, test_item_select.class);
-        spinner_option.this.startActivityForResult(go2intent, REQ_CODE_TEST_ITEM_ACT);
+
     }
 
     void setupSpinner()
@@ -255,7 +253,7 @@ public class spinner_option extends AppCompatActivity {
             return true;
         }
         else if (id == R.id.test_file) {
-            Intent go2intent = new Intent(spinner_option.this, test_item_select.class);
+            Intent go2intent = new Intent(spinner_option.this, testcase_select.class);
             spinner_option.this.startActivityForResult(go2intent, REQ_CODE_TEST_ITEM_ACT);
         }
         return super.onOptionsItemSelected(item);

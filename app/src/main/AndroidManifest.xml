@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/mytheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".BLETest.TEST_ACTIVITY.test_item_select"></activity>
+        <activity android:name=".BLETest.TEST_ACTIVITY.testcase_select"></activity>
         <activity android:name=".BLEutils.BLE_ACTIVITY.ble_dev_select" />
         <activity android:name=".test_view_tool" />
         <activity android:name=".time" />
