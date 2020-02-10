@@ -2,10 +2,15 @@ package com.example.johnny_wei.testtool.BLETest.TEST_ACTIVITY;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -17,25 +22,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class test_item_select extends AppCompatActivity {
-
+    private final String TAG = getClass().getSimpleName();
     //adapter
     ListView listView;
     List<RowItem> rowItems;
     customAdapter mAdapter;
+    ConstraintLayout consView;
+    LinearLayout LinView;
 
+    String[] fakeItem = {"2.1", "2.2", "2.3"};
+    List<CheckBox> checkBoxes_list = new ArrayList<>();
+
+    private List<String> test = new ArrayList<String>();;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_item_select);
+        consView=findViewById(R.id.cons_0);
+        LinView=consView.findViewById(R.id.Linear_0_1);
 
-        setupAdapter();
-
+        for(int i = 0; i < 30; i++) {
+            CheckBox ch = new CheckBox(this);
+            checkBoxes_list.add(ch);
+            ch.setId(i);
+            //ch.setText(fakeItem[i]);
+            ch.setText("item"+i);
+            ch.setOnCheckedChangeListener(checkBoxOnCheckedChange);
+            LinView.addView(ch);
+        }
         //read test file and show
-        show_test_file();
+
     }
 
     void uninit() {
-        rowItems.clear();
+
     }
 
     @Override
@@ -44,50 +64,42 @@ public class test_item_select extends AppCompatActivity {
         super.onDestroy();
     }
 
-    void setupAdapter() {
-        listView = (ListView) findViewById(R.id.test_item_list);
-        rowItems = new ArrayList<>();
-        mAdapter = new customAdapter(this, rowItems);
-        listView.setAdapter(mAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
-                Toast toast = Toast.makeText(getApplicationContext(),
-                        "Item " + (position + 1) + ": " + rowItems.get(position).getstrL2(),
-                        Toast.LENGTH_SHORT);
-                toast.show();
 
-                //finish and back to calling activity
-                finish(rowItems.get(position).getstrL1());
-            }
-        });
-    }
 
     /**go back to previous activity*/
-    public void finish(String filename) {
+    public void back2Actvity() {
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("EXTRAS_DEVICE_FILENAME", filename);
+//        resultIntent.putExtra("EXTRAS_DEVICE_FILENAME", filename);
+        resultIntent.putStringArrayListExtra("test", (ArrayList<String>) test);
         setResult(Activity.RESULT_OK, resultIntent);
         finish();
     }
 
-    void show_test_file() {
-        //read config
-        //gen fake file for test
-        int idx = 0;
-        for (idx = 1; idx < 10; idx++) {
-            RowItem rowItem = new RowItem("Test:" + idx, "", "");
-            rowItems.add(rowItem);
-        }
+    //設定callback
+    private CompoundButton.OnCheckedChangeListener checkBoxOnCheckedChange =
+            new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) { //buttonView 為目前觸發此事件的 CheckBox, isChecked 為此 CheckBox 目前的選取狀態
+                    String tmpStr = buttonView.getText().toString();
 
-        //update list view
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                (mAdapter).notifyDataSetChanged();
-            }
-        });
+                    if (isChecked)//等於 buttonView.isChecked()
+                    {
+                        Toast.makeText(getApplicationContext(), buttonView.getText() + " 被選取", Toast.LENGTH_LONG).show();
+                        Log.w(TAG,"add:"+tmpStr);
+                        test.add(tmpStr);
+                    } else {
+                        Log.w(TAG,"remove:"+tmpStr);
+                        test.remove(tmpStr);
+                        Toast.makeText(getApplicationContext(), buttonView.getText() + " 被取消", Toast.LENGTH_LONG).show();
+                    }
+                    //buttonView.getId() == R.id.checkBox_0(等於所選到的那個)
+                    Log.d(TAG, "buttonView.getId():" + buttonView.getId());
+
+                }
+            };
+
+
+    public void sel_ok(View view) {
+        back2Actvity();
     }
-
 }

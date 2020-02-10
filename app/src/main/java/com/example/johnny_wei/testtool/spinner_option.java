@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.johnny_wei.testtool.BLETest.TEST_ACTIVITY.test_item_select;
 
+import static com.example.johnny_wei.testtool.config.globalConfig.REQ_CODE_BLE_DEV_ACT;
 import static com.example.johnny_wei.testtool.config.globalConfig.REQ_CODE_TEST_ITEM_ACT;
 
 public class spinner_option extends AppCompatActivity {
@@ -42,6 +43,8 @@ public class spinner_option extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spinner_option);//使用Spinner
         //setupSpinner();
+        Intent go2intent = new Intent(spinner_option.this, test_item_select.class);
+        spinner_option.this.startActivityForResult(go2intent, REQ_CODE_TEST_ITEM_ACT);
     }
 
     void setupSpinner()
@@ -252,13 +255,28 @@ public class spinner_option extends AppCompatActivity {
             return true;
         }
         else if (id == R.id.test_file) {
-        Intent go2intent = new Intent(this, test_item_select.class);
-        this.startActivityForResult(go2intent, REQ_CODE_TEST_ITEM_ACT);
+            Intent go2intent = new Intent(spinner_option.this, test_item_select.class);
+            spinner_option.this.startActivityForResult(go2intent, REQ_CODE_TEST_ITEM_ACT);
         }
         return super.onOptionsItemSelected(item);
 
     }
 
 
-
+//user implement this to check
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.w(TAG,"requestCode:"+requestCode);
+        //request code is back from the class we call
+        if(requestCode == 1  && resultCode == RESULT_OK){
+            Log.w(TAG,"open bluetooth OK");
+        }else if(requestCode == REQ_CODE_TEST_ITEM_ACT && resultCode == RESULT_OK){
+            Log.w(TAG,"test item name:"+data.getExtras().getStringArrayList("test"));
+        }
+        else if(requestCode == 1 && resultCode == RESULT_CANCELED){
+            Toast.makeText(spinner_option.this,"please open bluetooth !! ",Toast.LENGTH_LONG).show();
+            finish();
+        }
+    }
 }

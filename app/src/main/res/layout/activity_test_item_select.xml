@@ -2,25 +2,29 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cons_0"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".BLETest.TEST_ACTIVITY.test_item_select">
 
-    <TextView
-        android:id="@+id/textView14"
+    <LinearLayout
+        android:id="@+id/Linear_0_1"
+        android:layout_width="234dp"
+        android:layout_height="338dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="76dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+
+    <Button
+        android:id="@+id/button33"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="file select"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="52dp"
+        android:text="@android:string/ok"
+        android:onClick="sel_ok"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ListView
-        android:id="@+id/test_item_list"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+        app:layout_constraintTop_toBottomOf="@+id/Linear_0_1" />
 </android.support.constraint.ConstraintLayout>
