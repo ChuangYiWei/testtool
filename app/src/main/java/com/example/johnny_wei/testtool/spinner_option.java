@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.johnny_wei.testtool.BLETest.TEST_ACTIVITY.testcase_select;
 
+import static com.example.johnny_wei.testtool.config.globalConfig.EXTRAS_TEST_CASE;
 import static com.example.johnny_wei.testtool.config.globalConfig.REQ_CODE_TEST_ITEM_ACT;
 
 public class spinner_option extends AppCompatActivity {
@@ -270,7 +271,7 @@ public class spinner_option extends AppCompatActivity {
         if(requestCode == 1  && resultCode == RESULT_OK){
             Log.w(TAG,"open bluetooth OK");
         }else if(requestCode == REQ_CODE_TEST_ITEM_ACT && resultCode == RESULT_OK){
-            Log.w(TAG,"test item name:"+data.getExtras().getStringArrayList("test"));
+            Log.w(TAG,"test item name:"+data.getExtras().getStringArrayList(EXTRAS_TEST_CASE));
         }
         else if(requestCode == 1 && resultCode == RESULT_CANCELED){
             Toast.makeText(spinner_option.this,"please open bluetooth !! ",Toast.LENGTH_LONG).show();

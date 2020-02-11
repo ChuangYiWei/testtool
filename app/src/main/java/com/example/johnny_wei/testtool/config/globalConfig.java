@@ -1,5 +1,9 @@
 package com.example.johnny_wei.testtool.config;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class globalConfig {
 
     //BLE
@@ -61,4 +65,14 @@ public class globalConfig {
     //write permission define
     public final static int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 102;
 
+    //test case
+    public static LinkedHashMap<String, String> map_testcase = new LinkedHashMap<String, String>() {{
+        put("2.3.1", "2.3.1.csv");
+        put("2.3.2", "2.3.2.csv");
+        put("2.3.3", "2.3.3.csv");
+        put("2.3.4", "2.3.4.csv");
+        put("2.3.9 Loopack", "loopback.csv");
+    }};
+
+    public final static String EXTRAS_TEST_CASE = "TEST_CASE";
 }
