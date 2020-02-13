@@ -28,7 +28,7 @@ public class invok extends AppCompatActivity {
     Class clz;
 
     static final String PATH_SD = Environment.getExternalStorageDirectory().getAbsolutePath();
-    String config_folder = "01_config";
+    String config_folder = "01_CONFIG";
     String config_name = "auto_config.csv";
     int itme_idx = 0;
     int group_idx = 2;
@@ -217,19 +217,22 @@ public class invok extends AppCompatActivity {
         //check list is null or not
         readcsv(filename);
 
-        map.put("010820","test_func1");
-        map.put("0171FC","test2_func1");
+//        map.put("010820","test_func1");
+//        map.put("0171FC","test2_func1");
         for (int i = 0; i < rows.size(); i++) {
-            Log.d(TAG, "cmd:" + rows.get(i)[cmd_idx]);
+            String cmd = rows.get(i)[cmd_idx];
+            String map_function = (rows.get(i)[func_name_idx]);
+            Log.d(TAG, "cmd:" + cmd);
+            Log.d(TAG, "map_function:" + map_function);
             //from 0108200403020105 get first 6 string and mapping to function we add in the hashmap
+//            String map_function = map.get(rows.get(i)[cmd_idx].substring(0, 6));
 
-            String map_function = map.get(rows.get(i)[cmd_idx].substring(0, 6));
             if (map_function == null) {
                 Log.e(TAG, "map_function is null, cmd:" + rows.get(i)[cmd_idx]);
                 continue;
             }
             try {
-                if (Integer.parseInt(rows.get(i)[group_idx]) == 0) {
+                if ((rows.get(i)[group_idx].equals("hci")))  {
                     Method method = test_class1_obj.getClass().getDeclaredMethod(map_function, String[].class);
                     boolean ret1 = (boolean) method.invoke(test_class1_obj, new Object[]{rows.get(i)});
                 } else if (Integer.parseInt(rows.get(i)[group_idx]) == 1) {

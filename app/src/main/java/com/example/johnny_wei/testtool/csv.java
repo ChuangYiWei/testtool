@@ -22,8 +22,8 @@ import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQ
 public class csv extends AppCompatActivity {
     static final String PATH_SD = Environment.getExternalStorageDirectory().getAbsolutePath();
     private final String TAG = getClass().getSimpleName();
-    String config_folder = "01_config";
-    String config_name = "test_config.csv";
+    String config_folder = "01_CONFIG";
+    String config_name = "auto_config.csv";
     int itme_idx = 0;
     int func_name_idx = 1;
     int cmd_idx = 3;

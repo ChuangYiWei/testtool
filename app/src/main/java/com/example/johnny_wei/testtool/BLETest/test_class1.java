@@ -26,6 +26,26 @@ public class test_class1 extends AppCompatActivity {
         return true;
     }
 
+    public boolean HCI_LE_Set_Advertising_Data(String[] str) {
+        Log.d(TAG,"HCI_LE_Set_Advertising_Data");
+        int i;
+        for(i=0;i<str.length;i++)
+        {
+            Log.d(TAG,"str["+i+"]:" + str[i]);
+        }
+        return true;
+    }
+
+    public boolean HCI_loopback(String[] str) {
+        Log.d(TAG,"HCI_loopback");
+        int i;
+        for(i=0;i<str.length;i++)
+        {
+            Log.d(TAG,"str["+i+"]:" + str[i]);
+        }
+        return true;
+    }
+
     public boolean test_func2(String arg) {
         Log.d(TAG,"test_func2");
         Log.d(TAG,"arg:" + arg);
