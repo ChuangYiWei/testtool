@@ -3,6 +3,7 @@ package com.example.johnny_wei.testtool;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.example.johnny_wei.testtool.utils.permissionUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOError;
@@ -26,11 +28,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE;
 
 public class write extends AppCompatActivity {
 
-    public static final String ENCODING="UTF-8";//常量，代表編碼格式。
+    public static final String ENCODING = "UTF-8";//常量，代表編碼格式。
     String className = getClass().getSimpleName();
 
     private TextView tv;
@@ -41,23 +47,78 @@ public class write extends AppCompatActivity {
 
     static SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-     final String CURRENT_PATH = "./";
+    final String CURRENT_PATH = "./";
 
-     List<String> string_list = new ArrayList<>();
+    List<String> string_list = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.e(className,"onCreate");
+
         storage_setup();
         //set debug to true
-        dbgLog.setDebug(true);
+        //dbgLog.setDebug(true);
 
-        writefile();
-        readline("HID_CMD/HID_KB.txt");
+//        writefile();
+//        readline("HID_CMD/HID_KB.txt");
+//
+//        List<String> mouse_list = new ArrayList<>();
+//        readline("HID_CMD/mouse_cmd.txt", mouse_list);
 
-        List<String> mouse_list = new ArrayList<>();
-        readline("HID_CMD/mouse_cmd.txt",mouse_list);
+        assetCopy();
     }
+
+    void assetCopy()
+    {
+        //copyAssets();
+        copyAssetsToFiles(this);
+    }
+
+    private void copyAssetsToFiles(Context context) {
+        String[] files;
+        try {
+            //注意：在assets文件夹下影藏了三个带文件的文件夹，分别是images、sounds、webkit
+            //返回数组files里面会包含这三个文件夹
+//            files = context.getResources().getAssets().list("");
+            files = context.getResources().getAssets().list("01_CONFIG");
+        } catch (IOException e1) {
+            return;
+        }
+
+        String File_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
+        File mWorkingPath = new File(File_PATH, "/01_CONFIG");
+        if (!mWorkingPath.exists()) {
+            mWorkingPath.mkdirs();
+        }
+
+        for (int i = 0; i < files.length; i++) {
+            try {
+                String fileName = files[i];
+                File outFile = new File(mWorkingPath, fileName);
+                if (outFile.exists()) {
+                    continue;
+                }
+
+                InputStream in = context.getAssets().open(fileName);
+                OutputStream out = new FileOutputStream(outFile);
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+
+                in.close();
+                out.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     //filename is folder+file under sd card root dir
     void readline(String filename,List<String> str_list)

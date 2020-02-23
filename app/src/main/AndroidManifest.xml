@@ -27,7 +27,7 @@
         <activity android:name=".aleart_test" />
         <activity android:name=".collection" />
         <activity android:name=".spinner_option" />
-        <activity android:name=".write" />
+        <activity android:name=".test_ble" />
         <activity android:name=".test_draw" />
         <activity android:name=".connected_list" />
         <activity android:name=".test_surface" />
@@ -44,7 +44,7 @@
         <activity android:name=".invok" />
         <activity android:name=".open_file_intent" />
         <activity android:name=".serviceExample" /> <!-- <activity android:name=".test_surface" android:screenOrientation="landscape" android:theme="@style/Theme.AppCompat.NoActionBar" android:configChanges="keyboard|keyboardHidden|orientation"> -->
-        <activity android:name=".test_ble">
+        <activity android:name=".write">
 
             <!-- android:screenOrientation="landscape" -->
             <intent-filter>
