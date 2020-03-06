@@ -34,7 +34,7 @@
         <activity android:name=".test_listview_tree" />
         <activity android:name=".expandleble" />
         <activity android:name=".scan_list" />
-        <activity android:name=".bytecheck" />
+        <activity android:name=".write" />
         <activity android:name=".customview" /> <!-- <activity android:name=".test_ble"> -->
         <activity android:name=".xmlandinvoke" />
         <activity android:name=".uart" />
@@ -44,7 +44,7 @@
         <activity android:name=".invok" />
         <activity android:name=".open_file_intent" />
         <activity android:name=".serviceExample" /> <!-- <activity android:name=".test_surface" android:screenOrientation="landscape" android:theme="@style/Theme.AppCompat.NoActionBar" android:configChanges="keyboard|keyboardHidden|orientation"> -->
-        <activity android:name=".write">
+        <activity android:name=".bytecheck">
 
             <!-- android:screenOrientation="landscape" -->
             <intent-filter>

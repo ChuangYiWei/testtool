@@ -73,11 +73,114 @@ public class bytecheck extends AppCompatActivity {
         String revKeycode = "Abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()";
         compareKeyCode(revKeycode,keycode_list);
 */
-        List<String> mouse_list = new ArrayList<>();
-        readline("HID_CMD/mouse_cmd.txt",mouse_list);
+//        List<String> mouse_list = new ArrayList<>();
+//        readline("HID_CMD/mouse_cmd.txt",mouse_list);
+
+        Log.d(TAG, "Get_HCI_change_interval_cmd:" + Get_HCI_change_interval_cmd(6, 7));
+        Log.d(TAG, "Get_HCI_change_interval_cmd:" + Get_HCI_change_interval_cmd(17, 18));
+        Log.d(TAG, "parsing_hci_get_interval_evt:" + parsing_hci_get_interval_evt("040E070164FC00200000", 0));
+
+        Get_HCI_Thrput_cmd(0,100,1000);
+        parse_hci_thrput_cmd("0162FC0300140A",0);
+        parse_hci_thrput_cmd("0162FC0300140A",1);
 
     }
 
+    //type : 0 get packet length
+    //type : 1 get data_size * 1000
+    int parse_hci_thrput_cmd(String cmd, int type)
+    {
+        //ex:0162FC03001402
+        int pos_len_start;
+        int pos_len_end;
+        int ret = 0;
+        if(type ==0) {
+            pos_len_start = 10;
+            pos_len_end = 12;
+            String str_pkt_len = cmd.substring(pos_len_start, pos_len_end);
+            Log.d(TAG, "str_pkt_len:" + str_pkt_len);
+            int pkt_len = Integer.parseInt(str_pkt_len, 16);
+            Log.d(TAG, "pkt_len:" + pkt_len);
+            ret = pkt_len;
+        }
+        else if(type==1) {
+            pos_len_start = 12;
+            pos_len_end = 14;
+            String str_data_size = cmd.substring(pos_len_start, pos_len_end);
+            Log.d(TAG, "str_data_size:" + str_data_size);
+            int data_size = Integer.parseInt(str_data_size, 16);
+            data_size = data_size * 1000;
+            Log.d(TAG, "data_size:" + data_size);
+            ret = data_size;
+        }
+
+        return ret;
+    }
+
+    //ex:0164FC0410002000
+    String Get_HCI_change_interval_cmd(int min,int max)
+    {
+        if (min > max) {
+            Log.w(TAG, "min can't be bigger than max");
+        }
+        String back = "";
+        back = "0164FC04" +
+                String.format("%02x",min).toUpperCase() + "00" +
+                String.format("%02x",max).toUpperCase() + "00";
+        Log.d(TAG, "min/max x 1.25ms:" + min*1.25 + "/" + max*1.25);
+        return back;
+    }
+    /**
+     * retrun connection interval(already *1.25) and Le connection update result
+     * @param type
+     * 0: interval,
+     * 1: LE_result,
+     */
+    //ex:040E07xx64FC00 200000
+    int parsing_hci_get_interval_evt(String evt,int type)
+    {
+        // 0:interval
+        // 1:LE result
+        int pos_intv_start = 14;
+        int pos_intv_end = 16;
+        String str_interval = evt.substring(pos_intv_start, pos_intv_end);
+        int interval = (int) ((float) Integer.parseInt(str_interval) * 1.25);
+        Log.d(TAG, "str_interval:" + str_interval);
+        Log.d(TAG, "connection interval:" + interval);
+
+        int pos_result_start = 18;
+        int pos_result_end = 20;
+        String str_le_result = evt.substring(pos_result_start, pos_result_end);
+
+        int le_result = Integer.parseInt(str_le_result);
+        Log.d(TAG, "LE result:" + str_le_result);
+        Log.d(TAG, "le_result:" + le_result);
+        return 0;
+    }
+
+    String Get_HCI_Thrput_cmd(int type, int pkt_length, int data_size) {
+        String back = "";
+        int covert2Uint1k = data_size/1000;
+        //StringBuilder stringBuilder = new StringBuilder(HCI_BLE_THROUGHPUT_RX.length());
+        if (type == 0) {
+            back = "0162FC0300" +
+                    String.format("%02x",pkt_length).toUpperCase()+
+                    String.format("%02x",covert2Uint1k).toUpperCase();
+
+            Log.d(TAG,"Get_HCI_Thrput_cmd is:" + back);
+            return back;
+
+        } else if (type == 1) {
+            back = "0162FC0301" +
+                    String.format("%02x",pkt_length).toUpperCase()+
+                    String.format("%02x",covert2Uint1k).toUpperCase();
+            Log.d(TAG,"Get_HCI_Thrput_cmd is:" + back);
+            return back;
+        }
+
+        Log.d(TAG,"back is:" + back);
+        return back;
+    }
     static final String PATH_SD = Environment.getExternalStorageDirectory().getAbsolutePath();
 
     String axis;

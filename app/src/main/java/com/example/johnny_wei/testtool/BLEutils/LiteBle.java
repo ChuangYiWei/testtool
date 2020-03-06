@@ -800,7 +800,7 @@ public class LiteBle  {
 
         @Override
         public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
-            Log.d(TAG, "onMtuChanged");
+            Log.w(TAG, "onMtuChanged:" + mtu);
             super.onMtuChanged(gatt, mtu, status);
         }
 

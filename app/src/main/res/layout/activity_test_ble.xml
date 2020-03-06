@@ -66,7 +66,7 @@
         android:layout_marginTop="4dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="20:20:02:03:13:47"
+        android:text="20:20:02:18:23:16"
         app:layout_constraintStart_toEndOf="@+id/button12"
         app:layout_constraintTop_toBottomOf="@+id/button9" />
 

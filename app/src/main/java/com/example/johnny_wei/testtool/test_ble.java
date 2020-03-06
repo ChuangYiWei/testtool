@@ -38,6 +38,7 @@ import com.example.johnny_wei.testtool.utils.Permission;
 
 import java.util.List;
 
+import static android.bluetooth.BluetoothDevice.PHY_LE_1M;
 import static android.bluetooth.BluetoothDevice.PHY_LE_2M;
 import static android.bluetooth.BluetoothDevice.PHY_OPTION_NO_PREFERRED;
 import static com.example.johnny_wei.testtool.config.globalConfig.BLE5_API_LEVEL;
@@ -112,8 +113,8 @@ public class test_ble extends AppCompatActivity  {
         }
 
         /**go to select ble device*/
-        Intent go2intent = new Intent(this, ble_dev_select.class);
-        this.startActivityForResult(go2intent, REQ_CODE_BLE_DEV_ACT);
+//        Intent go2intent = new Intent(this, ble_dev_select.class);
+//        this.startActivityForResult(go2intent, REQ_CODE_BLE_DEV_ACT);
 
     }
     private void setupview() {
@@ -403,17 +404,29 @@ public class test_ble extends AppCompatActivity  {
         }
     };
 
+    @TargetApi(21)
+    Runnable reqMTU_run = new Runnable() {
+        @Override public void run() {
+            Log.w(TAG,"reqMTU_run");
+            int n = 30;
+            liteBluetooth.getBluetoothGatt().requestMtu(n);
+        }
+    };
+
     @TargetApi(BLE5_API_LEVEL)
     Runnable setPreferredPhy_run= new Runnable() {
         @Override public void run() {
             Log.d(TAG,"set prefer phy");
-            liteBluetooth.getBluetoothGatt().setPreferredPhy(PHY_LE_2M,PHY_LE_2M,PHY_OPTION_NO_PREFERRED);
+            //liteBluetooth.getBluetoothGatt().setPreferredPhy(PHY_LE_2M,PHY_LE_2M,PHY_OPTION_NO_PREFERRED);
+            liteBluetooth.getBluetoothGatt().setPreferredPhy(PHY_LE_1M,PHY_LE_1M,PHY_OPTION_NO_PREFERRED);
         }
     };
 
     @TargetApi(BLE5_API_LEVEL)
     Runnable BLE5_support_run= new Runnable() {
         @Override public void run() {
+
+
             if(liteBluetooth.getBluetoothAdapter().isLe2MPhySupported()) {
                 Log.d(TAG, "This device support 2M");
             }
@@ -431,8 +444,9 @@ public class test_ble extends AppCompatActivity  {
         }
     };
 
-    @TargetApi(BLE5_API_LEVEL)
+    @TargetApi(21)
     public void clk_support(View view) {
+        m_userHandler.post(reqMTU_run);
         if(DevUtil.if_BLE5_API_support()) {
             m_userHandler.post(BLE5_support_run);
         }
