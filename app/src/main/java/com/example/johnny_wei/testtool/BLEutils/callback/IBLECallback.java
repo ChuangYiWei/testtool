@@ -27,6 +27,16 @@ public interface IBLECallback {
     void writeDescSuccessCB(String UUID, byte[] CBData);
     void writeDescFailCB(String UUID, int status);
 
+    void onMtuChangedSuccessCB(int mtu);
+    void onMtuChangedFailCB(int mtu);
+
+    void onPhyReadSuccessCB(int txPhy, int rxPhy);
+    void onPhyReadFailCB(int txPhy, int rxPhy);
+
+    void onPhyUpdateSuccessCB(int txPhy, int rxPhy);
+    void onPhyUpdateFailCB(int txPhy, int rxPhy);
+
+
     //    void OnServicesDiscovered();
 }
 

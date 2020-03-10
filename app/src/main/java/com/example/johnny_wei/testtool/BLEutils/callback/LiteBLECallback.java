@@ -45,4 +45,17 @@ public abstract class LiteBLECallback implements IBLECallback
     //write desc uuid
     public void writeDescSuccessCB(String UUID, byte[] CBData){}
     public void writeDescFailCB(String UUID, int status){}
+
+    //mtu change
+    public void onMtuChangedSuccessCB(int mtu){}
+    public void onMtuChangedFailCB(int mtu){}
+
+    //phy read
+    public void onPhyReadSuccessCB(int txPhy, int rxPhy){}
+    public void onPhyReadFailCB(int txPhy, int rxPhy){}
+
+    //phy update
+    public void onPhyUpdateSuccessCB(int txPhy, int rxPhy){}
+    public void onPhyUpdateFailCB(int txPhy, int rxPhy){}
+
 }

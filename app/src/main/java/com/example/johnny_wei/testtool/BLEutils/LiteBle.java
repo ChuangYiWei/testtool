@@ -106,7 +106,7 @@ public class LiteBle  {
      * bluetoothManager and bluetoothAdapter have only one instance in application
      * @param context use for get bluetooth adapter
      * @param dev_type index for control multiple device
-     * 0: DUT, 1:MB
+     * 0: DUT, 1:BLE_TOOL
      */
     //
     public LiteBle(Context context, int dev_type) {
@@ -120,7 +120,7 @@ public class LiteBle  {
 
     /**
      * 2020/02/03 add
-     * 0: DUT, 1:MB, without context, it must be create after getting bluetoothManager from LiteBle(Context context, int dev_type)
+     * 0: DUT, 1:BLE_TOOL, without context, it must be create after getting bluetoothManager from LiteBle(Context context, int dev_type)
      * @param dev_type index for control multiple device
      */
     public LiteBle(int dev_type) {
@@ -397,7 +397,7 @@ public class LiteBle  {
             }
             if (idx <= 2) {
                 //if fail reconnect
-                Log.d(TAG, "ble not connected," + "retry:" + idx);
+                Log.w(TAG, "ble not connected," + "retry:" + idx);
                 connect(address);
             } else if (idx == 3) {
                 Log.w(TAG, "reboot bluetooth" + "retry:" + idx);
@@ -489,6 +489,32 @@ public class LiteBle  {
         return true;
     }
 
+    public void enable_notify(int dev_type, String srv_uuid, String notify_uuid, String desc_uuid)
+    {
+        Log.w(TAG, "enable_notify");
+        StaticLitebleArray[dev_type].enableCharacteristicNotify(srv_uuid,notify_uuid,desc_uuid);
+    }
+
+    public void ble_write_cmd(int dev_type, String srv_uuid, String write_uuid, final byte[] bytes)
+    {
+        Log.i(TAG, "ble cmd:" + bytes2String(bytes));
+        StaticLitebleArray[dev_type].writeDataToCharacteristic(srv_uuid, write_uuid, bytes);
+    }
+
+    public void ble_write_cmd(int dev_type, String srv_uuid, String write_uuid, int cmd_length, final byte[] bytes) {
+        byte[] tx = new byte[cmd_length];
+        tx = Arrays.copyOf(bytes, cmd_length);
+        Log.i(TAG, "ble cmd:" + bytes2String(tx));
+        StaticLitebleArray[dev_type].writeDataToCharacteristic(srv_uuid, write_uuid, tx);
+    }
+
+    public void ble_write_cmd2(int dev_type, String srv_uuid, String write_uuid, int cmd_length, final byte[] bytes) {
+        byte[] tx = new byte[cmd_length];
+        tx = Arrays.copyOf(bytes, cmd_length);
+        Log.i(TAG, "ble cmd:" + bytes2String(tx));
+        writeDataToCharacteristic(srv_uuid, write_uuid, tx);
+    }
+
     public boolean enableNotifybyCharacteristic(
             BluetoothGattCharacteristic chara,
             final String descriptorUUID
@@ -546,7 +572,7 @@ public class LiteBle  {
 
         chara.setValue(bytes);
         if (!mBluetoothGatt.writeCharacteristic(chara)) {
-            Log.e(TAG, "write characteristic fail");
+            Log.e(TAG, "write characteristic fail:" + bytes2String(bytes));
         }
 
         return true;
@@ -800,25 +826,74 @@ public class LiteBle  {
 
         @Override
         public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
-            Log.w(TAG, "onMtuChanged:" + mtu);
+            Log.d(TAG, "onMtuChanged:" + mtu);
+            if (BluetoothGatt.GATT_SUCCESS == status) {
+            } else {
+                Log.e(TAG, "onMtuChanged fail");
+            }
+
+            //fire callback
+            if (bleCallbackMap.size() != 0) {
+                for (Map.Entry<IBLECallback, String> entry : bleCallbackMap.entrySet()) {
+                    Log.d(TAG, "onDescriptorWrite callback = " + entry.getKey() + " to class " + entry.getValue());
+                    if (BluetoothGatt.GATT_SUCCESS == status) {
+                        entry.getKey().onMtuChangedSuccessCB(mtu);
+                    } else {
+                        entry.getKey().onMtuChangedFailCB(mtu);
+                    }
+                }
+            }
             super.onMtuChanged(gatt, mtu, status);
         }
 
         @Override
         public void onPhyRead(BluetoothGatt gatt, int txPhy, int rxPhy, int status) {
+            if (BluetoothGatt.GATT_SUCCESS == status) {
+            } else {
+                Log.e(TAG, "onPhyRead fail");
+            }
+
             Log.w(TAG, "onPhyRead");
-            Log.d(TAG, "txPhy:" + txPhy);
-            Log.d(TAG, "rxPhy:" + rxPhy);
+            Log.d(TAG, "txPhy:" + txPhy + ",rxPhy " + rxPhy);
             Log.d(TAG, "status:" + status);
+
+            //fire callback
+            if (bleCallbackMap.size() != 0) {
+                for (Map.Entry<IBLECallback, String> entry : bleCallbackMap.entrySet()) {
+                    Log.d(TAG, "onDescriptorWrite callback = " + entry.getKey() + " to class " + entry.getValue());
+                    if (BluetoothGatt.GATT_SUCCESS == status) {
+                        entry.getKey().onPhyReadSuccessCB(txPhy,rxPhy);
+                    } else {
+                        entry.getKey().onPhyReadFailCB(txPhy,rxPhy);
+                    }
+                }
+            }
+
             super.onPhyRead(gatt, txPhy, rxPhy, status);
         }
 
         @Override
         public void onPhyUpdate(BluetoothGatt gatt, int txPhy, int rxPhy, int status) {
+            if (BluetoothGatt.GATT_SUCCESS == status) {
+            } else {
+                Log.e(TAG, "onPhyUpdate fail");
+            }
             Log.w(TAG, "onPhyUpdate !!!");
-            Log.d(TAG, "txPhy:" + txPhy);
-            Log.d(TAG, "rxPhy:" + rxPhy);
+            Log.d(TAG, "txPhy:" + txPhy + ",rxPhy " + rxPhy);
             Log.d(TAG, "status:" + status);
+
+            //fire callback
+            if (bleCallbackMap.size() != 0) {
+                for (Map.Entry<IBLECallback, String> entry : bleCallbackMap.entrySet()) {
+                    Log.d(TAG, "onDescriptorWrite callback = " + entry.getKey() + " to class " + entry.getValue());
+                    if (BluetoothGatt.GATT_SUCCESS == status) {
+                        entry.getKey().onPhyUpdateSuccessCB(txPhy,rxPhy);
+                    } else {
+                        entry.getKey().onPhyUpdateFailCB(txPhy,rxPhy);
+                    }
+                }
+            }
+
             super.onPhyUpdate(gatt, txPhy, rxPhy, status);
         }
     };
