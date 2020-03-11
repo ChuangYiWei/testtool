@@ -52,6 +52,7 @@ import static com.example.johnny_wei.testtool.config.globalConfig.UUID_SERVICE;
 import static com.example.johnny_wei.testtool.config.globalConfig.UUID_WRITE_CHARA;
 import static com.example.johnny_wei.testtool.config.globalConfig.UUID_WRITE_DESCRIPTOR;
 import static com.example.johnny_wei.testtool.utils.commonUtil.intToByteArray;
+import static com.example.johnny_wei.testtool.utils.strUtil.bytes2String;
 
 
 public class test_ble extends AppCompatActivity  {
@@ -77,6 +78,8 @@ public class test_ble extends AppCompatActivity  {
     int dut_rx_pkt_count = 0;
     int dut_max_pkt_count = 0x7FFFFFFF;
 
+    int max_mtu_length = 23;
+    byte[] tx_byte = new byte[255] ;
     @RequiresApi(21)
     private ScanCallback mScanCallback;
 
@@ -351,13 +354,20 @@ public class test_ble extends AppCompatActivity  {
                 UUID_WRITE_DESCRIPTOR);
     }
 
+    int idx=0;
     public void clk_write_data(View view) {
-        byte bytes[] = {0x0, 0x9, 0x9};
-        liteBluetooth.writeDataToCharacteristic(
-                UUID_SERVICE,
-                UUID_WRITE_CHARA,
-                bytes
-        );
+//        byte bytes[] = {0x0, 0x9, 0x9};
+//        liteBluetooth.writeDataToCharacteristic(
+//                UUID_SERVICE,
+//                UUID_WRITE_CHARA,
+//                bytes
+//        );
+
+        Log.d(TAG,"max_mtu_length:" + max_mtu_length);
+        set_same_byte(tx_byte,max_mtu_length-3,idx);
+        Log.d(TAG,"set same byte result:" + bytes2String(tx_byte));
+        liteBluetooth.ble_write_cmd(MB, UUID_SERVICE, UUID_WRITE_CHARA, max_mtu_length, tx_byte);
+        idx++;
     }
 
     public void clk_readData(View view) {
@@ -408,7 +418,7 @@ public class test_ble extends AppCompatActivity  {
     Runnable reqMTU_run = new Runnable() {
         @Override public void run() {
             Log.w(TAG,"reqMTU_run");
-            int n = 30;
+            int n = 200;
             liteBluetooth.getBluetoothGatt().requestMtu(n);
         }
     };
@@ -510,21 +520,21 @@ public class test_ble extends AppCompatActivity  {
         @Override
         public void CharaValueChangedSuccessCB(String UUID, byte[] CBData) {
             Log.e(TAG, "MB CharaValueChanged uuid:" + UUID);
-//            printbytes(CBData);
+            printbytes(CBData);
 //            byte bytes[] = {(byte)0x01, 0x02, 0x03};
 //            liteBluetooth.writeDataToCharacteristic(
 //                    UUID_SERVICE,
 //                    UUID_WRITE_CHARA,
 //                    bytes);
 
-            mb_tx_pkt_count++;
-            mb_rx_pkt_count++;
-            if (mb_max_pkt_count == mb_tx_pkt_count) {
-                dut_reset2Default();
-            }
-            byte tx[] = intToByteArray(mb_tx_pkt_count);
-            Log.d(TAG,"send data : 0x" + String.format("%08X", mb_tx_pkt_count));
-            mb_send_data(UUID_SERVICE, UUID_WRITE_CHARA, tx);
+//            mb_tx_pkt_count++;
+//            mb_rx_pkt_count++;
+//            if (mb_max_pkt_count == mb_tx_pkt_count) {
+//                dut_reset2Default();
+//            }
+//            byte tx[] = intToByteArray(mb_tx_pkt_count);
+//            Log.d(TAG,"send data : 0x" + String.format("%08X", mb_tx_pkt_count));
+//            mb_send_data(UUID_SERVICE, UUID_WRITE_CHARA, tx);
         }
 
 
@@ -551,6 +561,18 @@ public class test_ble extends AppCompatActivity  {
             Log.e(TAG, "MB write desc fail uuid:" + UUID);
         }
 
+        @Override
+        public void onMtuChangedSuccessCB(int mtu) {
+            super.onMtuChangedSuccessCB(mtu);
+            max_mtu_length = mtu;
+            Log.w(TAG, "MB onMtuChangedSuccessCB:" + mtu);
+        }
+
+        @Override
+        public void onMtuChangedFailCB(int mtu) {
+            super.onMtuChangedFailCB(mtu);
+            Log.w(TAG, "MB onMtuChangedFailCB:" + mtu);
+        }
     }
 
     private class DUT_GattCB extends LiteBLECallback {
@@ -607,21 +629,21 @@ public class test_ble extends AppCompatActivity  {
         @Override
         public void CharaValueChangedSuccessCB(String UUID, byte[] CBData) {
             Log.e(TAG, "DUT CharaValueChanged uuid:" + UUID);
-//            printbytes(CBData);
+            printbytes(CBData);
 //            byte bytes[] = {(byte)0x04, 0x05, 0x06};
 //            liteBluetooth_DUT.writeDataToCharacteristic(
 //                    UUID_SERVICE,
 //                    UUID_WRITE_CHARA,
 //                    bytes);
             // prepare send next
-            dut_tx_pkt_count++;
-            dut_rx_pkt_count++;
-            if (dut_max_pkt_count == dut_tx_pkt_count) {
-                dut_reset2Default();
-            }
-            byte tx[] = intToByteArray(dut_tx_pkt_count);
-            Log.d(TAG,"send data : 0x" + String.format("%08X", dut_tx_pkt_count));
-            dut_send_data(UUID_SERVICE, UUID_WRITE_CHARA, tx);
+//            dut_tx_pkt_count++;
+//            dut_rx_pkt_count++;
+//            if (dut_max_pkt_count == dut_tx_pkt_count) {
+//                dut_reset2Default();
+//            }
+//            byte tx[] = intToByteArray(dut_tx_pkt_count);
+//            Log.d(TAG,"send data : 0x" + String.format("%08X", dut_tx_pkt_count));
+//            dut_send_data(UUID_SERVICE, UUID_WRITE_CHARA, tx);
         }
 
 
@@ -731,5 +753,14 @@ public class test_ble extends AppCompatActivity  {
             break;
         }
 
+    }
+
+    void set_same_byte(byte[] bytes,int size, int set_value)
+    {
+
+        for(int i=0;i<size;i++)
+        {
+            bytes[i] = (byte)set_value;
+        }
     }
 }
