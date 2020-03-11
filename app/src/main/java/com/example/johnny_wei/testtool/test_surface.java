@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class test_surface extends AppCompatActivity {
+    private final String className = getClass().getSimpleName();
     LinearLayout layoutGet;
     LinkedList<Integer> data_list = new LinkedList<Integer>();
     private Object lock = new Object();
@@ -123,9 +124,12 @@ public class test_surface extends AppCompatActivity {
     public void produce() throws InterruptedException {
         synchronized (lock) {
 //            System.out.println("produce enter");
+            int random_data;
             for (int i = 0; i < add_sample; i++) {
+//                random_data = generatRandomPositiveNegitiveValue(500,-100);
+//                Log.d(className, "random_data:"+random_data);
+//                data_list.add(random_data);
                 if (i % 2 == 0) {
-                    //data_list.add(generatRandomPositiveNegitiveValue(500,100));
                     data_list.add(100);
                 } else {
                     //data_list.add(-100);
@@ -180,11 +184,13 @@ public class test_surface extends AppCompatActivity {
             super.onSizeChanged(w, h, oldw, oldh);
             Log.w("MySurfaceView", "onSizeChanged Height is :" + h);
             Log.w("MySurfaceView", "onSizeChanged width is :" + w);
-            y_axis_positive_max = h / 2;
+            //y_axis_positive_max = h / 2;
+            y_axis_positive_max = h ;
             y_axis_negtive_max = h / 2;
             mWidth = w;
             mHeight = h;
-            baseline = h / 2;
+//            baseline = h / 2;
+            baseline = h;
             for (int i = 0; i < sample; i++) {
                 data_x[i] = (i) * (mWidth / sample);
             }
@@ -290,8 +296,8 @@ public class test_surface extends AppCompatActivity {
                             tmp_data_array[i] = tmp_data_array[i] - min;
                         }
                         max = findMax(tmp_data_array);
-
-                        //Log.d("tmp_data_list", "tmp_data_array max:" + max + ",tmp_data_array min:" + min);
+                        //after modify
+//                        Log.d("tmp_data_list", "tmp_data_array max:" + max + ",tmp_data_array min:" + min);
                         for (int i = 0; i < sample; i++) {
                             //Log.d("consume", data_list.get(i).toString());
                             tmp = (float) tmp_data_array[i] / max;
@@ -311,7 +317,7 @@ public class test_surface extends AppCompatActivity {
                 for (int i = 0; i < sample -update_sample; i+=update_sample) {
                     mCanvas.drawLine(data_x[i], baseline-data_y[i], data_x[i+update_sample], baseline-data_y[i+update_sample],p);
 //                    Log.d("MySurfaceView", "x idx " + i + " data_x[i]:" + data_x[i]+ " data_y[i]:" + data_y[i]);
-//                    Log.d("MySurfaceView", "y idx " + i + " data_x[i+2]:" + data_x[i+update_sample]+ " data_y[i+2]:" + data_y[i+update_sample]);
+//                    Log.d("MySurfaceView", "y idx " + i + " data_x[i+1]:" + data_x[i+update_sample]+ " data_y[i+1]:" + data_y[i+update_sample]);
                     try {
                         Thread.sleep(0);
                     } catch (InterruptedException e) {
