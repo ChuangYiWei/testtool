@@ -1,16 +1,16 @@
 package com.example.johnny_wei.testtool;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,10 +20,10 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -31,6 +31,7 @@ public class test_surface extends AppCompatActivity {
     private final String className = getClass().getSimpleName();
     LinearLayout layoutGet;
     LinkedList<Integer> data_list = new LinkedList<Integer>();
+    MySurfaceView mSurfaceView;
     private Object lock = new Object();
     int sample = 300;
     int add_sample = 5;
@@ -69,8 +70,9 @@ public class test_surface extends AppCompatActivity {
         //setContentView(new MyView(this));
         layoutGet = (LinearLayout) findViewById(R.id.linear);
         //setContentView(new MySurfaceView(this));
-        layoutGet.addView(new MySurfaceView(this));
-
+        mSurfaceView = new MySurfaceView(this);
+        layoutGet.addView(mSurfaceView);
+        mSurfaceView.enable_draw();
         Log.d("test_surface", "layoutGet.getWidth() : " + layoutGet.getWidth());
         Log.d("test_surface", "layoutGet.getLayoutParams().width : " + layoutGet.getLayoutParams().width);
         Log.d("test_surface", "layoutGet.getLayoutParams().height : " + layoutGet.getLayoutParams().height);
@@ -159,12 +161,23 @@ public class test_surface extends AppCompatActivity {
         return (ii - 140);
     }
 
+    public void btn_stop(View view) {
+        mSurfaceView.disable_draw();
+    }
+
     public class MySurfaceView extends SurfaceView implements Runnable, SurfaceHolder.Callback {
         private SurfaceHolder mHolder; // 用于控制SurfaceView
+        //state
+        boolean enable_draw = false;
+
+        public Handler ui_handler = new Handler(Looper.getMainLooper());
+
+        int draw_ms=0;
+
         private Thread t; // 声明一条线程
         private volatile boolean flag; // 线程运行的标识，用于控制线程
         private Canvas mCanvas; // 声明一张画布
-        private Paint p; // 声明一支画笔
+        private Paint mPaint; // 声明一支画笔
         float m_circle_r = 10;
 
         public MySurfaceView(Context context) {
@@ -172,9 +185,9 @@ public class test_surface extends AppCompatActivity {
 
             mHolder = getHolder(); // 获得SurfaceHolder对象
             mHolder.addCallback(this); // 为SurfaceView添加状态监听
-            p = new Paint(); // 创建一个画笔对象
-            p.setStrokeWidth(3);
-            p.setColor(Color.RED); // 设置画笔的颜色为白色
+            mPaint = new Paint(); // 创建一个画笔对象
+            mPaint.setStrokeWidth(3);
+            mPaint.setColor(Color.RED); // 设置画笔的颜色为白色
             setFocusable(true); // 设置焦点                //red color
 
         }
@@ -202,9 +215,9 @@ public class test_surface extends AppCompatActivity {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
             Log.w("MySurfaceView", "surfaceCreated");
-            t = new Thread(this); // 创建一个线程对象
-            flag = true; // 把线程运行的标识设置成true
-            t.start(); // 启动线程
+//            t = new Thread(this); // 创建一个线程对象
+//            flag = true; // 把线程运行的标识设置成true
+//            t.start(); // 启动线程
 
         }
 
@@ -270,6 +283,41 @@ public class test_surface extends AppCompatActivity {
             }
         }
 
+        private Runnable draw_ppg_runnable = new Runnable() {
+            @Override
+            public void run() {
+                if(enable_draw) {
+                    try {
+                        synchronized (mHolder) {
+                            test_draw_data_own_data();
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } finally {
+                        if (mCanvas != null) {
+                            mHolder.unlockCanvasAndPost(mCanvas);// 完成画画，把画布显示在屏幕上结束锁定画图，并提交改变。
+                        }
+                    }
+
+                    ui_handler.postDelayed(draw_ppg_runnable, draw_ms);
+                }
+            }
+        };
+
+        public void enable_draw()
+        {
+            enable_draw = true;
+            ui_handler.postDelayed(draw_ppg_runnable,1000);
+
+//        ui_handler.postDelayed(check_size_timer_run,1000);
+        }
+
+        public void disable_draw()
+        {
+            enable_draw = false;
+            ui_handler.removeCallbacks(draw_ppg_runnable);
+        }
+
         int g_x = 0;
         int g_y = 0;
         int w = 800;
@@ -281,7 +329,7 @@ public class test_surface extends AppCompatActivity {
         int min;
         int max;
         int[] tmp_data_array = new int[sample];
-        public void test_draw_data_own_data() {
+        public void test_draw_data_own_data() throws InterruptedException {
 
             mCanvas = mHolder.lockCanvas(); // 获得画布对象，开始对画布画画
             if (mCanvas != null) {
@@ -315,7 +363,7 @@ public class test_surface extends AppCompatActivity {
                 //clear canvas
                 mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
                 for (int i = 0; i < sample -update_sample; i+=update_sample) {
-                    mCanvas.drawLine(data_x[i], baseline-data_y[i], data_x[i+update_sample], baseline-data_y[i+update_sample],p);
+                    mCanvas.drawLine(data_x[i], baseline-data_y[i], data_x[i+update_sample], baseline-data_y[i+update_sample], mPaint);
 //                    Log.d("MySurfaceView", "x idx " + i + " data_x[i]:" + data_x[i]+ " data_y[i]:" + data_y[i]);
 //                    Log.d("MySurfaceView", "y idx " + i + " data_x[i+1]:" + data_x[i+update_sample]+ " data_y[i+1]:" + data_y[i+update_sample]);
                     try {

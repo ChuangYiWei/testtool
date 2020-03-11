@@ -26,10 +26,10 @@ public class bytecheck extends AppCompatActivity {
              0x21, (byte) 0xE8, (byte) 0x80,  0x21, (byte) 0xEF
             };
     private byte[] raw_data1 =
-            {0x21, (byte) 0x21, 0x21, 0x21, (byte) 0xDF,
-                    0x60, 0x21, (byte) 0xE0, 0x60, 0x21,
-                    (byte) 0xE0, 0x00, 0x21, (byte) 0xE2, 0x00,
-                    0x21, (byte) 0xE8, (byte) 0x80,  0x21, (byte) 0xEF
+            {(byte)0xF1, (byte) 0x21, (byte)0x21, (byte)0x21, (byte) 0xDF,
+                    (byte)0x60,(byte) 0x21, (byte) 0xE0, (byte)0x60, (byte)0x21,
+                    (byte) 0xE0, (byte)0x00, (byte)0x21, (byte) 0xE2, (byte)0x00,
+                    (byte)0x21, (byte) (byte)0xE8, (byte) 0x80,  (byte)0x21, (byte) 0xEF
             };
 
 
@@ -58,7 +58,7 @@ public class bytecheck extends AppCompatActivity {
 //        HCI_check_evt_success("040E0C01032000254D000000000000");
 //        HCI_check_evt_success("040F0400011D04040C08000000081D00D307");
 //        HCI_check_evt_success("040E07012D0C000E0006");
-        read_remote_version();
+        //read_remote_version();
 //        substr();
 //        splitData();
 //        comparephyaddr();
@@ -76,16 +76,21 @@ public class bytecheck extends AppCompatActivity {
 //        List<String> mouse_list = new ArrayList<>();
 //        readline("HID_CMD/mouse_cmd.txt",mouse_list);
 
-        Log.d(TAG, "Get_HCI_change_interval_cmd:" + Get_HCI_change_interval_cmd(6, 7));
-        Log.d(TAG, "Get_HCI_change_interval_cmd:" + Get_HCI_change_interval_cmd(17, 18));
-        Log.d(TAG, "parsing_hci_get_interval_evt:" + parsing_hci_get_interval_evt("040E070164FC00200000", 0));
+        //parse_change_intv_example
 
-        Get_HCI_Thrput_cmd(0,100,1000);
-        parse_hci_thrput_cmd("0162FC0300140A",0);
-        parse_hci_thrput_cmd("0162FC0300140A",1);
+//        Get_HCI_Thrput_cmd(0,100,1000);
+//        parse_hci_thrput_cmd("0162FC0300140A",0);
+//        parse_hci_thrput_cmd("0162FC0300140A",1);
 
     }
 
+
+    void parse_change_intv_example()
+    {
+        Log.d(TAG, "Get_HCI_change_interval_cmd:" + Get_HCI_change_interval_cmd(6, 7));
+        Log.d(TAG, "Get_HCI_change_interval_cmd:" + Get_HCI_change_interval_cmd(17, 18));
+        Log.d(TAG, "parsing_hci_get_interval_evt:" + parsing_hci_get_interval_evt("040E070164FC00200000", 0));
+    }
     //type : 0 get packet length
     //type : 1 get data_size * 1000
     int parse_hci_thrput_cmd(String cmd, int type)
@@ -278,14 +283,23 @@ public class bytecheck extends AppCompatActivity {
         Long long_converted_data=0L;
         for (int i = 0; i < 16; i += 4) {
 
-
             Log.d(TAG,"convert_3byte_Long:" +String.format("0x%8x",convert_3byte_to_Long(raw_data1,i)));
             Log.d(TAG,"convert_3byte_Long string:" +Long.toString(convert_3byte_to_Long(raw_data1,i)));
             Log.d(TAG,"convert_4byte_Long:" + String.format("0x%8x",convert_4byte_to_Long(raw_data1,i)));
             Log.d(TAG,"convert_4byte_Long string:" + Long.toString(convert_4byte_to_Long(raw_data1,i)));
         }
 
+        for(int i=0;i<18;i+=3)
+        {
+            Log.d(TAG,"convert_3byte_int:" + String.format("0x%8x",convert_3byte_to_int(raw_data1,i)));
+            Log.d(TAG,"int:" + convert_3byte_to_int(raw_data1,i));
+        }
 
+        for(int i=0;i<16;i+=4)
+        {
+            Log.d(TAG,"convert_4byte_to_int:" + String.format("0x%8x",convert_4byte_to_int(raw_data1,i)));
+            Log.d(TAG,"int:" + convert_4byte_to_int(raw_data1,i));
+        }
     }
 
     Long convert_4byte_to_Long(byte[] bytedata, int index)
@@ -312,6 +326,22 @@ public class bytecheck extends AppCompatActivity {
                 (long)(0xFF & bytedata[index+1]) << 8 |
                 (long)(0xFF & bytedata[index+2]);
     }
+
+    int convert_3byte_to_int(byte[] bytedata, int index) {
+        return
+                (0xFF & bytedata[index]) << 24 |
+                (0xFF & bytedata[index + 1]) << 16 |
+                (0xFF & bytedata[index + 2]) << 8;
+    }
+
+    int convert_4byte_to_int(byte[] bytedata, int index) {
+        return
+                (0xFF & bytedata[index]) << 24 |
+                        (0xFF & bytedata[index + 1]) << 16 |
+                        (0xFF & bytedata[index + 2]) << 8 |
+                        (0xFF & bytedata[index + 3]);
+    }
+
 
     public static int byteArrayToInt(byte[] b, int index){
         return   b[index+3] & 0xFF |
