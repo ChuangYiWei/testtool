@@ -28,7 +28,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class test_surface extends AppCompatActivity {
-    private final String className = getClass().getSimpleName();
+    private final String TAG = getClass().getSimpleName();
     LinearLayout layoutGet;
     LinkedList<Integer> data_list = new LinkedList<Integer>();
     MySurfaceView mSurfaceView;
@@ -43,7 +43,8 @@ public class test_surface extends AppCompatActivity {
     int y_axis_negtive_max = 0;//最大顯示負y軸座標
     int y_data_max_value = 1;//當前y最大值,max(abs(valus)})
     int baseline = 0; //起始點座標
-
+    boolean data_bigger_than_sample = false;
+    boolean ifproduceData = true;
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -117,9 +118,9 @@ public class test_surface extends AppCompatActivity {
     });
 
     void init_data() {
-        for (int i = 0; i < sample; i++) {
-            data_list.add(i);
-        }
+//        for (int i = 0; i < sample; i++) {
+//            data_list.add(i);
+//        }
         Log.d("test_surface", "list size:" + data_list.size());
     }
 
@@ -163,6 +164,23 @@ public class test_surface extends AppCompatActivity {
 
     public void btn_stop(View view) {
         mSurfaceView.disable_draw();
+        data_bigger_than_sample = false;
+        resetpara();
+        ifproduceData = false;
+
+
+    }
+    void resetpara()
+    {
+        synchronized (lock)
+        {
+            data_list.clear();
+        }
+    }
+
+    public void btn_start(View view) {
+        mSurfaceView.enable_draw();
+        ifproduceData =true;
     }
 
     public class MySurfaceView extends SurfaceView implements Runnable, SurfaceHolder.Callback {
@@ -316,7 +334,9 @@ public class test_surface extends AppCompatActivity {
         {
             enable_draw = false;
             ui_handler.removeCallbacks(draw_ppg_runnable);
+
         }
+
 
         int g_x = 0;
         int g_y = 0;
@@ -329,62 +349,109 @@ public class test_surface extends AppCompatActivity {
         int min;
         int max;
         int[] tmp_data_array = new int[sample];
+
         public void test_draw_data_own_data() throws InterruptedException {
 
             mCanvas = mHolder.lockCanvas(); // 获得画布对象，开始对画布画画
             if (mCanvas != null) {
-                Log.w("MySurfaceView", "data_list size:" + data_list.size());
-                synchronized (lock) {
-                    if (data_list.size() >= sample) {
-                        for (int i = 0; i < sample; i++) {
-                            tmp_data_array[i] = data_list.get(i);
+                do{
+                    Log.w("MySurfaceView", "top data_list.size():" +data_list.size());
+                    synchronized (lock) {
+                        if (data_list.size() <= 10) {
+                            break;
                         }
-                        min = findMin(tmp_data_array);
-                        for (int i = 0; i < sample; i++) {
-                            tmp_data_array[i] = tmp_data_array[i] - min;
-                        }
-                        max = findMax(tmp_data_array);
-                        //after modify
+                        if (data_list.size() >= sample) {
+                            data_bigger_than_sample = true;
+                            Log.w("MySurfaceView", "data_list size11:" + data_list.size());
+                            for (int i = 0; i < sample; i++) {
+                                tmp_data_array[i] = data_list.get(i);
+                            }
+                            min = findMin(tmp_data_array);
+                            for (int i = 0; i < sample; i++) {
+                                tmp_data_array[i] = tmp_data_array[i] - min;
+                            }
+                            max = findMax(tmp_data_array);
+                            //after modify
 //                        Log.d("tmp_data_list", "tmp_data_array max:" + max + ",tmp_data_array min:" + min);
-                        for (int i = 0; i < sample; i++) {
-                            //Log.d("consume", data_list.get(i).toString());
-                            tmp = (float) tmp_data_array[i] / max;
-                            data_y[i] = (int) (y_axis_positive_max * tmp);
-                            //Log.d("MySurfaceView", "data_y idx " + i + "tmp:" + tmp + ",data_y:" + data_y[i] + ",y_max_value:" + y_data_max_value);
-                        }
-                        //remove first nth data
-                        for (int i = 0; i < update_sample; i++) {
-                            data_list.removeFirst();
+                            for (int i = 0; i < sample; i++) {
+                                //Log.d("consume", data_list.get(i).toString());
+                                tmp = (float) tmp_data_array[i] / max;
+                                data_y[i] = (int) (y_axis_positive_max * tmp);
+                                //Log.d("MySurfaceView", "data_y idx " + i + "tmp:" + tmp + ",data_y:" + data_y[i] + ",y_max_value:" + y_data_max_value);
+                            }
+                            //remove first nth data
+                            for (int i = 0; i < update_sample; i++) {
+                                data_list.removeFirst();
+                            }
+                        } else if ((!data_bigger_than_sample)) {
+                            Log.w("MySurfaceView", "data_list size22:" + data_list.size());
+
+                            //只顯示有資料的地方,ex:sample idx 220 ~ sample idx 300
+                            for (int i = sample - data_list.size(); i < sample; i++) {
+                                tmp_data_array[i] = data_list.get(i - sample + data_list.size());//data start from 0
+                            }
+                            Log.d(TAG, "tmp_data_array max2:" + findMax(tmp_data_array, sample - data_list.size(), sample) + ",tmp_data_array min:" + findMin(tmp_data_array, sample - data_list.size(), sample));
+                            //找到最大最小值後讓所有數值變正值
+                            min = findMin(tmp_data_array, sample - data_list.size(), sample);
+                            for (int i = sample - data_list.size(); i < sample; i++) {
+                                tmp_data_array[i] = tmp_data_array[i] - min;
+                            }
+                            max = findMax(tmp_data_array, sample - data_list.size(), sample);
+                            //修改完後
+                            Log.d(TAG, "tmp_data_array max2:" + findMax(tmp_data_array, sample - data_list.size(), sample) + ",tmp_data_array min:" + findMin(tmp_data_array, sample - data_list.size(), sample));
+                            for (int i = sample - data_list.size(); i < sample; i++) {
+                                //Log.d("consume", data_list.get(i).toString());
+                                tmp = (float) tmp_data_array[i] / max;
+                                data_y[i] = (int) (y_axis_positive_max * tmp);
+                                //Log.d("MySurfaceView", "data_y idx " + i + "tmp:" + tmp + ",data_y:" + data_y[i] + ",y_max_value:" + y_data_max_value);
+                            }
+//                            for(int i=0;i< sample;i++)
+//                            {
+//                                Log.d("MySurfaceView", i+":"+tmp_data_array[i]);
+//                            }
+                            //do not remove data
                         }
                     }
-                }
-                //Log.w("MySurfaceView", "mWidth: " + mWidth + ",mHeight:" + mHeight);
 
-                //clear canvas
-                mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-                for (int i = 0; i < sample -update_sample; i+=update_sample) {
-                    mCanvas.drawLine(data_x[i], baseline-data_y[i], data_x[i+update_sample], baseline-data_y[i+update_sample], mPaint);
+                    //Log.w("MySurfaceView", "mWidth: " + mWidth + ",mHeight:" + mHeight);
+
+                    //clear canvas
+                    if (data_bigger_than_sample) {
+                        mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                        Log.w("MySurfaceView", "canvas data_list size11:" + data_list.size());
+
+                        for (int i = 0; i < sample - update_sample; i += update_sample) {
+                            mCanvas.drawLine(data_x[i], baseline - data_y[i], data_x[i + update_sample], baseline - data_y[i + update_sample], mPaint);
 //                    Log.d("MySurfaceView", "x idx " + i + " data_x[i]:" + data_x[i]+ " data_y[i]:" + data_y[i]);
 //                    Log.d("MySurfaceView", "y idx " + i + " data_x[i+1]:" + data_x[i+update_sample]+ " data_y[i+1]:" + data_y[i+update_sample]);
-                    try {
-                        Thread.sleep(0);
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                            try {
+                                Thread.sleep(0);
+                            } catch (InterruptedException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+                        }
                     }
-                }
-                //normal
-//                for (int i = 0; i < sample - 1; i++) {
-//                    mCanvas.drawLine(data_x[i], baseline - data_y[i], data_x[i + 1], baseline - data_y[i + 1], p);
-////                    Log.d("MySurfaceView", "x idx " + i + " data_x[i]:" + data_x[i] + " data_y[i]:" + data_y[i]);
-////                    Log.d("MySurfaceView", "y idx " + i + " data_x[i+1]:" + data_x[i+1]+ " data_y[i+1]:" + data_y[i+1]);
-//                    try {
-//                        Thread.sleep(1);
-//                    } catch (InterruptedException e) {
-//                        // TODO Auto-generated catch block
-//                        e.printStackTrace();
-//                    }
-//                }
+                    else
+                    {
+                        Log.w("MySurfaceView", "canvas data_list size22:" + data_list.size());
+//                    //開始畫得的起始點從有資料的地方開始
+                        mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                        for (int i = sample -data_list.size(); i < sample -update_sample; i+=update_sample) {
+                            mCanvas.drawLine(data_x[i], baseline-data_y[i], data_x[i+update_sample], baseline-data_y[i+update_sample], mPaint);
+//                    Log.d("MySurfaceView", "x idx " + i + " data_x[i]:" + data_x[i]+ " data_y[i]:" + data_y[i]);
+//                    Log.d("MySurfaceView", "y idx " + i + " data_x[i+1]:" + data_x[i+update_sample]+ " data_y[i+1]:" + data_y[i+update_sample]);
+                            try {
+                                Thread.sleep(0);
+                            } catch (InterruptedException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                }while(false);
+
             }
         }
 
@@ -559,6 +626,40 @@ public class test_surface extends AppCompatActivity {
         }
         return max;
     }
+
+    /**
+     *找到array內最大值,
+     * begin : 起始點index
+     * end:結束點index
+     * */
+    int findMax(int[] arrays,int begin,int end)
+    {
+        int max = arrays[begin];
+        for (int i = begin+1; i < end; i++) {
+            if (arrays[i] > max) {
+                max = arrays[i];
+            }
+        }
+        return max;
+    }
+
+    /**
+     *找到array內最小值,
+     * begin : 起始點index
+     * end:結束點index
+     * */
+    int findMin(int[] arrays,int begin,int end)
+    {
+        int min = arrays[begin];
+
+        for (int i = begin+1; i < end; i++) {
+            if (arrays[i] < min) {
+                min = arrays[i];
+            }
+        }
+        return min;
+    }
+
     int[] raw_data1 = new int[]{
             99,20,30,40,50,60,70,80,90,100,
             0,20,30,40,50,60,70,80,90,100,
