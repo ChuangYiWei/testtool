@@ -43,7 +43,7 @@ public class test_surface extends AppCompatActivity {
     int y_axis_negtive_max = 0;//最大顯示負y軸座標
     int y_data_max_value = 1;//當前y最大值,max(abs(valus)})
     int baseline = 0; //起始點座標
-    boolean data_bigger_than_sample = false;
+    boolean st_data_bigger_than_sample = false;
     boolean ifproduceData = true;
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -164,7 +164,7 @@ public class test_surface extends AppCompatActivity {
 
     public void btn_stop(View view) {
         mSurfaceView.disable_draw();
-        data_bigger_than_sample = false;
+        st_data_bigger_than_sample = false;
         resetpara();
         ifproduceData = false;
 
@@ -361,7 +361,7 @@ public class test_surface extends AppCompatActivity {
                             break;
                         }
                         if (data_list.size() >= sample) {
-                            data_bigger_than_sample = true;
+                            st_data_bigger_than_sample = true;
                             Log.w("MySurfaceView", "data_list size11:" + data_list.size());
                             for (int i = 0; i < sample; i++) {
                                 tmp_data_array[i] = data_list.get(i);
@@ -383,7 +383,7 @@ public class test_surface extends AppCompatActivity {
                             for (int i = 0; i < update_sample; i++) {
                                 data_list.removeFirst();
                             }
-                        } else if ((!data_bigger_than_sample)) {
+                        } else if ((!st_data_bigger_than_sample)) {
                             Log.w("MySurfaceView", "data_list size22:" + data_list.size());
 
                             //只顯示有資料的地方,ex:sample idx 220 ~ sample idx 300
@@ -416,7 +416,7 @@ public class test_surface extends AppCompatActivity {
                     //Log.w("MySurfaceView", "mWidth: " + mWidth + ",mHeight:" + mHeight);
 
                     //clear canvas
-                    if (data_bigger_than_sample) {
+                    if (st_data_bigger_than_sample) {
                         mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
                         Log.w("MySurfaceView", "canvas data_list size11:" + data_list.size());
 

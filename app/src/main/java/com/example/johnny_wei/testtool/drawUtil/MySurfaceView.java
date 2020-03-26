@@ -29,8 +29,10 @@ public class MySurfaceView extends SurfaceView implements Runnable, SurfaceHolde
      */
     public void doDraw() {
         mCanvas = mHolder.lockCanvas(); // 获得画布对象，开始对画布画画
-        mCanvas.drawRGB(0, 0, 0); // 把画布填充为黑色
-        mCanvas.drawCircle(x, y, r, p); // 画一个圆
+        //mCanvas.drawRGB(0, 0, 0); // 把画布填充为黑色
+        //mCanvas.drawCircle(x, y, r, p); // 画一个圆
+        mCanvas.drawLine(5, 300, 100, 100, p);
+        mCanvas.drawLine(100, 100, 160, 300, p);
         mHolder.unlockCanvasAndPost(mCanvas); // 完成画画，把画布显示在屏幕上
     }
     /**

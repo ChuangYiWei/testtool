@@ -19,6 +19,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.johnny_wei.testtool.drawUtil.MovePathView;
+import com.example.johnny_wei.testtool.drawUtil.MySurfaceView;
 import com.example.johnny_wei.testtool.drawUtil.PaintView;
 import com.example.johnny_wei.testtool.drawUtil.TestPathView;
 
@@ -37,6 +38,8 @@ public class test_draw extends AppCompatActivity {
     LinearLayout layoutGet;
     RadioButton rdx_ecg;
     RadioButton rdx_ppg;
+
+    MySurfaceView mySurfaceView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,10 +47,18 @@ public class test_draw extends AppCompatActivity {
         //pv = new PaintView(this, null);
         setContentView(R.layout.activity_test_draw);
         layoutGet = (LinearLayout) findViewById(R.id.lin_layout);
+
+        //draw by canvas
+        mySurfaceView = new MySurfaceView(this);
+        layoutGet.addView(mySurfaceView);
+
+        //simulate ppg
+//        test_view = new TestPathView(this);
+//        layoutGet.addView(test_view);
+
         //mv = new MovePathView(this);
-        test_view = new TestPathView(this);
-        layoutGet.addView(test_view);
         //setContentView(mv);
+
 
         radio_setup();
         static_test_draw = this;

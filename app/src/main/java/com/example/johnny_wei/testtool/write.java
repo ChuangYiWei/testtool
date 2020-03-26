@@ -73,22 +73,22 @@ public class write extends AppCompatActivity {
     void assetCopy()
     {
         //copyAssets();
-        copyAssetsToFiles(this);
+        copyAssetsToFiles(this,"01_CONFIG","01_CONFIG");
     }
 
-    private void copyAssetsToFiles(Context context) {
+    private void copyAssetsToFiles(Context context,String assetSrcDir, String SDcardDestDir) {
         String[] files;
         try {
             //注意：在assets文件夹下影藏了三个带文件的文件夹，分别是images、sounds、webkit
             //返回数组files里面会包含这三个文件夹
 //            files = context.getResources().getAssets().list("");
-            files = context.getResources().getAssets().list("01_CONFIG");
+            files = context.getResources().getAssets().list(assetSrcDir);
         } catch (IOException e1) {
             return;
         }
 
         String File_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
-        File mWorkingPath = new File(File_PATH, "/01_CONFIG");
+        File mWorkingPath = new File(File_PATH, SDcardDestDir);
         if (!mWorkingPath.exists()) {
             mWorkingPath.mkdirs();
         }
@@ -96,12 +96,14 @@ public class write extends AppCompatActivity {
         for (int i = 0; i < files.length; i++) {
             try {
                 String fileName = files[i];
+                Log.d(className, " fileName:" + fileName);
                 File outFile = new File(mWorkingPath, fileName);
                 if (outFile.exists()) {
+                    Log.d(className,fileName + " exist, skip");
                     continue;
                 }
 
-                InputStream in = context.getAssets().open(fileName);
+                InputStream in = context.getAssets().open(assetSrcDir + "/" + fileName);
                 OutputStream out = new FileOutputStream(outFile);
                 byte[] buf = new byte[1024];
                 int len;
