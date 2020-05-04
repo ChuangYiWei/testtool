@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 
 
+import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_BACKGROUND_LOCATION;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_COARSE_LOCATION;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE;
 
@@ -57,6 +58,20 @@ public class Permission {
             //未取得權限，向使用者要求允許權限
             if (permission != PackageManager.PERMISSION_GRANTED) {
                 argActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
+            }
+        }
+        else {
+            // do nothing
+        }
+    }
+
+    @TargetApi(29)
+    public static void Req_Access_Access_Background_Location(Activity argActivity) {
+        if(Build.VERSION.SDK_INT >= 29){
+            int permission = argActivity.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+            //未取得權限，向使用者要求允許權限
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                argActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, PERMISSION_REQUEST_BACKGROUND_LOCATION);
             }
         }
         else {

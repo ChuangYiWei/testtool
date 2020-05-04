@@ -1,5 +1,6 @@
 package com.example.johnny_wei.testtool;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -7,9 +8,11 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.RequiresApi;
@@ -44,6 +47,8 @@ import static android.bluetooth.BluetoothDevice.PHY_OPTION_NO_PREFERRED;
 import static com.example.johnny_wei.testtool.config.globalConfig.BLE5_API_LEVEL;
 import static com.example.johnny_wei.testtool.config.globalConfig.DUT;
 import static com.example.johnny_wei.testtool.config.globalConfig.MB;
+import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_ACCESS_FINE_LOCATION;
+import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_BACKGROUND_LOCATION;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_COARSE_LOCATION;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE;
 import static com.example.johnny_wei.testtool.config.globalConfig.REQ_CODE_BLE_DEV_ACT;
@@ -105,10 +110,28 @@ public class test_ble extends AppCompatActivity  {
 
         gatt_cb = new GattCB();
         dut_gatt_cb = new DUT_GattCB();
-
-        Permission.Req_Access_Coarse_Permissions(this);
-
         setupview();
+
+
+        if( Build.VERSION.SDK_INT >= 29) {
+            Log.d(TAG,"Req_Access_Access_Background_Location");
+            int permission = thisActivity.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+            //未取得權限，向使用者要求允許權限
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                thisActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, PERMISSION_REQUEST_BACKGROUND_LOCATION);
+            }
+
+//            int permission = thisActivity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+//            //未取得權限，向使用者要求允許權限
+//            if (permission != PackageManager.PERMISSION_GRANTED) {
+//                thisActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_ACCESS_FINE_LOCATION);
+//            }
+        }
+        else
+        {
+            Permission.Req_Access_Coarse_Permissions(this);
+        }
+
 
         if(DevUtil.if_LeScanner_API_support())
         {
@@ -311,15 +334,51 @@ public class test_ble extends AppCompatActivity  {
 
 
     public void clk_scan(View view) {
+        // Since Android 6.0 we need to obtain either Manifest.permission.ACCESS_COARSE_LOCATION or Manifest.permission.ACCESS_FINE_LOCATION to be able to scan for
+        // Bluetooth LE devices. This is related to beacons as proximity devices.
+        // On API older than Marshmallow the following code does nothing.
+//        if(Build.VERSION.SDK_INT >= 23) {
+//
+//            int permission = thisActivity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+//            if (permission != PackageManager.PERMISSION_GRANTED) {
+//                Log.w(TAG, "requset ACCESS_COARSE_LOCATION");
+//                thisActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
+//            }
+//        }
+
+        if( Build.VERSION.SDK_INT >= 29) {
+            int permission = thisActivity.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+            //未取得權限，向使用者要求允許權限
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG,"Req_Access_Access_Background_Location");
+                thisActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, PERMISSION_REQUEST_BACKGROUND_LOCATION);
+            }
+        }
+        if(Build.VERSION.SDK_INT >= 23) {
+            int permission = thisActivity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+            //未取得權限，向使用者要求允許權限
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                Log.w(TAG, "requset ACCESS_FINE_LOCATION");
+                thisActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_ACCESS_FINE_LOCATION);
+            }
+        }
         if (DevUtil.if_LeScanner_API_support()) {
-            liteBluetooth.startAPI21_LeScan(mScanCallback, 5000);
+            ScanSettings settings = new ScanSettings.Builder()
+                    .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+                    .build();
+            liteBluetooth.startAPI21_LeScan(mScanCallback, null, settings, 5000);
         } else {
             liteBluetooth.startLeScan(mLeScanCallback, 5000);
         }
     }
 
     public void clk_stopscan(View view) {
-        liteBluetooth.stopLeScan(mLeScanCallback);
+        if (DevUtil.if_LeScanner_API_support()) {
+            liteBluetooth.stopAPI21_LeScan(mScanCallback);
+        } else {
+            liteBluetooth.stopLeScan(mLeScanCallback);
+        }
+
     }
 
     public void clk_getState(View view) {
@@ -733,6 +792,41 @@ public class test_ble extends AppCompatActivity  {
                 }
                 break;
             }
+            case PERMISSION_REQUEST_BACKGROUND_LOCATION: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "BACKGROUND_LOCATION permission granted");
+                } else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Functionality limited");
+                    builder.setMessage("Since BACKGROUND_LOCATION access has not been granted, this app will not be able to discover beacons when in the background.");
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+                break;
+            }
+            case PERMISSION_REQUEST_ACCESS_FINE_LOCATION: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "PERMISSION_REQUEST_ACCESS_FINE_LOCATION permission granted");
+                } else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Functionality limited");
+                    builder.setMessage("Since PERMISSION_REQUEST_ACCESS_FINE_LOCATION access has not been granted, this app will not be able to discover beacons when in the background.");
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+                break;
+            }
+
             case PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE: {
                 if (grantResults[0]
                         == PackageManager.PERMISSION_GRANTED) {

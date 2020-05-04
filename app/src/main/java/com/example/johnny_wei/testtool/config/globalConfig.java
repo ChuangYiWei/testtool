@@ -61,6 +61,8 @@ public class globalConfig {
 
     //ble location define
     public final static int PERMISSION_REQUEST_COARSE_LOCATION = 101;
+    public final static int PERMISSION_REQUEST_BACKGROUND_LOCATION = 110;
+    public final static int PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 111;
 
     //write permission define
     public final static int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 102;
