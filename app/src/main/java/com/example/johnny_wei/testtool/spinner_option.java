@@ -206,19 +206,35 @@ public class spinner_option extends AppCompatActivity {
             inflater = this.getLayoutInflater();
             scrollView = (View) inflater.inflate(R.layout.test_scroll, null);
             linerView = scrollView.findViewById(R.id.scroll_linear);
+            constraintView = linerView.findViewById(R.id.scroll_linear_cons_1);
+            Spinner notifySpinner = constraintView.findViewById(R.id.dbglevel_spinner);
+            String[] testModeArray = {"INFO","DEBUG"};
+            ArrayAdapter adapter = new ArrayAdapter(this, R.layout.myspinner, testModeArray);
 
-            /* add fake text view, can't scroll if we don't use scroll view*/
-            int i=0;
-            for(i=0;i<30;i++)
-            {
-                TextView m = new TextView(this);
-                String s= "linerView added"+i;
-                m.setText(s);
-                linerView.addView(m);
-            }
+            adapter.setDropDownViewResource(R.layout.myspinner);
+            notifySpinner.setAdapter(adapter);
+            notifySpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+                public void onItemSelected(AdapterView adapterView, View view, int position, long id){
 
+                    Toast.makeText(spinner_option.this, "You choose "+adapterView.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
+                }
+                public void onNothingSelected(AdapterView arg0) {
+                    Toast.makeText(spinner_option.this, "You did not choose", Toast.LENGTH_LONG).show();
+                }
+            });
+
+//            /* add fake text view, can't scroll if we don't use scroll view*/
+//            int i=0;
+//            for(i=0;i<30;i++)
+//            {
+//                TextView m = new TextView(this);
+//                String s= "linerView added"+i;
+//                m.setText(s);
+//                linerView.addView(m);
+//            }
+//
             builder = new AlertDialog.Builder(this);
-            builder.setTitle("這是標題")
+            builder.setTitle("")
                     .setView(scrollView)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -228,7 +244,7 @@ public class spinner_option extends AppCompatActivity {
                     });
             AlertDialog dialog = builder.create();
             dialog.show();
-            Toast.makeText(this, "幫忙", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "幫忙", Toast.LENGTH_SHORT).show();
             return true;
         }
         else if (id == R.id.baud_rate) {

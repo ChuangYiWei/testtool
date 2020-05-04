@@ -1,5 +1,6 @@
 package com.example.johnny_wei.testtool;
 
+import android.os.Build;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,9 +14,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+
+
 
 public class bytecheck extends AppCompatActivity {
     private final byte[] bytearray={0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F};
@@ -79,11 +83,52 @@ public class bytecheck extends AppCompatActivity {
         //parse_change_intv_example
 
 //        Get_HCI_Thrput_cmd(0,100,1000);
-//        parse_hci_thrput_cmd("0162FC0300140A",0);
-//        parse_hci_thrput_cmd("0162FC0300140A",1);
+        parse_hci_thrput_cmd("0162FC0400011401",0);
+        parse_hci_thrput_cmd("0162FC0400011401",1);
+        parse_hci_thrput_cmd("0162FC040002140A",2);
+
+        int app_ver_date = parse_ver_date_to_int("1.0.0.20200413");
+        int fw_ver_date = parse_ver_date_to_int("040E080160FC0020200415");
+
+        if (app_ver_date < fw_ver_date) {
+            Log.e(TAG,"app version:" + app_ver_date + " less than fw version:" + fw_ver_date);
+        }
+
+        if (20200413 < 20200415) {
+            Log.e(TAG,"xxx");
+        }
+        //time check
+        time_format();
 
     }
 
+    /**
+     * last 8 number is date to distinguish  version
+     * parse last 8 number
+     * ex:040E080160FC0020200415, 1.0.0.20200415
+     * @return 0 fail
+     * */
+
+    int parse_ver_date_to_int(String ver)
+    {
+        int ret = 0;
+        int ver_len = ver.length();
+        if (ver_len < 8) {
+            return ret;
+        }
+        ret = Integer.parseInt(ver.substring(ver_len-8, ver_len));
+        Log.d(TAG,"verNum:"+ret);
+
+        return ret;
+    }
+
+void time_format()
+{
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+    Date dt = new Date();
+    String dts = sdf.format(dt);
+    Log.d(TAG, Build.MODEL.replace(" ", "")+"_" + dts);
+}
 
     void parse_change_intv_example()
     {
@@ -93,6 +138,7 @@ public class bytecheck extends AppCompatActivity {
     }
     //type : 0 get packet length
     //type : 1 get data_size * 1000
+    //type : 2 phy
     int parse_hci_thrput_cmd(String cmd, int type)
     {
         //ex:0162FC03001402
@@ -100,8 +146,8 @@ public class bytecheck extends AppCompatActivity {
         int pos_len_end;
         int ret = 0;
         if(type ==0) {
-            pos_len_start = 10;
-            pos_len_end = 12;
+            pos_len_start = 12;
+            pos_len_end = 14;
             String str_pkt_len = cmd.substring(pos_len_start, pos_len_end);
             Log.d(TAG, "str_pkt_len:" + str_pkt_len);
             int pkt_len = Integer.parseInt(str_pkt_len, 16);
@@ -109,14 +155,23 @@ public class bytecheck extends AppCompatActivity {
             ret = pkt_len;
         }
         else if(type==1) {
-            pos_len_start = 12;
-            pos_len_end = 14;
+            pos_len_start = 14;
+            pos_len_end = 16;
             String str_data_size = cmd.substring(pos_len_start, pos_len_end);
             Log.d(TAG, "str_data_size:" + str_data_size);
             int data_size = Integer.parseInt(str_data_size, 16);
             data_size = data_size * 1000;
             Log.d(TAG, "data_size:" + data_size);
             ret = data_size;
+        }
+        else if(type==2) {
+            pos_len_start = 10;
+            pos_len_end = 12;
+            String str_phy = cmd.substring(pos_len_start, pos_len_end);
+            Log.d(TAG, "str_mb:" + str_phy);
+            int phy = Integer.parseInt(str_phy, 16);
+            Log.d(TAG, "phy:" + phy);
+            ret = phy;
         }
 
         return ret;
