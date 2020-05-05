@@ -9,12 +9,16 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -43,7 +47,11 @@ import java.util.List;
 
 import static android.bluetooth.BluetoothDevice.PHY_LE_1M;
 import static android.bluetooth.BluetoothDevice.PHY_LE_2M;
+import static android.bluetooth.BluetoothDevice.PHY_LE_CODED;
+import static android.bluetooth.BluetoothDevice.PHY_LE_CODED_MASK;
 import static android.bluetooth.BluetoothDevice.PHY_OPTION_NO_PREFERRED;
+import static android.bluetooth.BluetoothDevice.PHY_OPTION_S2;
+import static android.bluetooth.BluetoothDevice.PHY_OPTION_S8;
 import static com.example.johnny_wei.testtool.config.globalConfig.BLE5_API_LEVEL;
 import static com.example.johnny_wei.testtool.config.globalConfig.DUT;
 import static com.example.johnny_wei.testtool.config.globalConfig.MB;
@@ -51,6 +59,7 @@ import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQ
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_BACKGROUND_LOCATION;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_COARSE_LOCATION;
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE;
+import static com.example.johnny_wei.testtool.config.globalConfig.REQUEST_CODE_LOCATION_SETTINGS;
 import static com.example.johnny_wei.testtool.config.globalConfig.REQ_CODE_BLE_DEV_ACT;
 import static com.example.johnny_wei.testtool.config.globalConfig.UUID_NOTIFY_CHARA;
 import static com.example.johnny_wei.testtool.config.globalConfig.UUID_SERVICE;
@@ -114,12 +123,12 @@ public class test_ble extends AppCompatActivity  {
 
 
         if( Build.VERSION.SDK_INT >= 29) {
-            Log.d(TAG,"Req_Access_Access_Background_Location");
-            int permission = thisActivity.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
-            //未取得權限，向使用者要求允許權限
-            if (permission != PackageManager.PERMISSION_GRANTED) {
-                thisActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, PERMISSION_REQUEST_BACKGROUND_LOCATION);
-            }
+//            Log.d(TAG,"Req_Access_Access_Background_Location");
+//            int permission = thisActivity.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+//            //未取得權限，向使用者要求允許權限
+//            if (permission != PackageManager.PERMISSION_GRANTED) {
+//                thisActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, PERMISSION_REQUEST_BACKGROUND_LOCATION);
+//            }
 
 //            int permission = thisActivity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
 //            //未取得權限，向使用者要求允許權限
@@ -129,9 +138,18 @@ public class test_ble extends AppCompatActivity  {
         }
         else
         {
-            Permission.Req_Access_Coarse_Permissions(this);
+//            Permission.Req_Access_Coarse_Permissions(this);
         }
 
+
+        if(Build.VERSION.SDK_INT >= 23) {
+            int permission = thisActivity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+            //未取得權限，向使用者要求允許權限
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                Log.w(TAG, "requset ACCESS_FINE_LOCATION");
+                thisActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_ACCESS_FINE_LOCATION);
+            }
+        }
 
         if(DevUtil.if_LeScanner_API_support())
         {
@@ -142,7 +160,33 @@ public class test_ble extends AppCompatActivity  {
 //        Intent go2intent = new Intent(this, ble_dev_select.class);
 //        this.startActivityForResult(go2intent, REQ_CODE_BLE_DEV_ACT);
 
+
+//        if (!isLocationEnable(thisActivity)) {
+//            setLocationService();
+//        }
+
     }
+
+    /**
+     * Location service if enable
+     *
+     * @param context
+     * @return location is enable if return true, otherwise disable.
+     */
+    public static final boolean isLocationEnable(Context context) {
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        boolean networkProvider = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        boolean gpsProvider = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (networkProvider || gpsProvider) return true;
+        return false;
+    }
+
+    private void setLocationService() {
+        Intent locationIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        this.startActivityForResult(locationIntent, REQUEST_CODE_LOCATION_SETTINGS);
+    }
+
+
     private void setupview() {
 
         //ed_mac = findViewById(R.id.ed_mac);
@@ -325,6 +369,13 @@ public class test_ble extends AppCompatActivity  {
         }else if(requestCode == REQ_CODE_BLE_DEV_ACT && resultCode == RESULT_OK){
             Toast.makeText(test_ble.this,data.getExtras().getString("EXTRAS_DEVICE_ADDRESS"),Toast.LENGTH_LONG).show();
             Log.d(TAG,"get device name:"+data.getExtras().getString("EXTRAS_DEVICE_ADDRESS"));
+        }else if(requestCode == REQUEST_CODE_LOCATION_SETTINGS){
+            if (isLocationEnable(this)) {
+                Log.d(TAG,"gps enanle");
+            } else {
+                Toast.makeText(test_ble.this,"please enable location service",Toast.LENGTH_LONG).show();
+                Log.w(TAG,"gps not enanle");
+            }
         }
         else if(requestCode == 1 && resultCode == RESULT_CANCELED){
             Toast.makeText(test_ble.this,"please open bluetooth !! ",Toast.LENGTH_LONG).show();
@@ -346,29 +397,35 @@ public class test_ble extends AppCompatActivity  {
 //            }
 //        }
 
-        if( Build.VERSION.SDK_INT >= 29) {
-            int permission = thisActivity.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
-            //未取得權限，向使用者要求允許權限
-            if (permission != PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG,"Req_Access_Access_Background_Location");
-                thisActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, PERMISSION_REQUEST_BACKGROUND_LOCATION);
-            }
+//        if( Build.VERSION.SDK_INT >= 29) {
+//            int permission = thisActivity.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+//            //未取得權限，向使用者要求允許權限
+//            if (permission != PackageManager.PERMISSION_GRANTED) {
+//                Log.d(TAG,"Req_Access_Access_Background_Location");
+//                thisActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, PERMISSION_REQUEST_BACKGROUND_LOCATION);
+//            }
+//        }
+//        if(Build.VERSION.SDK_INT >= 23) {
+//            int permission = thisActivity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+//            //未取得權限，向使用者要求允許權限
+//            if (permission != PackageManager.PERMISSION_GRANTED) {
+//                Log.w(TAG, "requset ACCESS_FINE_LOCATION");
+//                thisActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_ACCESS_FINE_LOCATION);
+//            }
+//        }
+
+        if (!isLocationEnable(thisActivity)) {
+            setLocationService();
         }
-        if(Build.VERSION.SDK_INT >= 23) {
-            int permission = thisActivity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
-            //未取得權限，向使用者要求允許權限
-            if (permission != PackageManager.PERMISSION_GRANTED) {
-                Log.w(TAG, "requset ACCESS_FINE_LOCATION");
-                thisActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_ACCESS_FINE_LOCATION);
+        else {
+            if (DevUtil.if_LeScanner_API_support()) {
+                ScanSettings settings = new ScanSettings.Builder()
+                        .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+                        .build();
+                liteBluetooth.startAPI21_LeScan(mScanCallback, null, settings, 5000);
+            } else {
+                liteBluetooth.startLeScan(mLeScanCallback, 5000);
             }
-        }
-        if (DevUtil.if_LeScanner_API_support()) {
-            ScanSettings settings = new ScanSettings.Builder()
-                    .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
-                    .build();
-            liteBluetooth.startAPI21_LeScan(mScanCallback, null, settings, 5000);
-        } else {
-            liteBluetooth.startLeScan(mLeScanCallback, 5000);
         }
     }
 
@@ -386,7 +443,9 @@ public class test_ble extends AppCompatActivity  {
         int state = liteBluetooth.getConnectionState();
         tv_status.setText(String.valueOf(state));
         liteBluetooth.printServices(liteBluetooth.getBluetoothGatt());
+
     }
+
 
     public void clk_MB_connect(View view) {
         liteBluetooth.connectRetry(ed_mac.getText().toString());
@@ -486,8 +545,10 @@ public class test_ble extends AppCompatActivity  {
     Runnable setPreferredPhy_run= new Runnable() {
         @Override public void run() {
             Log.d(TAG,"set prefer phy");
-            //liteBluetooth.getBluetoothGatt().setPreferredPhy(PHY_LE_2M,PHY_LE_2M,PHY_OPTION_NO_PREFERRED);
-            liteBluetooth.getBluetoothGatt().setPreferredPhy(PHY_LE_1M,PHY_LE_1M,PHY_OPTION_NO_PREFERRED);
+//            liteBluetooth.getBluetoothGatt().setPreferredPhy(PHY_LE_2M,PHY_LE_2M,PHY_OPTION_NO_PREFERRED);
+            //liteBluetooth.getBluetoothGatt().setPreferredPhy(PHY_LE_1M,PHY_LE_1M,PHY_OPTION_NO_PREFERRED);
+//            liteBluetooth.getBluetoothGatt().setPreferredPhy(PHY_LE_CODED_MASK,PHY_LE_CODED_MASK,PHY_OPTION_S2);
+            liteBluetooth.getBluetoothGatt().setPreferredPhy(PHY_LE_CODED_MASK,PHY_LE_CODED_MASK,PHY_OPTION_S8);
         }
     };
 
