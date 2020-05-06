@@ -68,6 +68,7 @@ public class globalConfig {
 
     //write permission define
     public final static int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 102;
+    public final static int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 103;
 
     //test case
     public static LinkedHashMap<String, String> map_testcase = new LinkedHashMap<String, String>() {{

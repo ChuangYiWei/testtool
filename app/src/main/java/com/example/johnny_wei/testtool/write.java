@@ -2,13 +2,17 @@ package com.example.johnny_wei.testtool;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Environment;
+import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.johnny_wei.testtool.BLEutils.BleUtil;
 import com.example.johnny_wei.testtool.log.dbgLog;
@@ -59,21 +63,33 @@ public class write extends AppCompatActivity {
 
         storage_setup();
         //set debug to true
-        //dbgLog.setDebug(true);
+        dbgLog.setDebug(true,mActivity);
 
-//        writefile();
+        writefile();
 //        readline("HID_CMD/HID_KB.txt");
 //
 //        List<String> mouse_list = new ArrayList<>();
 //        readline("HID_CMD/mouse_cmd.txt", mouse_list);
 
         assetCopy();
+
+        test_storage_manager();
+        //會跳出給使用這選
+//        createFile("text/plain", "foobar.txt");
     }
 
     void assetCopy()
     {
         //copyAssets();
         copyAssetsToFiles(this,"01_CONFIG","01_CONFIG");
+    }
+
+    void test_storage_manager()
+    {
+        //若要使用需要大於API 24,  https://busy.im/post/android-sdcard-write/
+        StorageManager sm = (StorageManager)getSystemService(Context.STORAGE_SERVICE);
+//        StorageVolume volume = sm.getStorageVolume(new File(rootPath));
+
     }
 
     private void copyAssetsToFiles(Context context,String assetSrcDir, String SDcardDestDir) {
@@ -87,14 +103,18 @@ public class write extends AppCompatActivity {
             return;
         }
 
-        String File_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
-        File mWorkingPath = new File(File_PATH, SDcardDestDir);
+        File mWorkingPath =  new File(context.getExternalFilesDir(null), SDcardDestDir);
+        //sd card path when andorid version less than 10(Android Q)
+//        String File_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
+//        File mWorkingPath = new File(File_PATH, SDcardDestDir);
+
         if (!mWorkingPath.exists()) {
             mWorkingPath.mkdirs();
         }
 
         for (int i = 0; i < files.length; i++) {
             try {
+                Log.d(className,"work path:"+mWorkingPath.toString());
                 String fileName = files[i];
                 Log.d(className, " fileName:" + fileName);
                 File outFile = new File(mWorkingPath, fileName);
@@ -120,6 +140,73 @@ public class write extends AppCompatActivity {
             }
         }
     }
+    // Unique request code.
+    private static final int WRITE_REQUEST_CODE = 43;
+    private void createFile(String mimeType, String fileName) {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+
+        // Filter to only show results that can be "opened", such as
+        // a file (as opposed to a list of contacts or timezones).
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        // Create a file with the requested MIME type.
+        intent.setType(mimeType);
+        intent.putExtra(Intent.EXTRA_TITLE, fileName);
+        startActivityForResult(intent, WRITE_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == WRITE_REQUEST_CODE && resultCode == RESULT_OK) {
+            Log.d(className, "WRITE_REQUEST_CODE  OK");
+        }
+    }
+
+//    private void copyAssetsToFiles(Context context,String assetSrcDir, String SDcardDestDir) {
+//        String[] files;
+//        try {
+//            //注意：在assets文件夹下影藏了三个带文件的文件夹，分别是images、sounds、webkit
+//            //返回数组files里面会包含这三个文件夹
+////            files = context.getResources().getAssets().list("");
+//            files = context.getResources().getAssets().list(assetSrcDir);
+//        } catch (IOException e1) {
+//            return;
+//        }
+//
+//        String File_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
+//        File mWorkingPath = new File(File_PATH, SDcardDestDir);
+//        if (!mWorkingPath.exists()) {
+//            mWorkingPath.mkdirs();
+//        }
+//
+//        for (int i = 0; i < files.length; i++) {
+//            try {
+//                String fileName = files[i];
+//                Log.d(className, " fileName:" + fileName);
+//                File outFile = new File(mWorkingPath, fileName);
+//                if (outFile.exists()) {
+//                    Log.d(className,fileName + " exist, skip");
+//                    continue;
+//                }
+//
+//                InputStream in = context.getAssets().open(assetSrcDir + "/" + fileName);
+//                OutputStream out = new FileOutputStream(outFile);
+//                byte[] buf = new byte[1024];
+//                int len;
+//                while ((len = in.read(buf)) > 0) {
+//                    out.write(buf, 0, len);
+//                }
+//
+//                in.close();
+//                out.close();
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
 
     //filename is folder+file under sd card root dir
@@ -218,14 +305,6 @@ public class write extends AppCompatActivity {
         dbgLog.d("warring", "444444444444444444444");//tag, message
         dbgLog.d("warring", "555555555555555555555");//tag, message
 
-
-        //Log.d(className,"largest:" + findLargetExtNum("D_DEB"));
-//      GetFilebyAddsuffix("debug_01");
-
-//        DevUtil.printDeviceInfo();
-        //dbgLog.deletefolder("123");
-//        dbgLog.deletefile("1");
-//        createFoler("log_debug");
     }
 
     private String GetFilebyAddsuffix(String filename) {

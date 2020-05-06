@@ -1,5 +1,6 @@
 package com.example.johnny_wei.testtool.log;
 
+import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
@@ -28,8 +29,11 @@ public class dbgLog {
     private static String SD_PATH = Environment.getExternalStorageDirectory().getPath();
 
     static SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-    public static void setDebug(boolean debug) {
+
+    static Context mContext;
+    public static void setDebug(boolean debug,Context Context) {
         DEBUG_ENABLED = debug;
+        mContext = Context;
     }
 
     public static void setPath(String path) {
@@ -138,7 +142,7 @@ public class dbgLog {
     // folder will be 123/456, file name is 789
     private static void logToFile(String tag, String message) {
         try {
-            File logFile = new File(Environment.getExternalStorageDirectory(), PATH);
+            File logFile = new File(mContext.getExternalFilesDir(null), PATH);
             Log.d(className, "log file path is:" + PATH);
             if (!logFile.exists()) {
                 logFile.getParentFile().mkdirs();
@@ -159,7 +163,9 @@ public class dbgLog {
 
     private static void circularlogToFile(String tag, String message) {
         try {
-            File logFile = new File(Environment.getExternalStorageDirectory(), CURRENT_PATH);
+            File logFile = new File(mContext.getExternalFilesDir(null), CURRENT_PATH);
+
+            Log.d(className, "current path:" + CURRENT_PATH);
             int maxFileNum = findLargetExtNum(DEBUG_FOLDER);
             if (maxFileNum == -1) {//if no debug_x file exist
                 logFile.getParentFile().mkdirs();
@@ -173,7 +179,7 @@ public class dbgLog {
 
                     String newFileName = GetFilebyAddsuffix("debug_" + maxFileNum);
                     CURRENT_PATH = DEBUG_FOLDER + newFileName;
-                    File newlogFile = new File(Environment.getExternalStorageDirectory(), CURRENT_PATH);
+                    File newlogFile = new File(mContext.getExternalFilesDir(null), CURRENT_PATH);
                     newlogFile.createNewFile();
                     Log.w(className, "create file" + newlogFile.getPath());
                     BufferedWriter writer = new BufferedWriter(new FileWriter(newlogFile, true));
@@ -207,7 +213,7 @@ public class dbgLog {
         int MaxNum = -1;
         int current = MaxNum;
         try {
-            File directory = new File(Environment.getExternalStorageDirectory(), folderName);
+            File directory = new File(mContext.getExternalFilesDir(null), folderName);
             //get all the files from a directory
             File[] fList = directory.listFiles();
 
