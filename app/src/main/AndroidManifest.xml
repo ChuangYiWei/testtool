@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.johnny_wei.testtool">
+    package="com.BLE.johnny_wei.testtool">
 
     <uses-feature android:name="android.hardware.usb.host" /> <!-- storage -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -22,31 +22,31 @@
         android:supportsRtl="true"
         android:theme="@style/mytheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".BLETest.TEST_ACTIVITY.testcase_select"></activity>
-        <activity android:name=".BLEutils.BLE_ACTIVITY.ble_dev_select" />
-        <activity android:name=".test_view_tool" />
-        <activity android:name=".time" />
-        <activity android:name=".write" />
-        <activity android:name=".collection" />
-        <activity android:name=".aleart_test" />
-        <activity android:name=".test_draw" />
-        <activity android:name=".spinner_option" />
-        <activity android:name=".connected_list" />
-        <activity android:name=".test_surface" />
-        <activity android:name=".test_listview_tree" />
-        <activity android:name=".expandleble" />
-        <activity android:name=".scan_list" />
-        <activity android:name=".bytecheck" />
-        <activity android:name=".customview" /> <!-- <activity android:name=".test_ble"> -->
-        <activity android:name=".xmlandinvoke" />
-        <activity android:name=".uart" />
-        <activity android:name=".csv" />
-        <activity android:name=".handler" />
-        <activity android:name=".ble" />
-        <activity android:name=".invok" />
-        <activity android:name=".open_file_intent" />
-        <activity android:name=".serviceExample" /> <!-- <activity android:name=".test_surface" android:screenOrientation="landscape" android:theme="@style/Theme.AppCompat.NoActionBar" android:configChanges="keyboard|keyboardHidden|orientation"> -->
-        <activity android:name=".test_ble">
+        <activity android:name="com.BLE.johnny_wei.testtool.BLETest.TEST_ACTIVITY.testcase_select"></activity>
+        <activity android:name="com.BLE.johnny_wei.testtool.BLEutils.BLE_ACTIVITY.ble_dev_select" />
+        <activity android:name="com.BLE.johnny_wei.testtool.test_view_tool" />
+        <activity android:name="com.BLE.johnny_wei.testtool.time" />
+        <activity android:name="com.BLE.johnny_wei.testtool.test_ble" />
+        <activity android:name="com.BLE.johnny_wei.testtool.collection" />
+        <activity android:name="com.BLE.johnny_wei.testtool.aleart_test" />
+        <activity android:name="com.BLE.johnny_wei.testtool.test_draw" />
+        <activity android:name="com.BLE.johnny_wei.testtool.spinner_option" />
+        <activity android:name="com.BLE.johnny_wei.testtool.connected_list" />
+        <activity android:name="com.BLE.johnny_wei.testtool.test_surface" />
+        <activity android:name="com.BLE.johnny_wei.testtool.test_listview_tree" />
+        <activity android:name="com.BLE.johnny_wei.testtool.expandleble" />
+        <activity android:name="com.BLE.johnny_wei.testtool.scan_list" />
+        <activity android:name="com.BLE.johnny_wei.testtool.bytecheck" />
+        <activity android:name="com.BLE.johnny_wei.testtool.customview" /> <!-- <activity android:name=".test_ble"> -->
+        <activity android:name="com.BLE.johnny_wei.testtool.xmlandinvoke" />
+        <activity android:name="com.BLE.johnny_wei.testtool.uart" />
+        <activity android:name="com.BLE.johnny_wei.testtool.csv" />
+        <activity android:name="com.BLE.johnny_wei.testtool.handler" />
+        <activity android:name="com.BLE.johnny_wei.testtool.ble" />
+        <activity android:name="com.BLE.johnny_wei.testtool.invok" />
+        <activity android:name="com.BLE.johnny_wei.testtool.open_file_intent" />
+        <activity android:name="com.BLE.johnny_wei.testtool.serviceExample" /> <!-- <activity android:name=".test_surface" android:screenOrientation="landscape" android:theme="@style/Theme.AppCompat.NoActionBar" android:configChanges="keyboard|keyboardHidden|orientation"> -->
+        <activity android:name="com.BLE.johnny_wei.testtool.write">
 
 
             <!-- android:screenOrientation="landscape" -->
@@ -63,20 +63,20 @@
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
         </activity>
-        <activity android:name=".custom_expand_list" />
-        <activity android:name=".BRrate" />
-        <activity android:name=".test_layout" />
-        <activity android:name=".permision_test" />
-        <activity android:name=".readxml" />
-        <activity android:name=".advdata" />
-        <activity android:name=".test_callback" />
+        <activity android:name="com.BLE.johnny_wei.testtool.custom_expand_list" />
+        <activity android:name="com.BLE.johnny_wei.testtool.BRrate" />
+        <activity android:name="com.BLE.johnny_wei.testtool.test_layout" />
+        <activity android:name="com.BLE.johnny_wei.testtool.permision_test" />
+        <activity android:name="com.BLE.johnny_wei.testtool.readxml" />
+        <activity android:name="com.BLE.johnny_wei.testtool.advdata" />
+        <activity android:name="com.BLE.johnny_wei.testtool.test_callback" />
 
         <service
-            android:name=".MyService"
+            android:name="com.BLE.johnny_wei.testtool.MyService"
             android:enabled="true"
             android:exported="true" />
         <service
-            android:name=".bleService"
+            android:name="com.BLE.johnny_wei.testtool.bleService"
             android:enabled="true"
             android:exported="true" />
     </application>
