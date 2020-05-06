@@ -133,7 +133,7 @@ public class test_ble extends AppCompatActivity  {
 //            Permission.Req_Access_Coarse_Permissions(this);
         }
 
-
+        //must
         if(Build.VERSION.SDK_INT >= 23) {
             int permission = thisActivity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
             //未取得權限，向使用者要求允許權限
@@ -142,6 +142,24 @@ public class test_ble extends AppCompatActivity  {
                 thisActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_ACCESS_FINE_LOCATION);
             }
         }
+
+//        if(Build.VERSION.SDK_INT >= 23) {
+//
+//            int permission = thisActivity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+//            if (permission != PackageManager.PERMISSION_GRANTED) {
+//                Log.w(TAG, "requset ACCESS_COARSE_LOCATION");
+//                thisActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
+//            }
+//        }
+
+//        if( Build.VERSION.SDK_INT >= 29) {
+//            int permission = thisActivity.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+//            //未取得權限，向使用者要求允許權限
+//            if (permission != PackageManager.PERMISSION_GRANTED) {
+//                Log.d(TAG,"Req_Access_Access_Background_Location");
+//                thisActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, PERMISSION_REQUEST_BACKGROUND_LOCATION);
+//            }
+//        }
 
         if(DevUtil.if_LeScanner_API_support())
         {
@@ -397,14 +415,15 @@ public class test_ble extends AppCompatActivity  {
 //                thisActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, PERMISSION_REQUEST_BACKGROUND_LOCATION);
 //            }
 //        }
-//        if(Build.VERSION.SDK_INT >= 23) {
-//            int permission = thisActivity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
-//            //未取得權限，向使用者要求允許權限
-//            if (permission != PackageManager.PERMISSION_GRANTED) {
-//                Log.w(TAG, "requset ACCESS_FINE_LOCATION");
-//                thisActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_ACCESS_FINE_LOCATION);
-//            }
-//        }
+        if(Build.VERSION.SDK_INT >= 23) {
+            int permission = thisActivity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+            //未取得權限，向使用者要求允許權限
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                Log.w(TAG, "requset ACCESS_FINE_LOCATION");
+                thisActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_ACCESS_FINE_LOCATION);
+            }
+        }
+
 
         if (!isLocationEnable(thisActivity)) {
             setLocationService();
@@ -822,12 +841,13 @@ public class test_ble extends AppCompatActivity  {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        Log.d("Permission", "onRequestPermissionsResult");
+        Log.d("Permission", "onRequestPermissionsResult requestCode:"+requestCode);
         if (grantResults.length == 0) {
             Log.e(TAG, "grantResults size is 0");
             return;
         }
         switch (requestCode) {
+            //only use coarse can not scan
             case PERMISSION_REQUEST_COARSE_LOCATION: {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d(TAG, "coarse location permission granted");

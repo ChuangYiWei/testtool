@@ -73,6 +73,9 @@ public class write extends AppCompatActivity {
         //間接法使用2
         //https://android.jlelse.eu/handling-files-in-code-after-the-android-10-released-2bea0e16d35
 
+        //間接法使用3,似乎只要API19
+        //https://www.zoftino.com/how-to-create-browse-files-option-in-android
+
         //會跳出給使用這選
 //        createFile("text/plain", "foobar.txt");
 
