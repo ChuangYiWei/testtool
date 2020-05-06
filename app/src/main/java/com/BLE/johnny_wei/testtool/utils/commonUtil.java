@@ -1,5 +1,10 @@
 package com.BLE.johnny_wei.testtool.utils;
 
+import android.content.Context;
+import android.util.Log;
+
+import java.io.File;
+
 public class commonUtil {
 
     public static byte[] intToByteArray(int a)
@@ -35,5 +40,16 @@ public class commonUtil {
         String minutes = String.format(format, mins % 60);
         String hours = String.format(format, hrs);
         return hours + ":" + minutes + ":" + seconds;
+    }
+
+    //The file root folder in the app, path:sd/Android/data/com.xxx.xxx/files/Folder X
+    public static boolean is_File_Exist(String absfileName, Context context) {
+        File file = new File(context.getExternalFilesDir(null),absfileName);
+        if (!file.exists()) {
+            Log.w("commonUtil", "fileName: " + absfileName + " not exist");
+            return false;
+        }
+        Log.d("commonUtil", "fileName: " + absfileName + " exist");
+        return true;
     }
 }

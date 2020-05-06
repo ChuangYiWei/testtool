@@ -1,5 +1,6 @@
 package com.BLE.johnny_wei.testtool.config;
 
+import java.io.File;
 import java.util.LinkedHashMap;
 
 public class globalConfig {
@@ -8,6 +9,9 @@ public class globalConfig {
     private int ENABLE_BT = 1;
 
     public static final int BLE5_API_LEVEL = 26;
+
+    final static public String CONFIG_FOLDER = "01_CONFIG";
+    final static public String CONFIG_FOLDER_PATH = CONFIG_FOLDER + File.separator;
 
     //device
     public static final int DUT = 0;

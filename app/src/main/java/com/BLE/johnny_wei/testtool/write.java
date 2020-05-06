@@ -31,7 +31,9 @@ import java.util.List;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import static com.BLE.johnny_wei.testtool.config.globalConfig.CONFIG_FOLDER_PATH;
 import static com.BLE.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE;
+import static com.BLE.johnny_wei.testtool.utils.commonUtil.is_File_Exist;
 
 public class write extends AppCompatActivity {
 
@@ -308,7 +310,8 @@ public class write extends AppCompatActivity {
         dbgLog.d("warring", "333333333333333333333");//tag, message
         dbgLog.d("warring", "444444444444444444444");//tag, message
         dbgLog.d("warring", "555555555555555555555");//tag, message
-
+        String filename = "test_config.csv";
+        is_File_Exist(CONFIG_FOLDER_PATH + filename, mActivity);
     }
 
     private String GetFilebyAddsuffix(String filename) {

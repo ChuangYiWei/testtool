@@ -273,7 +273,7 @@ public class dbgLog {
 
     //delete--------------------------------------------------------------
     public static void deletefile(String fileName) {
-        File file = new File(Environment.getExternalStorageDirectory(), fileName);
+        File file = new File(mContext.getExternalFilesDir(null), fileName);
         if(!file.exists())
         {
             logToFile("file", "file: " + file + " not exist");
