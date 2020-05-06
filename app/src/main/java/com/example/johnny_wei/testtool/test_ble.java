@@ -17,11 +17,10 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.SystemClock;
 import android.provider.Settings;
-import android.support.annotation.RequiresApi;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -35,22 +34,15 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.johnny_wei.testtool.BLEutils.BLE_ACTIVITY.ble_dev_select;
 import com.example.johnny_wei.testtool.BLEutils.LiteBle;
 import com.example.johnny_wei.testtool.BLEutils.callback.LiteBLECallback;
 import com.example.johnny_wei.testtool.config.globalConfig;
 import com.example.johnny_wei.testtool.utils.DevUtil;
-import com.example.johnny_wei.testtool.utils.Permission;
 
 
 import java.util.List;
 
-import static android.bluetooth.BluetoothDevice.PHY_LE_1M;
-import static android.bluetooth.BluetoothDevice.PHY_LE_2M;
-import static android.bluetooth.BluetoothDevice.PHY_LE_CODED;
 import static android.bluetooth.BluetoothDevice.PHY_LE_CODED_MASK;
-import static android.bluetooth.BluetoothDevice.PHY_OPTION_NO_PREFERRED;
-import static android.bluetooth.BluetoothDevice.PHY_OPTION_S2;
 import static android.bluetooth.BluetoothDevice.PHY_OPTION_S8;
 import static com.example.johnny_wei.testtool.config.globalConfig.BLE5_API_LEVEL;
 import static com.example.johnny_wei.testtool.config.globalConfig.DUT;

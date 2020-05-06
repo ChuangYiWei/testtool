@@ -1,12 +1,10 @@
 package com.example.johnny_wei.testtool;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 public class BRrate extends AppCompatActivity {
     //baud rate

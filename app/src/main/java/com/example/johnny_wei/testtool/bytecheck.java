@@ -2,7 +2,7 @@ package com.example.johnny_wei.testtool;
 
 import android.os.Build;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 

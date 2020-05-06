@@ -4,17 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.os.Environment;
 import android.os.storage.StorageManager;
-import android.os.storage.StorageVolume;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.johnny_wei.testtool.BLEutils.BleUtil;
 import com.example.johnny_wei.testtool.log.dbgLog;
 import com.example.johnny_wei.testtool.utils.AlertDialogUtil;
 import com.example.johnny_wei.testtool.utils.DevUtil;
@@ -25,7 +22,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.IOError;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,7 +29,6 @@ import java.util.Date;
 import java.util.List;
 
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 import static com.example.johnny_wei.testtool.config.globalConfig.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE;
@@ -72,10 +67,16 @@ public class write extends AppCompatActivity {
 //        readline("HID_CMD/mouse_cmd.txt", mouse_list);
 
         assetCopy();
-
+        //間接法使用1
         test_storage_manager();
+
+        //間接法使用2
+        //https://android.jlelse.eu/handling-files-in-code-after-the-android-10-released-2bea0e16d35
+
         //會跳出給使用這選
 //        createFile("text/plain", "foobar.txt");
+
+
     }
 
     void assetCopy()
@@ -143,7 +144,7 @@ public class write extends AppCompatActivity {
     // Unique request code.
     private static final int WRITE_REQUEST_CODE = 43;
     private void createFile(String mimeType, String fileName) {
-        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE );
 
         // Filter to only show results that can be "opened", such as
         // a file (as opposed to a list of contacts or timezones).

@@ -1,9 +1,7 @@
 package com.example.johnny_wei.testtool.BLETest;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
-
-import com.example.johnny_wei.testtool.invok;
 
 public class test_class1 extends AppCompatActivity {
     String TAG = getClass().getSimpleName();
